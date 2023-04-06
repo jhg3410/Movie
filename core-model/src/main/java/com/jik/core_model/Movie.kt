@@ -1,7 +1,11 @@
 package com.jik.core_model
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class Movie(
     val id : String,
     val title: String,
-    val poserPath : String,
+    @Json(name = "poster_path") val poserPath : String,
 )
