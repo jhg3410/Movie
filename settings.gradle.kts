@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Movie"
 include(":app")
+include(":core-model")
