@@ -37,6 +37,7 @@ android {
 dependencies {
 
     implementation(projects.coreModel)
+    implementation(projects.coreNetwork)
     implementation(libs.androidx.ktx)
 
     // test
