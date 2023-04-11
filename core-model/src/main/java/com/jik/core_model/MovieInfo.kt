@@ -13,6 +13,8 @@ data class MovieInfo(
     @Json(name = "vote_average") val rating: Double,
 ) {
 
+    fun getGenreString(): List<String> = genres.map { it.name }
+
     @JsonClass(generateAdapter = true)
     data class Genre(
         val id: Int,
