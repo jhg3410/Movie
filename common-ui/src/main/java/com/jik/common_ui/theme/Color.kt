@@ -1,4 +1,4 @@
-package com.jik.movie.ui.theme
+package com.jik.common_ui.theme
 
 import androidx.compose.ui.graphics.Color
 

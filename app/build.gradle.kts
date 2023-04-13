@@ -51,6 +51,9 @@ android {
 }
 
 dependencies {
+
+    implementation(projects.commonUi)
+
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.runtime.ktx)
     implementation(libs.androidx.activity)
