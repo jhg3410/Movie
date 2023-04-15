@@ -9,6 +9,7 @@ material3 = "1.1.0-beta01"
 junit = "4.13.2"
 ext-junit = "1.1.5"
 espresso = "3.5.1"
+moshi = "1.14.0"
 
 
 androidGradlePlugin = "7.4.2"
@@ -32,6 +33,10 @@ ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "ext-ju
 espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 compose-test-junit = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }
 compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
+
+# moshi
+moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin"}
