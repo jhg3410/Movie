@@ -7,5 +7,5 @@ import com.squareup.moshi.JsonClass
 data class Movie(
     val id : Long,
     val title: String,
-    @Json(name = "poster_path") val poserPath : String,
+    @Json(name = "poster_path") val posterPath : String,
 )
