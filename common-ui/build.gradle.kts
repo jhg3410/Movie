@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jik.common_ui"
+    namespace = "com.jik.common.ui"
     compileSdk = 33
 
     defaultConfig {

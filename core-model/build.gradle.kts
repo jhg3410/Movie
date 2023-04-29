@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jik.core_model"
+    namespace = "com.jik.core.model"
     compileSdk = 33
 
     defaultConfig {
@@ -38,4 +38,10 @@ dependencies {
     implementation(libs.androidx.ktx)
     implementation(libs.moshi)
 
+    // test
+    testImplementation(libs.junit)
+
+    // android test
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso)
 }
