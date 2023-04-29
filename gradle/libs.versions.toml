@@ -10,6 +10,8 @@ junit = "4.13.2"
 ext-junit = "1.1.5"
 espresso = "3.5.1"
 moshi = "1.14.0"
+coil = "2.3.0"
+timber = "5.0.1"
 
 
 androidGradlePlugin = "7.4.2"
@@ -37,8 +39,13 @@ compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifes
 # moshi
 moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
+# coil
+compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
+# Timer
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "androidGradlePlugin"}
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
