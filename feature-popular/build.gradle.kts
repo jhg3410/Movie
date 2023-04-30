@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.preview)
     implementation(libs.compose.material3)
+    implementation(libs.compose.viewmodel)
 
     // test
     testImplementation(libs.junit)
