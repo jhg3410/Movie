@@ -26,12 +26,13 @@ fun PosterCard(
     ElevatedCard(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.elevatedCardElevation(8.dp),
-        modifier = modifier.clickable { onClick() }
+        modifier = modifier
     ) {
         AsyncImage(
             model = posterPath,
             placeholder = placeholder,
             contentDescription = contentDescription,
+            modifier = Modifier.clickable { onClick() }
         )
     }
 }
