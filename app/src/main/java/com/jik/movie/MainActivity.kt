@@ -8,8 +8,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.jik.common.ui.component.MovieTopAppBar
+import com.jik.common.ui.preview.DevicePreviews
 import com.jik.common.ui.theme.MovieTheme
 import com.jik.feature.popular.PopularScreen
 
@@ -37,7 +37,7 @@ fun MovieApp() {
 }
 
 
-@Preview(showBackground = true)
+@DevicePreviews
 @Composable
 fun DefaultPreview() {
     MovieTheme {

@@ -2,6 +2,7 @@ package com.jik.common.ui.component
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
@@ -32,7 +33,9 @@ fun PosterCard(
             model = posterPath,
             placeholder = placeholder,
             contentDescription = contentDescription,
-            modifier = Modifier.clickable { onClick() }
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable { onClick() },
         )
     }
 }

@@ -4,7 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -25,7 +26,7 @@ fun PopularScreen(
 
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Fixed(count = 2),
+        columns = GridCells.Adaptive(160.dp),
         contentPadding = PaddingValues(14.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -33,7 +34,9 @@ fun PopularScreen(
         items(items = popularViewModel.popularMock) { movie ->
             PosterCard(
                 posterPath = "https://image.tmdb.org/t/p/w500" + movie.posterPath,
-                modifier = Modifier.size(width = 160.dp, height = 240.dp),
+                modifier = Modifier
+                    .sizeIn(minWidth = 160.dp, minHeight = 240.dp)
+                    .aspectRatio(2f / 3f),
                 onClick = { onPosterCardClick(context, movie) }
             )
         }
