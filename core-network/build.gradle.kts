@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jik.core_network"
+    namespace = "com.jik.core.network"
     compileSdk = 33
 
     defaultConfig {
@@ -40,4 +40,8 @@ dependencies {
 
     // test
     testImplementation(libs.junit)
+
+    // android test
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso)
 }

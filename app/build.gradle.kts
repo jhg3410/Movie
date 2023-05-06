@@ -52,7 +52,10 @@ android {
 
 dependencies {
 
+    // modules
     implementation(projects.commonUi)
+    implementation(projects.coreModel)
+    implementation(projects.featurePopular)
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.runtime.ktx)

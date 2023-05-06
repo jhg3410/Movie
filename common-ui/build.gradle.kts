@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jik.common_ui"
+    namespace = "com.jik.common.ui"
     compileSdk = 33
 
     defaultConfig {
@@ -53,4 +53,7 @@ dependencies {
     // android test
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso)
+
+    // coil
+    implementation(libs.compose.coil)
 }

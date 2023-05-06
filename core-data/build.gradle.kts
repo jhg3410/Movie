@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jik.core_data"
+    namespace = "com.jik.core.data"
     compileSdk = 33
 
     defaultConfig {
