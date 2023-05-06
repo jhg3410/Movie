@@ -2,12 +2,9 @@ package com.jik.common.ui.theme
 
 import android.app.Activity
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
@@ -80,16 +77,20 @@ private val DarkColors = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+private val isSdkHigher31 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+
 @Composable
 fun MovieTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
+    dynamicColor: Boolean = isSdkHigher31,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
-        dynamicColor && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
+        dynamicColor && darkTheme && isSdkHigher31 -> dynamicDarkColorScheme(LocalContext.current)
+        dynamicColor && !darkTheme && isSdkHigher31 -> dynamicLightColorScheme(LocalContext.current)
         darkTheme -> DarkColors
         else -> LightColors
     }
