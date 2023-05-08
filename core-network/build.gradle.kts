@@ -44,4 +44,7 @@ dependencies {
     // android test
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso)
+
+    // moshi
+    implementation(libs.moshi)
 }

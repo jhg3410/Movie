@@ -36,7 +36,6 @@ android {
 dependencies {
 
     implementation(libs.androidx.ktx)
-    implementation(libs.moshi)
 
     // test
     testImplementation(libs.junit)
@@ -44,4 +43,7 @@ dependencies {
     // android test
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso)
+
+    // moshi
+    implementation(libs.moshi)
 }

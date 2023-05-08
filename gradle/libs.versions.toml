@@ -13,6 +13,7 @@ moshi = "1.14.0"
 coil = "2.3.0"
 timber = "5.0.1"
 viewmodel = "2.5.1"
+coroutines = "1.7.0"
 
 
 androidGradlePlugin = "7.4.2"
@@ -21,6 +22,10 @@ androidGradlePlugin = "7.4.2"
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 androidx-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "runtime-ktx" }
 androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+
+# coroutine
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+
 
 # compose
 compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
