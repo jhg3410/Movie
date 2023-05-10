@@ -42,10 +42,15 @@ android {
 
 dependencies {
 
+    implementation(projects.coreModel)
+
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
     implementation(libs.compose.tooling)
     implementation(libs.androidx.ktx)
+
+    // coroutines
+    implementation(libs.coroutines)
 
     // test
     testImplementation(libs.junit)
