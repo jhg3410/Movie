@@ -8,11 +8,11 @@ class MovieRepositoryImpl(
     private val movieRemoteDataSource: MovieRemoteDataSource
 ) : MovieRepository {
 
-    override fun getPopularMovies(): Result<List<Movie>> {
+    override suspend fun getPopularMovies(): Result<List<Movie>> {
         return movieRemoteDataSource.getPopularMovies()
     }
 
-    override fun getMovieInfo(id: Int): Result<MovieInfo> {
+    override suspend fun getMovieInfo(id: Int): Result<MovieInfo> {
         return movieRemoteDataSource.getMovieInfo(id = id)
     }
 }

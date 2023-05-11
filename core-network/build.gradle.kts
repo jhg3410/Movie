@@ -38,13 +38,16 @@ dependencies {
     implementation(projects.coreModel)
     implementation(libs.androidx.ktx)
 
+    // moshi
+    implementation(libs.moshi)
+
+    // retrofit
+    implementation(libs.retrofit)
+
     // test
     testImplementation(libs.junit)
 
     // android test
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso)
-
-    // moshi
-    implementation(libs.moshi)
 }

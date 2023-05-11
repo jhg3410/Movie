@@ -14,6 +14,8 @@ coil = "2.3.0"
 timber = "5.0.1"
 viewmodel = "2.5.1"
 coroutines = "1.7.0"
+hilt = "2.45"
+retrofit = "2.9.0"
 
 
 androidGradlePlugin = "7.4.2"
@@ -51,6 +53,12 @@ compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 
 # Timer
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+# Hilt
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+
+# retrofit
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
