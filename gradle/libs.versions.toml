@@ -16,6 +16,7 @@ viewmodel = "2.5.1"
 coroutines = "1.7.0"
 hilt = "2.45"
 retrofit = "2.9.0"
+logging-interceptor = "4.11.0"
 
 
 androidGradlePlugin = "7.4.2"
@@ -57,8 +58,11 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 # Hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 
-# retrofit
+# Retrofit
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+
+# Logging Interceptor
+logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
