@@ -4,6 +4,7 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -51,12 +52,14 @@ dependencies {
 
     // retrofit
     implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi)
 
     // logging
     implementation(libs.logging.interceptor)
 
     // hilt
     implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     // test
     testImplementation(libs.junit)
