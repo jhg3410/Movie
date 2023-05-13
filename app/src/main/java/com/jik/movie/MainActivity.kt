@@ -12,7 +12,9 @@ import com.jik.common.ui.component.MovieTopAppBar
 import com.jik.common.ui.preview.DevicePreviews
 import com.jik.common.ui.theme.MovieTheme
 import com.jik.feature.popular.PopularScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +22,7 @@ class MainActivity : ComponentActivity() {
             MovieTheme(
                 dynamicColor = false
             ) {
-                MovieApp()
+                MovieScreen()
             }
         }
     }
@@ -28,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieApp() {
+fun MovieScreen() {
     Scaffold(
         topBar = { MovieTopAppBar(titleRes = R.string.app_name) }
     ) {

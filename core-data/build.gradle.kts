@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -39,6 +40,10 @@ dependencies {
     implementation(projects.coreModel)
     implementation(projects.coreNetwork)
     implementation(libs.androidx.ktx)
+
+    // hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     // test
     testImplementation(libs.junit)

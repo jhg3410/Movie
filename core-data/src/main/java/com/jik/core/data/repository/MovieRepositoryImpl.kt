@@ -3,8 +3,9 @@ package com.jik.core.data.repository
 import com.jik.core.model.Movie
 import com.jik.core.model.MovieInfo
 import com.jik.core.network.source.MovieRemoteDataSource
+import javax.inject.Inject
 
-class MovieRepositoryImpl(
+class MovieRepositoryImpl @Inject constructor(
     private val movieRemoteDataSource: MovieRemoteDataSource
 ) : MovieRepository {
 
