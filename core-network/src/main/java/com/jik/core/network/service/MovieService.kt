@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface MovieService {
 
-    @GET("/movie/popular")
+    @GET("movie/popular")
     suspend fun getMovieList(): Result<MovieResponse>
 }
