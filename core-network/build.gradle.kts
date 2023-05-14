@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -49,6 +50,7 @@ dependencies {
 
     // moshi
     implementation(libs.moshi)
+    ksp(libs.moshi.codegen)
 
     // retrofit
     implementation(libs.retrofit)
