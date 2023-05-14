@@ -1,11 +1,9 @@
 package com.jik.core.network.di
 
+import com.jik.core.network.adapter.ResultCallAdapterFactory
 import com.jik.core.network.interceptor.provideLoggingInterceptor
 import com.jik.core.network.interceptor.provideTmdbApiKeyInterceptor
 import com.jik.core.network.service.MovieService
-import com.jik.core.network.source.MovieRemoteDataSource
-import com.jik.core.network.source.MovieRemoteDataSourceImpl
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,6 +34,7 @@ internal object NetworkModule {
             .client(okHttpClient)
             .baseUrl("https://api.themoviedb.org/3/")
             .addConverterFactory(MoshiConverterFactory.create())
+            .addCallAdapterFactory(ResultCallAdapterFactory.create())
             .build()
     }
 
