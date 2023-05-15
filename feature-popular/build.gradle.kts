@@ -56,7 +56,10 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.preview)
     implementation(libs.compose.material3)
-    implementation(libs.compose.viewmodel)
+
+    // lifecycle
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.runtime)
 
     // hilt
     implementation(libs.hilt.android)

@@ -12,7 +12,7 @@ espresso = "3.5.1"
 moshi = "1.14.0"
 coil = "2.3.0"
 timber = "5.0.1"
-viewmodel = "2.5.1"
+lifecycle = "2.5.1"
 coroutines = "1.7.0"
 hilt = "2.45"
 retrofit = "2.9.0"
@@ -36,7 +36,10 @@ compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compos
 compose-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
 compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
-compose-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewmodel" }
+
+# lifecycle
+lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }

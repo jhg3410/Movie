@@ -12,13 +12,15 @@ sealed interface UiState<out T> {
     data class Error(val throwable: Throwable) : UiState<Nothing>
 }
 
-fun <T> Result<T>.toUiStateFlow(
-    dispatcher: CoroutineDispatcher = Dispatchers.IO
+fun <T> getUiStateFlow(
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    block: suspend () -> Result<T>
 ) = flow {
-    onSuccess {
+    val result = block()
+    result.onSuccess {
         emit(UiState.Success(it))
     }
-    onFailure {
+    result.onFailure {
         emit(UiState.Error(it))
     }
 }.onStart { emit(UiState.Loading) }.flowOn(dispatcher)
