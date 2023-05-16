@@ -54,6 +54,7 @@ dependencies {
 
     // test
     testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
 
     // android test
     androidTestImplementation(libs.ext.junit)
