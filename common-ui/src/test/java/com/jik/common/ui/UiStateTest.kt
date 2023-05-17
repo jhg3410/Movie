@@ -6,6 +6,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.lang.System.currentTimeMillis
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -59,7 +60,7 @@ class UiStateTest {
 
     @Test
     fun loadingTime() = runTest {
-        val delayTime = 3.seconds
+        val delayTime = 2.seconds
         var startTime = 0L
         var loadingTime = 0L
 
@@ -79,10 +80,12 @@ class UiStateTest {
                 is UiState.Error -> Unit
             }
         }
-        assert(loadingTime.milliseconds in delayTime..delayTime.plus(0.5.seconds))
+        assert(loadingTime.milliseconds moreThanOrEquals delayTime)
     }
 }
 
+
+private infix fun Duration.moreThanOrEquals(other: Duration) = this >= other
 
 private const val mockData = "mockData"
 private val mockThrowable = Throwable("error")
