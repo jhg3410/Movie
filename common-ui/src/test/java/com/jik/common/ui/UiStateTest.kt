@@ -4,6 +4,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.lang.System.currentTimeMillis
 import kotlin.time.Duration
@@ -80,7 +81,7 @@ class UiStateTest {
                 is UiState.Error -> Unit
             }
         }
-        assert(loadingTime.milliseconds moreThanOrEquals delayTime)
+        assertTrue(loadingTime.milliseconds moreThanOrEquals delayTime)
     }
 }
 
