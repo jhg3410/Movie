@@ -1,7 +1,11 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -13,6 +17,12 @@ android {
         targetSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            type = "String",
+            name = "TMDB_API_KEY",
+            value = gradleLocalProperties(rootDir).getProperty("TMDB_API_KEY")
+        )
     }
 
     buildTypes {
@@ -37,6 +47,21 @@ dependencies {
 
     implementation(projects.coreModel)
     implementation(libs.androidx.ktx)
+
+    // moshi
+    implementation(libs.moshi)
+    ksp(libs.moshi.codegen)
+
+    // retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi)
+
+    // logging
+    implementation(libs.logging.interceptor)
+
+    // hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     // test
     testImplementation(libs.junit)

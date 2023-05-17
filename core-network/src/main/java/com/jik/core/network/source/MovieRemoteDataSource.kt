@@ -5,7 +5,7 @@ import com.jik.core.model.MovieInfo
 
 interface MovieRemoteDataSource {
 
-    fun getPopularMovies(): List<Movie>
+    suspend fun getPopularMovies(): Result<List<Movie>>
 
-    fun getMovieInfo(id: Int): MovieInfo
+    suspend fun getMovieInfo(id: Int): Result<MovieInfo>
 }

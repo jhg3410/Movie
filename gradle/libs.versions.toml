@@ -1,9 +1,9 @@
 [versions]
-kotlin = "1.8.0"
+kotlin = "1.8.10"
 
 ktx = "1.9.0"
 runtime-ktx = "2.6.1"
-compose = "1.4.0"
+compose = "1.4.3"
 activity-compose = "1.7.0"
 material3 = "1.1.0-beta01"
 junit = "4.13.2"
@@ -12,7 +12,12 @@ espresso = "3.5.1"
 moshi = "1.14.0"
 coil = "2.3.0"
 timber = "5.0.1"
-viewmodel = "2.5.1"
+lifecycle = "2.5.1"
+coroutines = "1.7.0"
+hilt = "2.45"
+retrofit = "2.9.0"
+logging-interceptor = "4.11.0"
+ksp = "1.8.10-1.0.9"
 
 
 androidGradlePlugin = "7.4.2"
@@ -22,12 +27,19 @@ androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx"
 androidx-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "runtime-ktx" }
 androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 
+# coroutine
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
 # compose
 compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
 compose-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
-compose-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewmodel" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+
+# lifecycle
+lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -40,6 +52,7 @@ compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifes
 
 # moshi
 moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+moshi-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 
 # coil
 compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
@@ -47,7 +60,22 @@ compose-coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 # Timer
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
+# Hilt
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+
+# Retrofit
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
+
+# Logging Interceptor
+logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+hilt-plugin = { id = "dagger.hilt.android.plugin", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

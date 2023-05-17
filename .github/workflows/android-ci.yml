@@ -22,5 +22,9 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+
+    - name: Set up TMDB API Key
+      run: echo 'TMDB_API_KEY=${{ secrets.TMDB_API_KEY }}' > ./local.properties
+
     - name: Build with Gradle
       run: ./gradlew build
