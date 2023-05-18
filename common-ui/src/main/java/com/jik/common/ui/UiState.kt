@@ -1,10 +1,9 @@
 package com.jik.common.ui
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 
 sealed interface UiState<out T> {
     object Loading : UiState<Nothing>
@@ -13,6 +12,7 @@ sealed interface UiState<out T> {
 }
 
 fun <T> getUiStateFlow(
+    scope: CoroutineScope,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
     block: suspend () -> Result<T>
 ) = flow {
@@ -23,4 +23,8 @@ fun <T> getUiStateFlow(
     result.onFailure {
         emit(UiState.Error(it))
     }
-}.onStart { emit(UiState.Loading) }.flowOn(dispatcher)
+}.onStart { emit(UiState.Loading) }.flowOn(dispatcher).stateIn(
+    scope = scope,
+    started = SharingStarted.WhileSubscribed(5000),
+    initialValue = UiState.Loading
+)

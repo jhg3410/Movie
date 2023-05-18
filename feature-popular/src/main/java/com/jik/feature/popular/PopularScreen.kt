@@ -26,19 +26,19 @@ fun PopularScreen(
     popularViewModel: PopularViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    val popularMovie by popularViewModel.popularMovieFlow.collectAsStateWithLifecycle(initialValue = UiState.Loading)
+    val popularUiState by popularViewModel.popularUiState.collectAsStateWithLifecycle()
 
-    when (popularMovie) {
+    when (popularUiState) {
         is UiState.Loading -> {
             toast(context, "Loading...")
         }
         is UiState.Error -> {
-            toast(context, "Error: ${(popularMovie as UiState.Error).throwable.message}")
+            toast(context, "Error: ${(popularUiState as UiState.Error).throwable.message}")
         }
         is UiState.Success -> {
             PopularScreenContent(
                 modifier = modifier,
-                popularMovie = (popularMovie as UiState.Success).data
+                popularMovie = (popularUiState as UiState.Success).data
             )
         }
     }
