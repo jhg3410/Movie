@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -26,19 +25,19 @@ fun PopularScreen(
     popularViewModel: PopularViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    val popularUiState by popularViewModel.popularUiState.collectAsStateWithLifecycle()
+    val popularUiState = popularViewModel.popularUiState.collectAsStateWithLifecycle().value
 
     when (popularUiState) {
         is UiState.Loading -> {
             toast(context, "Loading...")
         }
         is UiState.Error -> {
-            toast(context, "Error: ${(popularUiState as UiState.Error).throwable.message}")
+            toast(context, "Error: ${popularUiState.throwable.message}")
         }
         is UiState.Success -> {
             PopularScreenContent(
                 modifier = modifier,
-                popularMovie = (popularUiState as UiState.Success).data
+                popularMovie = popularUiState.data
             )
         }
     }

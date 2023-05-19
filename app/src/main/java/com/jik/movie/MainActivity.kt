@@ -13,10 +13,14 @@ import com.jik.common.ui.preview.DevicePreviews
 import com.jik.common.ui.theme.MovieTheme
 import com.jik.feature.popular.PopularScreen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
+import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        createSplashScreen(delay = 1.2.seconds)
+
         super.onCreate(savedInstanceState)
         setContent {
             MovieTheme(
