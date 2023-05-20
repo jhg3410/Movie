@@ -45,7 +45,9 @@ android {
 
 dependencies {
 
+    // modules
     implementation(projects.coreModel)
+
     implementation(libs.androidx.ktx)
 
     // moshi

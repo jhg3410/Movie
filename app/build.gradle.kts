@@ -66,8 +66,9 @@ dependencies {
 
     // compose
     implementation(libs.compose.ui)
-    implementation(libs.compose.preview)
     implementation(libs.compose.material3)
+    implementation(libs.compose.tooling)
+    implementation(libs.compose.preview)
 
     // hilt
     implementation(libs.hilt.android)

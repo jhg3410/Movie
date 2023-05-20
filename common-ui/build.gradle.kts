@@ -42,15 +42,22 @@ android {
 
 dependencies {
 
+    // modules
     implementation(projects.coreModel)
 
+    implementation(libs.androidx.ktx)
+
+    // compose
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
     implementation(libs.compose.tooling)
-    implementation(libs.androidx.ktx)
+    implementation(libs.compose.preview)
 
     // coroutines
     implementation(libs.coroutines)
+
+    // coil
+    implementation(libs.compose.coil)
 
     // test
     testImplementation(libs.junit)
@@ -59,7 +66,4 @@ dependencies {
     // android test
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso)
-
-    // coil
-    implementation(libs.compose.coil)
 }

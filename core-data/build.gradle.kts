@@ -36,9 +36,10 @@ android {
 }
 
 dependencies {
-
+    // modules
     implementation(projects.coreModel)
     implementation(projects.coreNetwork)
+
     implementation(libs.androidx.ktx)
 
     // hilt
