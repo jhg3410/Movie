@@ -13,16 +13,21 @@ import com.jik.common.ui.theme.MovieTheme
 fun MovieTopAppBar(
     @StringRes titleRes: Int,
     modifier: Modifier = Modifier,
-    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.primary)
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(
+        containerColor = MaterialTheme.colorScheme.background,
+        scrolledContainerColor = MaterialTheme.colorScheme.background
+    ),
+    scrollBehavior: TopAppBarScrollBehavior
 ) {
     TopAppBar(
         title = {
             Text(
                 text = stringResource(id = titleRes),
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.primary
             )
         },
         colors = colors,
+        scrollBehavior = scrollBehavior,
         modifier = modifier
     )
 }
@@ -35,7 +40,8 @@ private fun TopAppBarPreview() {
         dynamicColor = false
     ) {
         MovieTopAppBar(
-            titleRes = android.R.string.untitled
+            titleRes = android.R.string.untitled,
+            scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         )
     }
 }

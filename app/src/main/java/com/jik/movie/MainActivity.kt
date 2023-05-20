@@ -6,10 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.jik.common.ui.component.MovieTopAppBar
-import com.jik.common.ui.preview.DevicePreviews
 import com.jik.common.ui.theme.MovieTheme
 import com.jik.feature.popular.PopularScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,18 +36,12 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieScreen() {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
     Scaffold(
-        topBar = { MovieTopAppBar(titleRes = R.string.app_name) }
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = { MovieTopAppBar(titleRes = R.string.app_name, scrollBehavior = scrollBehavior) }
     ) {
         PopularScreen(Modifier.padding(it))
-    }
-}
-
-
-@DevicePreviews
-@Composable
-fun DefaultPreview() {
-    MovieTheme {
-        MovieApp()
     }
 }

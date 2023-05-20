@@ -95,12 +95,13 @@ fun MovieTheme(
         else -> LightColors
     }
     val view = LocalView.current
-    val window = (view.context as Activity).window
 
     if (!view.isInEditMode) {
+        val window = (view.context as Activity).window
+
         SideEffect {
-            window.statusBarColor = colorScheme.primary.toArgb()
-            window.navigationBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = colorScheme.background.toArgb()
+            window.navigationBarColor = colorScheme.background.toArgb()
             WindowCompat.getInsetsController(window, view).run {
                 isAppearanceLightStatusBars = darkTheme.not()
                 isAppearanceLightNavigationBars = darkTheme.not()
