@@ -16,8 +16,9 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Movie"
 include(":app")
+include(":core-ui")
+include(":core-designsystem")
 include(":core-model")
 include(":core-network")
 include(":core-data")
-include(":common-ui")
 include(":feature-popular")

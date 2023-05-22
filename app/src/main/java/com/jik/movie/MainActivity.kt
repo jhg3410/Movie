@@ -10,8 +10,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import com.jik.common.ui.component.MovieTopAppBar
-import com.jik.common.ui.theme.MovieTheme
+import com.jik.core.designsystem.component.MovieTopAppBar
+import com.jik.core.designsystem.theme.MovieTheme
 import com.jik.feature.popular.PopularScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*

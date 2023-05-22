@@ -14,10 +14,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.jik.common.ui.UiState
-import com.jik.common.ui.component.PosterCard
-import com.jik.common.ui.util.toast
+import com.jik.core.designsystem.component.PosterCard
 import com.jik.core.model.Movie
+import com.jik.core.ui.state.UiState
+import com.jik.core.ui.util.toast
+
 
 @Composable
 fun PopularScreen(
