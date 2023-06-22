@@ -27,7 +27,7 @@ class UiStateTest {
     fun success() = runTest {
 
         launch {
-            val uiStateFlow = getUiStateFlow(scope = this, block = { Result.success(successData) })
+            val uiStateFlow = getUiStateFlow(block = { Result.success(successData) })
 
             uiStateFlow.collect { uiState ->
                 result.add(uiState)
@@ -46,7 +46,7 @@ class UiStateTest {
 
         launch {
             val uiStateFlow =
-                getUiStateFlow(scope = this, block = { Result.failure<String>(failData) })
+                getUiStateFlow(block = { Result.failure<String>(failData) })
 
             uiStateFlow.collect { uiState ->
                 result.add(uiState)
@@ -67,7 +67,7 @@ class UiStateTest {
         var loadingTime = 0L
 
         launch {
-            val uiStateFlow = getUiStateFlow(scope = this, block = {
+            val uiStateFlow = getUiStateFlow(block = {
                 delay(delayTime)
                 Result.success(successData)
             })
