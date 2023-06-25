@@ -14,9 +14,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.jik.core.designsystem.component.ErrorButton
 import com.jik.core.designsystem.component.LoadingWheel
 import com.jik.core.designsystem.component.PosterCard
+import com.jik.core.designsystem.component.Refresh
 import com.jik.core.model.Movie
 import com.jik.core.ui.pagination.Pageable
 import com.jik.core.ui.util.toast
@@ -91,12 +91,14 @@ fun PopularScreenContent(
                 }
                 is PopularUiState.Error -> {
                     if (index != uiStates.size - 1) return@forEachIndexed
+
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         Box(
                             modifier = Modifier.height(popularScreenHeight)
                         ) {
-                            ErrorButton(
+                            Refresh(
                                 modifier = Modifier.align(Alignment.Center),
+                                size = 40.dp,
                                 onClick = {
                                     coroutineScope.launch {
                                         onRetry()
