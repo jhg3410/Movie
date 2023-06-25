@@ -7,17 +7,20 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.jik.core.designsystem.component.ErrorButton
 import com.jik.core.designsystem.component.LoadingWheel
 import com.jik.core.designsystem.component.PosterCard
 import com.jik.core.model.Movie
 import com.jik.core.ui.pagination.Pageable
 import com.jik.core.ui.util.toast
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -30,6 +33,7 @@ fun PopularScreen(
         modifier = modifier,
         uiStates = popularViewModel.uiStates,
         onLoadMore = popularViewModel::getPopularMovies,
+        onRetry = popularViewModel::getPopularMovies
     )
 }
 
@@ -38,8 +42,10 @@ fun PopularScreenContent(
     modifier: Modifier = Modifier,
     uiStates: List<PopularUiState>,
     onLoadMore: suspend () -> Unit,
+    onRetry: suspend () -> Unit
 ) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     // screen height - topAppBar height
     val popularScreenHeight = LocalConfiguration.current.screenHeightDp.dp - 64.dp
@@ -84,12 +90,27 @@ fun PopularScreenContent(
                     }
                 }
                 is PopularUiState.Error -> {
-                    // todo
+                    if (index != uiStates.size - 1) return@forEachIndexed
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Box(
+                            modifier = Modifier.height(popularScreenHeight)
+                        ) {
+                            ErrorButton(
+                                modifier = Modifier.align(Alignment.Center),
+                                onClick = {
+                                    coroutineScope.launch {
+                                        onRetry()
+                                    }
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
+
 
 private fun onPosterCardClick(context: Context, movie: Movie) {
     toast(context, movie.title)
