@@ -1,9 +1,6 @@
 package com.jik.feature.popular
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.jik.core.data.repository.MovieRepository
 import com.jik.core.model.Movie
@@ -18,30 +15,38 @@ class PopularViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : ViewModel() {
 
+
     private val page = MutableStateFlow(1)
 
-    val popularMovies = mutableStateListOf<Movie>()
-    var visibleLoading by mutableStateOf(false)
-    var visibleError by mutableStateOf(false)
+    val uiStates = mutableStateListOf<PopularUiState>()
 
 
     suspend fun getPopularMovies() {
         getUiStateFlow { movieRepository.getPopularMovies(page.value) }
             .collect { uiState ->
                 when (uiState) {
-                    is UiState.Error -> {
-                        visibleError = true
-                        visibleLoading = false
-                    }
                     is UiState.Loading -> {
-                        visibleLoading = true
+                        uiStates.add(PopularUiState.Loading)
+                    }
+                    is UiState.Error -> {
+                        uiStates.add(PopularUiState.Error(uiState.throwable))
                     }
                     is UiState.Success -> {
-                        visibleLoading = false
                         page.value++
-                        popularMovies.addAll(uiState.data)
+                        uiState.data.forEach {
+                            uiStates.add(PopularUiState.Data(it))
+                        }
                     }
                 }
             }
     }
+}
+
+
+sealed class PopularUiState {
+    object Loading : PopularUiState()
+
+    data class Error(val throwable: Throwable) : PopularUiState()
+
+    data class Data(val movie: Movie) : PopularUiState()
 }

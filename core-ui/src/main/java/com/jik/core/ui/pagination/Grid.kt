@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 @Composable
 fun LazyGridState.Pageable(
     onLoadMore: suspend () -> Unit,
-    threshold: Int = 5
+    threshold: Int = 4
 ) {
     fun calculateShouldLoadMore(): Boolean {
         val itemCount = layoutInfo.totalItemsCount
