@@ -9,16 +9,16 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.jik.common.ui.UiState
-import com.jik.common.ui.component.PosterCard
-import com.jik.common.ui.util.toast
+import com.jik.core.designsystem.component.PosterCard
 import com.jik.core.model.Movie
+import com.jik.core.ui.state.UiState
+import com.jik.core.ui.util.toast
+
 
 @Composable
 fun PopularScreen(
@@ -26,19 +26,19 @@ fun PopularScreen(
     popularViewModel: PopularViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    val popularMovie by popularViewModel.popularMovieFlow.collectAsStateWithLifecycle(initialValue = UiState.Loading)
+    val popularUiState = popularViewModel.popularUiState.collectAsStateWithLifecycle().value
 
-    when (popularMovie) {
+    when (popularUiState) {
         is UiState.Loading -> {
             toast(context, "Loading...")
         }
         is UiState.Error -> {
-            toast(context, "Error: ${(popularMovie as UiState.Error).throwable.message}")
+            toast(context, "Error: ${popularUiState.throwable.message}")
         }
         is UiState.Success -> {
             PopularScreenContent(
                 modifier = modifier,
-                popularMovie = (popularMovie as UiState.Success).data
+                popularMovie = popularUiState.data
             )
         }
     }

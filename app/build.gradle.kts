@@ -55,7 +55,8 @@ android {
 dependencies {
 
     // modules
-    implementation(projects.commonUi)
+    implementation(projects.coreDesignsystem)
+    implementation(projects.coreUi)
     implementation(projects.coreModel)
     implementation(projects.coreData)
     implementation(projects.featurePopular)
@@ -66,12 +67,16 @@ dependencies {
 
     // compose
     implementation(libs.compose.ui)
-    implementation(libs.compose.preview)
     implementation(libs.compose.material3)
+    implementation(libs.compose.tooling)
+    implementation(libs.compose.preview)
 
     // hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+    // splash
+    implementation(libs.splashscreen)
 
     // test
     testImplementation(libs.junit)

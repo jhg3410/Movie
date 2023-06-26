@@ -44,7 +44,8 @@ android {
 dependencies {
 
     // modules
-    implementation(projects.commonUi)
+    implementation(projects.coreDesignsystem)
+    implementation(projects.coreUi)
     implementation(projects.coreModel)
     implementation(projects.coreData)
 

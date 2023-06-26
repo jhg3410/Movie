@@ -18,6 +18,7 @@ hilt = "2.45"
 retrofit = "2.9.0"
 logging-interceptor = "4.11.0"
 ksp = "1.8.10-1.0.9"
+splashscreen = "1.0.0"
 
 
 androidGradlePlugin = "7.4.2"
@@ -71,6 +72,10 @@ retrofit-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.re
 
 # Logging Interceptor
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+
+# Splash
+splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
