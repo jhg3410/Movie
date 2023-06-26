@@ -15,8 +15,7 @@ class PopularViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : ViewModel() {
 
-
-    private val page = MutableStateFlow(1)
+    private val page = MutableStateFlow(FIRST_PAGE)
 
     val uiStates = mutableStateListOf<PopularUiState>()
 
@@ -32,21 +31,24 @@ class PopularViewModel @Inject constructor(
                         uiStates.add(PopularUiState.Error(uiState.throwable))
                     }
                     is UiState.Success -> {
+                        uiStates.addAll(uiState.data.map { PopularUiState.Data(it) })
                         page.value++
-                        uiState.data.forEach {
-                            uiStates.add(PopularUiState.Data(it))
-                        }
                     }
                 }
             }
     }
+
+    companion object {
+        private const val FIRST_PAGE = 1
+    }
 }
 
 
-sealed class PopularUiState {
-    object Loading : PopularUiState()
+sealed interface PopularUiState {
 
-    data class Error(val throwable: Throwable) : PopularUiState()
+    object Loading : PopularUiState
 
-    data class Data(val movie: Movie) : PopularUiState()
+    data class Data(val movie: Movie) : PopularUiState
+
+    data class Error(val throwable: Throwable) : PopularUiState
 }

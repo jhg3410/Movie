@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jik.core.designsystem.component.LoadingWheel
+import com.jik.core.designsystem.component.MovieTopAppBar
 import com.jik.core.designsystem.component.PosterCard
 import com.jik.core.designsystem.component.Refresh
 import com.jik.core.model.Movie
@@ -37,6 +38,7 @@ fun PopularScreen(
     )
 }
 
+
 @Composable
 fun PopularScreenContent(
     modifier: Modifier = Modifier,
@@ -47,8 +49,7 @@ fun PopularScreenContent(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    // screen height - topAppBar height
-    val popularScreenHeight = LocalConfiguration.current.screenHeightDp.dp - 64.dp
+    val popularScreenHeight = LocalConfiguration.current.screenHeightDp.dp - MovieTopAppBar.height
 
     val lazyGridState = rememberLazyGridState().apply {
         Pageable(onLoadMore = onLoadMore)
@@ -67,7 +68,7 @@ fun PopularScreenContent(
                 is PopularUiState.Data -> {
                     item {
                         PosterCard(
-                            posterPath = "https://image.tmdb.org/t/p/w500" + uiState.movie.posterPath,
+                            posterPath = uiState.movie.getPosterUrl(),
                             modifier = Modifier
                                 .sizeIn(minWidth = 160.dp, minHeight = 240.dp)
                                 .aspectRatio(2f / 3f),
