@@ -8,4 +8,7 @@ data class Movie(
     val id : Long,
     val title: String,
     @Json(name = "poster_path") val posterPath : String,
-)
+) {
+
+    fun getPosterUrl() = "https://image.tmdb.org/t/p/w500$posterPath"
+}
