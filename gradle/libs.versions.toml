@@ -4,7 +4,8 @@ kotlin = "1.8.10"
 ktx = "1.9.0"
 runtime-ktx = "2.6.1"
 compose = "1.4.3"
-activity-compose = "1.7.0"
+compose-activity = "1.7.0"
+compose-navigation = "2.6.0"
 material3 = "1.1.0-beta01"
 junit = "4.13.2"
 ext-junit = "1.1.5"
@@ -15,6 +16,7 @@ timber = "5.0.1"
 lifecycle = "2.5.1"
 coroutines = "1.7.0"
 hilt = "2.45"
+hilt-navigation = "1.0.0"
 retrofit = "2.9.0"
 logging-interceptor = "4.11.0"
 ksp = "1.8.10-1.0.9"
@@ -26,7 +28,8 @@ androidGradlePlugin = "7.4.2"
 [libraries]
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 androidx-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "runtime-ktx" }
-androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+androidx-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "compose-activity" }
+androidx-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
 
 # coroutine
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
@@ -65,6 +68,7 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
 
 # Retrofit
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }

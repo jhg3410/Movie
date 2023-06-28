@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jik.feature.popular"
+    namespace = "com.jik.feature.detail"
     compileSdk = 33
 
     defaultConfig {
@@ -15,6 +15,7 @@ android {
         targetSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {

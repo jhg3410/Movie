@@ -60,10 +60,12 @@ dependencies {
     implementation(projects.coreModel)
     implementation(projects.coreData)
     implementation(projects.featurePopular)
+    implementation(projects.featureDetail)
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.runtime.ktx)
     implementation(libs.androidx.activity)
+    implementation(libs.androidx.navigation)
 
     // compose
     implementation(libs.compose.ui)
