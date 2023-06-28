@@ -1,6 +1,5 @@
 package com.jik.feature.popular
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -11,42 +10,41 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jik.core.designsystem.component.LoadingWheel
 import com.jik.core.designsystem.component.MovieTopAppBar
 import com.jik.core.designsystem.component.PosterCard
 import com.jik.core.designsystem.component.Refresh
-import com.jik.core.model.Movie
 import com.jik.core.ui.pagination.Pageable
-import com.jik.core.ui.util.toast
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun PopularScreen(
+    onPosterCardClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
-    popularViewModel: PopularViewModel = viewModel()
+    popularViewModel: PopularViewModel = hiltViewModel()
 ) {
 
     PopularScreenContent(
-        modifier = modifier,
         uiStates = popularViewModel.uiStates,
         onLoadMore = popularViewModel::getPopularMovies,
-        onRetry = popularViewModel::getPopularMovies
+        onRetry = popularViewModel::getPopularMovies,
+        onPosterCardClick = onPosterCardClick,
+        modifier = modifier,
     )
 }
 
 
 @Composable
 fun PopularScreenContent(
-    modifier: Modifier = Modifier,
     uiStates: List<PopularUiState>,
     onLoadMore: suspend () -> Unit,
-    onRetry: suspend () -> Unit
+    onRetry: suspend () -> Unit,
+    onPosterCardClick: (Long) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     val popularScreenHeight = LocalConfiguration.current.screenHeightDp.dp - MovieTopAppBar.height
@@ -72,7 +70,7 @@ fun PopularScreenContent(
                             modifier = Modifier
                                 .sizeIn(minWidth = 160.dp, minHeight = 240.dp)
                                 .aspectRatio(2f / 3f),
-                            onClick = { onPosterCardClick(context, uiState.movie) }
+                            onClick = { onPosterCardClick(uiState.movie.id) }
                         )
                     }
                 }
@@ -112,9 +110,4 @@ fun PopularScreenContent(
             }
         }
     }
-}
-
-
-private fun onPosterCardClick(context: Context, movie: Movie) {
-    toast(context, movie.title)
 }

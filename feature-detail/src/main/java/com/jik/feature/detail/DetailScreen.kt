@@ -5,14 +5,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 
 
 @Composable
 fun DetailScreen(
     movieId: Long,
     modifier: Modifier = Modifier,
-    viewModel: DetailViewModel = viewModel()
+    viewModel: DetailViewModel = hiltViewModel()
 ) {
 
 
@@ -20,7 +20,7 @@ fun DetailScreen(
         Text(
             text = "Detail Screen${movieId}",
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
