@@ -15,7 +15,7 @@ fun rememberMovieAppState(
     navController: NavHostController = rememberNavController(),
 ): MovieAppState = remember(navController) {
     MovieAppState(
-        navController = navController,
+        navController = navController
     )
 }
 
@@ -26,7 +26,6 @@ class MovieAppState(
 ) {
 
     private val topLevelDestinationRoutes = TopLevelDestination.values().map { it.route }
-
 
     @OptIn(ExperimentalMaterial3Api::class)
     val topAppBarScrollBehavior

@@ -10,7 +10,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun DetailScreen(
-    movieId: Long,
     modifier: Modifier = Modifier,
     viewModel: DetailViewModel = hiltViewModel()
 ) {
@@ -18,7 +17,7 @@ fun DetailScreen(
 
     Box(modifier = modifier) {
         Text(
-            text = "Detail Screen${movieId}",
+            text = "Detail Screen ${viewModel.movieId}",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.primary
         )
