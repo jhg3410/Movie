@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jik.feature.popular"
+    namespace = "com.jik.feature.detail"
     compileSdk = 33
 
     defaultConfig {
@@ -15,6 +15,7 @@ android {
         targetSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -48,7 +49,6 @@ dependencies {
     implementation(projects.coreUi)
     implementation(projects.coreModel)
     implementation(projects.coreData)
-    implementation(projects.featureDetail)
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.runtime.ktx)
