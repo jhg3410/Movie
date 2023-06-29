@@ -1,3 +1,4 @@
-### Current development status
+### Current development status(develop branch)
 
-https://github.com/jhg3410/Movie/assets/80373033/abbfbf70-a92e-4f2c-99bb-0779e56c98d3
+
+https://github.com/jhg3410/Movie/assets/80373033/a9a9cc31-242d-4847-929a-2fddb123a577
