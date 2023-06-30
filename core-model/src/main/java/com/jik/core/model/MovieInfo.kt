@@ -9,6 +9,7 @@ data class MovieInfo(
     val title: String,
     val genres: List<Genre>,
     val overview: String,
+    @Json(name = "release_date") val releaseDate: String,
     @Json(name = "poster_path") val posterPath: String,
     @Json(name = "vote_average") val rating: Double,
 ) {

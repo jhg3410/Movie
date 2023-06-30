@@ -7,5 +7,5 @@ interface MovieRepository {
 
     suspend fun getPopularMovies(page: Int): Result<List<Movie>>
 
-    suspend fun getMovieInfo(id: Int): Result<MovieInfo>
+    suspend fun getMovieInfo(id: Long): Result<MovieInfo>
 }
