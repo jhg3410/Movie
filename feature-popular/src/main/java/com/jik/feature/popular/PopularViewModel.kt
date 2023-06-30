@@ -17,7 +17,7 @@ class PopularViewModel @Inject constructor(
 
     private val page = MutableStateFlow(FIRST_PAGE)
 
-    val uiStates = mutableStateListOf<PopularUiState>()
+    val popularUiStates = mutableStateListOf<PopularUiState>()
 
 
     suspend fun getPopularMovies() {
@@ -25,13 +25,13 @@ class PopularViewModel @Inject constructor(
             .collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        uiStates.add(PopularUiState.Loading)
+                        popularUiStates.add(PopularUiState.Loading)
                     }
                     is UiState.Error -> {
-                        uiStates.add(PopularUiState.Error(uiState.throwable))
+                        popularUiStates.add(PopularUiState.Error(uiState.throwable))
                     }
                     is UiState.Success -> {
-                        uiStates.addAll(uiState.data.map { PopularUiState.Data(it) })
+                        popularUiStates.addAll(uiState.data.map { PopularUiState.Data(it) })
                         page.value++
                     }
                 }
