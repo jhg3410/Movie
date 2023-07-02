@@ -14,7 +14,8 @@ data class MovieInfo(
     @Json(name = "vote_average") val rating: Double,
 ) {
 
-    fun getGenreString(): List<String> = genres.map { it.name }
+    fun getReleaseDateString(): String = "release: $releaseDate"
+    fun getPosterUrl() = "https://image.tmdb.org/t/p/w500$posterPath"
 
     @JsonClass(generateAdapter = true)
     data class Genre(
