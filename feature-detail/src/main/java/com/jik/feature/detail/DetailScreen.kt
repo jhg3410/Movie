@@ -7,14 +7,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -64,20 +62,27 @@ fun DetailScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreenContent(
     movieInfo: MovieInfo,
     modifier: Modifier = Modifier
 ) {
 
-    Column(modifier = modifier) {
+    BottomSheetScaffold(
+        sheetContent = {
+            MovieInformation(movieInfo = movieInfo)
+        },
+        sheetPeekHeight =
+        LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenWidthDp.dp * 1.5f),
+        sheetShape = RoundedCornerShape(size = 16.dp),
+        modifier = modifier
+    ) {
         PosterCard(
             posterPath = movieInfo.getPosterUrl(),
             modifier = Modifier.aspectRatio(2f / 3f),
             roundedCornerSize = 0.dp
         )
-
-        MovieInformation(movieInfo = movieInfo)
     }
 }
 
