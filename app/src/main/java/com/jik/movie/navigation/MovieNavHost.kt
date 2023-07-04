@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.jik.feature.detail.navigation.DetailNavigation.installDetailScreen
+import com.jik.feature.home.navigation.HomeNavigation.installHomeScreen
 import com.jik.feature.popular.navigation.PopularNavigation
 import com.jik.feature.popular.navigation.PopularNavigation.installPopularScreen
 
@@ -19,6 +20,7 @@ fun MovieNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
+        installHomeScreen()
         installPopularScreen(navController)
         installDetailScreen()
     }

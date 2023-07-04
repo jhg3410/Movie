@@ -1,9 +1,23 @@
 package com.jik.movie.navigation
 
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.jik.core.designsystem.icon.MovieIcons
+import com.jik.feature.home.navigation.HomeNavigation
 import com.jik.feature.popular.navigation.PopularNavigation
 
 enum class TopLevelDestination(
-    val route: String
+    val route: String,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
 ) {
-    POPULAR(PopularNavigation.route)
+    HOME(
+        route = HomeNavigation.route,
+        selectedIcon = MovieIcons.Home,
+        unselectedIcon = MovieIcons.HomeOutlined
+    ),
+    POPULAR(
+        route = PopularNavigation.route,
+        selectedIcon = MovieIcons.LocalFireDepartment,
+        unselectedIcon = MovieIcons.LocalFireDepartmentOutlined
+    )
 }

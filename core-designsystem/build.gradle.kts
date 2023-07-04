@@ -46,12 +46,16 @@ dependencies {
     implementation(projects.coreUi)
 
     implementation(libs.androidx.ktx)
+    implementation(libs.androidx.navigation)
 
     // compose
     implementation(libs.compose.ui)
-    implementation(libs.compose.material3)
     implementation(libs.compose.tooling)
     implementation(libs.compose.preview)
+
+    // material
+    implementation(libs.compose.material3)
+    implementation(libs.compose.material.icons)
 
     // coroutines
     implementation(libs.coroutines)
