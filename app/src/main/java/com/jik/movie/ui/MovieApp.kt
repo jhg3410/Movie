@@ -71,23 +71,9 @@ fun MovieBottomBar(
                 MovieNavigationBarItem(
                     selected = selected,
                     onClick = { onNavigateToDestination(destination) },
-                    icon = {
-                        Icon(
-                            imageVector = destination.unselectedIcon,
-                            contentDescription = null
-                        )
-                    },
-                    selectedIcon = {
-                        Icon(
-                            imageVector = destination.selectedIcon,
-                            contentDescription = null
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = destination.route
-                        )
-                    }
+                    iconImageVector = destination.selectedIcon,
+                    selectedIconImageVector = destination.selectedIcon,
+                    labelTextId = destination.iconTextId,
                 )
             }
         }

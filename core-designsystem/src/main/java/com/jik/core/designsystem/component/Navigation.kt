@@ -1,21 +1,33 @@
 package com.jik.core.designsystem.component
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBarDefaults
-import androidx.compose.material3.Surface
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.jik.core.designsystem.component.MovieNavigationBarItemDefaults.selectedIconColor
+import com.jik.core.designsystem.component.MovieNavigationBarItemDefaults.selectedTextColor
+import com.jik.core.designsystem.component.MovieNavigationBarItemDefaults.unselectedIconColor
+import com.jik.core.designsystem.component.MovieNavigationBarItemDefaults.unselectedTextColor
 
+
+val NavigationBarCornerSize = 24.dp
 
 @Composable
 fun MovieNavigationBar(
@@ -30,13 +42,14 @@ fun MovieNavigationBar(
         modifier = modifier,
         shape = shape,
         color = MaterialTheme.colorScheme.background,
+        tonalElevation = 0.1.dp,
         shadowElevation = 4.dp
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .windowInsetsPadding(NavigationBarDefaults.windowInsets)
-                .height(58.dp)
+                .height(52.dp)
                 .selectableGroup(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             content = content
@@ -47,13 +60,17 @@ fun MovieNavigationBar(
 @Composable
 fun RowScope.MovieNavigationBarItem(
     selected: Boolean,
+    iconImageVector: ImageVector,
+    selectedIconImageVector: ImageVector,
     modifier: Modifier = Modifier,
-    label: (@Composable () -> Unit)? = null,
+    labelTextId: Int? = null,
     enabled: Boolean = true,
     onClick: () -> Unit,
-    icon: @Composable () -> Unit,
-    selectedIcon: @Composable () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val scale = animateFloatAsState(targetValue = if (isPressed) 0.8f else 1f)
+
     Box(
         modifier
             .selectable(
@@ -61,61 +78,80 @@ fun RowScope.MovieNavigationBarItem(
                 onClick = onClick,
                 enabled = enabled,
                 role = Role.Tab,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null,
             )
-            .weight(1f),
+            .weight(1f)
+            .scale(scale.value),
         contentAlignment = Alignment.Center
     ) {
-        if (label == null) {
-            NavigationItemIcon(
+        if (labelTextId == null) {
+            MovieNavigationBarItemIcon(
                 selected = selected,
-                icon = icon,
-                selectedIcon = selectedIcon
+                iconImageVector = iconImageVector,
+                selectedIconImageVector = selectedIconImageVector
             )
         } else {
-            NavigationItemLabelAndIcon(
+            MovieNavigationBarItemLabelAndIcon(
                 selected = selected,
-                icon = icon,
-                selectedIcon = selectedIcon,
-                label = label
+                iconImageVector = iconImageVector,
+                selectedIconImageVector = selectedIconImageVector,
+                labelTextId = labelTextId
             )
         }
     }
 }
 
+
 @Composable
-private fun NavigationItemLabelAndIcon(
+private fun MovieNavigationBarItemLabelAndIcon(
     selected: Boolean,
-    icon: @Composable () -> Unit,
-    selectedIcon: @Composable () -> Unit,
-    label: @Composable () -> Unit,
+    iconImageVector: ImageVector,
+    selectedIconImageVector: ImageVector,
+    labelTextId: Int,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        NavigationItemIcon(
+        MovieNavigationBarItemIcon(
             selected = selected,
-            icon = icon,
-            selectedIcon = selectedIcon
+            iconImageVector = iconImageVector,
+            selectedIconImageVector = selectedIconImageVector
         )
-        label()
+        Text(
+            text = stringResource(id = labelTextId),
+            color = if (selected) selectedTextColor() else unselectedTextColor(),
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 12.sp
+        )
     }
 }
 
 @Composable
-private fun NavigationItemIcon(
+private fun MovieNavigationBarItemIcon(
     selected: Boolean,
-    icon: @Composable () -> Unit,
-    selectedIcon: @Composable () -> Unit
+    iconImageVector: ImageVector,
+    selectedIconImageVector: ImageVector,
 ) {
-    if (selected) {
-        selectedIcon()
-    } else {
-        icon()
-    }
+    Icon(
+        imageVector = if (selected) selectedIconImageVector else iconImageVector,
+        tint = if (selected) selectedIconColor() else unselectedIconColor(),
+        contentDescription = null
+    )
 }
 
-val NavigationBarCornerSize = 24.dp
+private object MovieNavigationBarItemDefaults {
+    @Composable
+    fun selectedIconColor() = MaterialTheme.colorScheme.onSurface
+
+    @Composable
+    fun selectedTextColor() = MaterialTheme.colorScheme.onSurface
+
+    @Composable
+    fun unselectedIconColor() = MaterialTheme.colorScheme.outline
+
+    @Composable
+    fun unselectedTextColor() = MaterialTheme.colorScheme.outline
+}

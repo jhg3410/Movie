@@ -5,21 +5,27 @@ import androidx.navigation.NavDestination
 import com.jik.core.designsystem.icon.MovieIcons
 import com.jik.feature.home.navigation.HomeNavigation
 import com.jik.feature.popular.navigation.PopularNavigation
+import com.jik.feature.home.R as homeR
+import com.jik.feature.popular.R as popularR
+
 
 enum class TopLevelDestination(
     val route: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
+    val iconTextId: Int
 ) {
     HOME(
         route = HomeNavigation.route,
-        selectedIcon = MovieIcons.Home,
-        unselectedIcon = MovieIcons.HomeOutlined
+        selectedIcon = MovieIcons.HomeRounded,
+        unselectedIcon = MovieIcons.HomeRounded,
+        iconTextId = homeR.string.home
     ),
     POPULAR(
         route = PopularNavigation.route,
-        selectedIcon = MovieIcons.LocalFireDepartment,
-        unselectedIcon = MovieIcons.LocalFireDepartmentOutlined
+        selectedIcon = MovieIcons.LocalFireDepartmentRounded,
+        unselectedIcon = MovieIcons.LocalFireDepartmentRounded,
+        iconTextId = popularR.string.popular
     )
 }
 
