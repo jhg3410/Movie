@@ -1,6 +1,7 @@
 package com.jik.movie.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavDestination
 import com.jik.core.designsystem.icon.MovieIcons
 import com.jik.feature.home.navigation.HomeNavigation
 import com.jik.feature.popular.navigation.PopularNavigation
@@ -20,4 +21,8 @@ enum class TopLevelDestination(
         selectedIcon = MovieIcons.LocalFireDepartment,
         unselectedIcon = MovieIcons.LocalFireDepartmentOutlined
     )
+}
+
+fun TopLevelDestination.isCurrentDestination(navDestination: NavDestination?): Boolean {
+    return this.route == (navDestination?.route ?: false)
 }

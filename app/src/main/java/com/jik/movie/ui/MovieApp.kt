@@ -1,20 +1,18 @@
 package com.jik.movie.ui
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import com.jik.core.designsystem.component.*
 import com.jik.core.designsystem.theme.MovieTheme
 import com.jik.core.ui.R
 import com.jik.movie.navigation.MovieNavHost
 import com.jik.movie.navigation.TopLevelDestination
+import com.jik.movie.navigation.isCurrentDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +43,15 @@ fun MovieApp() {
                 }
             }
         ) {
-            MovieNavHost(navController = appState.navController, modifier = Modifier.padding(it))
+            val topPadding = it.calculateTopPadding()
+            val bottomPadding = it.calculateBottomPadding()
+            MovieNavHost(
+                navController = appState.navController, modifier = Modifier.padding(
+                    top = topPadding,
+                    bottom = if (appState.isTopLevelDestination && bottomPadding > 0.dp) bottomPadding - NavigationBarCornerSize
+                    else bottomPadding
+                )
+            )
         }
     }
 }
@@ -53,15 +59,15 @@ fun MovieApp() {
 @Composable
 fun MovieBottomBar(
     destination: List<TopLevelDestination>,
-    onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
+    onNavigateToDestination: (TopLevelDestination) -> Unit,
 ) {
     MovieNavigationBar(
         modifier = modifier,
         content = {
             destination.forEach { destination ->
-                val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
+                val selected = destination.isCurrentDestination(currentDestination)
                 MovieNavigationBarItem(
                     selected = selected,
                     onClick = { onNavigateToDestination(destination) },
@@ -86,9 +92,4 @@ fun MovieBottomBar(
             }
         }
     )
-}
-
-
-private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination): Boolean {
-    return this?.hierarchy?.any { it.route == destination.route } ?: false
 }
