@@ -5,10 +5,15 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Surface
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,6 +25,7 @@ import com.jik.core.ui.pagination.Pageable
 import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PopularScreen(
     onPosterCardClick: (Long) -> Unit,
@@ -27,15 +33,30 @@ fun PopularScreen(
     popularViewModel: PopularViewModel = hiltViewModel()
 ) {
 
-    PopularScreenContent(
-        popularUiStates = popularViewModel.popularUiStates,
-        onLoadMore = popularViewModel::getPopularMovies,
-        onRetry = popularViewModel::getPopularMovies,
-        onPosterCardClick = onPosterCardClick,
-        modifier = modifier,
-    )
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+    Surface(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
+        Column {
+            PopularScreenTopBar(scrollBehavior = scrollBehavior)
+            PopularScreenContent(
+                popularUiStates = popularViewModel.popularUiStates,
+                onLoadMore = popularViewModel::getPopularMovies,
+                onRetry = popularViewModel::getPopularMovies,
+                onPosterCardClick = onPosterCardClick,
+                modifier = modifier,
+            )
+        }
+    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PopularScreenTopBar(scrollBehavior: TopAppBarScrollBehavior) {
+    MovieTopAppBar(
+        titleRes = R.string.popular,
+        scrollBehavior = scrollBehavior
+    )
+}
 
 @Composable
 fun PopularScreenContent(

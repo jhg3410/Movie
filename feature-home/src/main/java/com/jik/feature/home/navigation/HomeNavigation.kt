@@ -2,7 +2,6 @@ package com.jik.feature.home.navigation
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -19,13 +18,10 @@ object HomeNavigation {
         navigate(route, navOptions)
     }
 
-    fun NavGraphBuilder.installHomeScreen(
-        ExpandTopBar: @Composable () -> Unit,
-    ) {
+    fun NavGraphBuilder.installHomeScreen() {
         composable(
             route = HomeNavigation.route
         ) {
-            ExpandTopBar()
             HomeScreen()
             Spacer(modifier = Modifier.padding(bottom = NavigationBarCornerSize))
         }

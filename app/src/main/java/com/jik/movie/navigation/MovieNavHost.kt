@@ -14,14 +14,13 @@ fun MovieNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     startDestination: String = HomeNavigation.route,
-    ExpandTopBar: @Composable () -> Unit,
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
-        installHomeScreen(ExpandTopBar)
+        installHomeScreen()
         installPopularScreen(navController)
         installDetailScreen()
     }
