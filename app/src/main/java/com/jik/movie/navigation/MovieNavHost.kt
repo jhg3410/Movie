@@ -13,14 +13,15 @@ import com.jik.feature.popular.navigation.PopularNavigation.installPopularScreen
 fun MovieNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    startDestination: String = HomeNavigation.route
+    startDestination: String = HomeNavigation.route,
+    ExpandTopBar: @Composable () -> Unit,
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
-        installHomeScreen()
+        installHomeScreen(ExpandTopBar)
         installPopularScreen(navController)
         installDetailScreen()
     }

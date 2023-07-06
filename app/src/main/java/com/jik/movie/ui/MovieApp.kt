@@ -45,12 +45,19 @@ fun MovieApp() {
         ) {
             val topPadding = it.calculateTopPadding()
             val bottomPadding = it.calculateBottomPadding()
+
             MovieNavHost(
-                navController = appState.navController, modifier = Modifier.padding(
+                navController = appState.navController,
+                modifier = Modifier.padding(
                     top = topPadding,
                     bottom = if (appState.isTopLevelDestination && bottomPadding > 0.dp) bottomPadding - NavigationBarCornerSize
                     else bottomPadding
-                )
+                ),
+                ExpandTopBar = {
+                    if (scrollBehavior.state.heightOffset < 0.0) {
+                        scrollBehavior.state.heightOffset = 0f
+                    }
+                }
             )
         }
     }
