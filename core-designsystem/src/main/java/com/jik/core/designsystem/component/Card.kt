@@ -10,6 +10,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -24,7 +25,8 @@ fun PosterCard(
     onClick: () -> Unit = {},
     roundedCornerSize: Dp = 16.dp,
     contentDescription: String? = null,
-    placeholder: Painter? = null
+    placeholder: Painter? = null,
+    contentScale: ContentScale = ContentScale.Fit
 ) {
     ElevatedCard(
         shape = RoundedCornerShape(roundedCornerSize),
@@ -33,11 +35,12 @@ fun PosterCard(
     ) {
         AsyncImage(
             model = posterPath,
-            placeholder = placeholder,
             contentDescription = contentDescription,
             modifier = Modifier
                 .fillMaxSize()
                 .clickable { onClick() },
+            placeholder = placeholder,
+            contentScale = contentScale
         )
     }
 }
