@@ -6,13 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination
 import com.jik.core.designsystem.component.*
 import com.jik.core.designsystem.theme.MovieTheme
-import com.jik.core.ui.R
 import com.jik.movie.navigation.MovieNavHost
 import com.jik.movie.navigation.TopLevelDestination
-import com.jik.movie.navigation.isCurrentDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,23 +19,24 @@ fun MovieApp() {
     ) {
         val appState = rememberMovieAppState()
         val scrollBehavior = appState.topAppBarScrollBehavior
+        val destination = appState.currentTopLevelDestination
 
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
-                if (appState.isTopLevelDestination) {
+                if (destination != null) {
                     MovieTopAppBar(
-                        titleRes = R.string.app_name,
+                        titleRes = destination.titleTextId,
                         scrollBehavior = scrollBehavior
                     )
                 }
             },
             bottomBar = {
-                if (appState.isTopLevelDestination) {
+                if (destination != null) {
                     MovieBottomBar(
-                        destination = appState.topLevelDestinations,
+                        topLevelDestination = appState.topLevelDestinations,
+                        currentDestination = destination,
                         onNavigateToDestination = appState::navigateToDestination,
-                        currentDestination = appState.currentDestination
                     )
                 }
             }
@@ -50,7 +48,7 @@ fun MovieApp() {
                 navController = appState.navController,
                 modifier = Modifier.padding(
                     top = topPadding,
-                    bottom = if (appState.isTopLevelDestination && bottomPadding > 0.dp) bottomPadding - NavigationBarCornerSize
+                    bottom = if (destination != null && bottomPadding > 0.dp) bottomPadding - NavigationBarCornerSize
                     else bottomPadding
                 ),
                 ExpandTopBar = {
@@ -65,16 +63,16 @@ fun MovieApp() {
 
 @Composable
 fun MovieBottomBar(
-    destination: List<TopLevelDestination>,
-    currentDestination: NavDestination?,
+    topLevelDestination: List<TopLevelDestination>,
+    currentDestination: TopLevelDestination,
     modifier: Modifier = Modifier,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
 ) {
     MovieNavigationBar(
         modifier = modifier,
         content = {
-            destination.forEach { destination ->
-                val selected = destination.isCurrentDestination(currentDestination)
+            topLevelDestination.forEach { destination ->
+                val selected = destination.route == currentDestination.route
                 MovieNavigationBarItem(
                     selected = selected,
                     onClick = { onNavigateToDestination(destination) },
