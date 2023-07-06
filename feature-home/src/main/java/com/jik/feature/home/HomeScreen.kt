@@ -4,12 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.jik.core.designsystem.component.MovieTopAppBar
 import com.jik.core.designsystem.component.PosterCard
 
@@ -19,12 +21,28 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
 
+    TransparentStatusBar()
+
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Surface(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         HomeScreenTopContent(scrollBehavior = scrollBehavior)
+    }
+}
+
+@Composable
+fun TransparentStatusBar() {
+
+    val systemUiController = rememberSystemUiController()
+    val defaultColor = MaterialTheme.colorScheme.background
+
+    DisposableEffect(Unit) {
+        systemUiController.setStatusBarColor(color = Color.Transparent, darkIcons = true)
+        onDispose {
+            systemUiController.setStatusBarColor(color = defaultColor)
+        }
     }
 }
 

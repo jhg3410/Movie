@@ -61,6 +61,9 @@ dependencies {
     implementation(libs.compose.preview)
     implementation(libs.compose.material3)
 
+    // accompanist
+    implementation(libs.accompanist.systemuicontroller)
+
     // lifecycle
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.lifecycle.runtime)

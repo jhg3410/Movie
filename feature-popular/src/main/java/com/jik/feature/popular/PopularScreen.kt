@@ -28,9 +28,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PopularScreen(
-    onPosterCardClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
-    popularViewModel: PopularViewModel = hiltViewModel()
+    popularViewModel: PopularViewModel = hiltViewModel(),
+    onPosterCardClick: (Long) -> Unit,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()

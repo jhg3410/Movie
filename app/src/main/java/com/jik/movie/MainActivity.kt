@@ -3,6 +3,7 @@ package com.jik.movie
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.view.WindowCompat
 import com.jik.movie.splash.createSplashScreen
 import com.jik.movie.ui.MovieApp
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,6 +15,8 @@ class MainActivity : ComponentActivity() {
         createSplashScreen(delay = 1.2.seconds)
 
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             MovieApp()
