@@ -14,7 +14,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMovieInfo(id: Int): Result<MovieInfo> {
-        TODO("Not yet implemented")
+    override suspend fun getMovieInfo(id: Long): Result<MovieInfo> {
+        return movieService.getMovieInfo(id)
     }
 }

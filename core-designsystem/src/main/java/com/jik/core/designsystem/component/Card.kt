@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.jik.core.designsystem.theme.MovieTheme
@@ -19,13 +20,14 @@ import com.jik.core.designsystem.theme.MovieTheme
 @Composable
 fun PosterCard(
     posterPath: String,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    roundedCornerSize: Dp = 16.dp,
     contentDescription: String? = null,
     placeholder: Painter? = null
 ) {
     ElevatedCard(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(roundedCornerSize),
         elevation = CardDefaults.elevatedCardElevation(8.dp),
         modifier = modifier
     ) {

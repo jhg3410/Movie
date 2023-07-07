@@ -28,7 +28,7 @@ fun PopularScreen(
 ) {
 
     PopularScreenContent(
-        uiStates = popularViewModel.uiStates,
+        popularUiStates = popularViewModel.popularUiStates,
         onLoadMore = popularViewModel::getPopularMovies,
         onRetry = popularViewModel::getPopularMovies,
         onPosterCardClick = onPosterCardClick,
@@ -39,7 +39,7 @@ fun PopularScreen(
 
 @Composable
 fun PopularScreenContent(
-    uiStates: List<PopularUiState>,
+    popularUiStates: List<PopularUiState>,
     onLoadMore: suspend () -> Unit,
     onRetry: suspend () -> Unit,
     onPosterCardClick: (Long) -> Unit,
@@ -61,7 +61,7 @@ fun PopularScreenContent(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        uiStates.forEachIndexed { index, uiState ->
+        popularUiStates.forEachIndexed { index, uiState ->
             when (uiState) {
                 is PopularUiState.Data -> {
                     item {
@@ -75,7 +75,7 @@ fun PopularScreenContent(
                     }
                 }
                 is PopularUiState.Loading -> {
-                    if (index != uiStates.size - 1) return@forEachIndexed
+                    if (index != popularUiStates.size - 1) return@forEachIndexed
 
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         Box(
@@ -89,7 +89,7 @@ fun PopularScreenContent(
                     }
                 }
                 is PopularUiState.Error -> {
-                    if (index != uiStates.size - 1) return@forEachIndexed
+                    if (index != popularUiStates.size - 1) return@forEachIndexed
 
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         Box(

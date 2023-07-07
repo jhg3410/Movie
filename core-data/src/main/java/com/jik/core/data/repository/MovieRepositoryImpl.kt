@@ -13,7 +13,7 @@ class MovieRepositoryImpl @Inject constructor(
         return movieRemoteDataSource.getPopularMovies(page)
     }
 
-    override suspend fun getMovieInfo(id: Int): Result<MovieInfo> {
+    override suspend fun getMovieInfo(id: Long): Result<MovieInfo> {
         return movieRemoteDataSource.getMovieInfo(id = id)
     }
 }

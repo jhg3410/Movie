@@ -14,6 +14,7 @@ class MainActivity : ComponentActivity() {
         createSplashScreen(delay = 1.2.seconds)
 
         super.onCreate(savedInstanceState)
+
         setContent {
             MovieApp()
         }

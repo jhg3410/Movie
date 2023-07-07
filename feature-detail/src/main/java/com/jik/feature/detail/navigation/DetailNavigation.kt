@@ -1,5 +1,6 @@
 package com.jik.feature.detail.navigation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -9,8 +10,8 @@ import com.jik.feature.detail.DetailScreen
 
 object DetailNavigation {
 
+    const val movieIdArg = "movieId"
     private const val route = "detail"
-    private const val movieIdArg = "movieId"
     private const val routeWithArgs = "${route}/{${movieIdArg}}"
 
     private val arguments = listOf(
@@ -27,11 +28,14 @@ object DetailNavigation {
         composable(
             route = routeWithArgs,
             arguments = arguments
-        ) { navBackStackEntry ->
-            val movieId =
-                navBackStackEntry.arguments?.getLong(movieIdArg)
-                    ?: throw IllegalStateException("movieId not found")
-            DetailScreen(movieId = movieId)
+        ) {
+            DetailScreen()
         }
     }
+}
+
+internal class MovieArgs(val movieId: Long) {
+    constructor(savedStateHandle: SavedStateHandle): this(
+        movieId = checkNotNull(savedStateHandle[DetailNavigation.movieIdArg])
+    )
 }
