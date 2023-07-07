@@ -5,10 +5,18 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
+import com.jik.feature.home.navigation.HomeNavigation
+import com.jik.feature.home.navigation.HomeNavigation.navigateHome
+import com.jik.feature.popular.navigation.PopularNavigation
+import com.jik.feature.popular.navigation.PopularNavigation.navigatePopular
 import com.jik.movie.navigation.TopLevelDestination
+import com.jik.movie.navigation.TopLevelDestination.HOME
+import com.jik.movie.navigation.TopLevelDestination.POPULAR
 
 @Composable
 fun rememberMovieAppState(
@@ -25,13 +33,33 @@ class MovieAppState(
     val navController: NavHostController,
 ) {
 
-    private val topLevelDestinationRoutes = TopLevelDestination.values().map { it.route }
-
     @OptIn(ExperimentalMaterial3Api::class)
     val topAppBarScrollBehavior
         @Composable get() = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    val isTopLevelDestination: Boolean
-        @Composable get() = navController
-            .currentBackStackEntryAsState().value?.destination?.route in topLevelDestinationRoutes
+    private val currentDestination: NavDestination?
+        @Composable get() = navController.currentBackStackEntryAsState().value?.destination
+
+    val currentTopLevelDestination: TopLevelDestination?
+        @Composable get() = when (currentDestination?.route) {
+            HomeNavigation.route -> HOME
+            PopularNavigation.route -> POPULAR
+            else -> null
+        }
+
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().toList()
+
+    fun navigateToDestination(topLevelDestination: TopLevelDestination) {
+        val navOptions = navOptions {
+            popUpTo(navController.graph.startDestinationId) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+        when (topLevelDestination) {
+            HOME -> navController.navigateHome(navOptions)
+            POPULAR -> navController.navigatePopular(navOptions)
+        }
+    }
 }

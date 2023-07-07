@@ -59,6 +59,7 @@ dependencies {
     implementation(projects.coreUi)
     implementation(projects.coreModel)
     implementation(projects.coreData)
+    implementation(projects.featureHome)
     implementation(projects.featurePopular)
     implementation(projects.featureDetail)
 

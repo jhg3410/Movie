@@ -1,37 +1,71 @@
 package com.jik.movie.ui
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import com.jik.core.designsystem.component.MovieTopAppBar
+import androidx.compose.ui.unit.dp
+import com.jik.core.designsystem.component.MovieNavigationBar
+import com.jik.core.designsystem.component.MovieNavigationBarItem
+import com.jik.core.designsystem.component.NavigationBarCornerSize
 import com.jik.core.designsystem.theme.MovieTheme
-import com.jik.core.ui.R
 import com.jik.movie.navigation.MovieNavHost
+import com.jik.movie.navigation.TopLevelDestination
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieApp() {
     MovieTheme(
         dynamicColor = false
     ) {
         val appState = rememberMovieAppState()
-        val scrollBehavior = appState.topAppBarScrollBehavior
+        val destination = appState.currentTopLevelDestination
 
         Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = {
-                if (appState.isTopLevelDestination) {
-                    MovieTopAppBar(
-                        titleRes = R.string.app_name,
-                        scrollBehavior = scrollBehavior
+            bottomBar = {
+                if (destination != null) {
+                    MovieBottomBar(
+                        topLevelDestination = appState.topLevelDestinations,
+                        currentDestination = destination,
+                        onNavigateToDestination = appState::navigateToDestination,
                     )
                 }
             }
         ) {
-            MovieNavHost(navController = appState.navController, modifier = Modifier.padding(it))
+            val topPadding = it.calculateTopPadding()
+            val bottomPadding = it.calculateBottomPadding()
+
+            MovieNavHost(
+                navController = appState.navController,
+                modifier = Modifier.padding(
+                    top = topPadding,
+                    bottom = if (destination != null && bottomPadding > 0.dp) bottomPadding - NavigationBarCornerSize
+                    else bottomPadding
+                )
+            )
         }
     }
+}
+
+@Composable
+fun MovieBottomBar(
+    topLevelDestination: List<TopLevelDestination>,
+    currentDestination: TopLevelDestination,
+    modifier: Modifier = Modifier,
+    onNavigateToDestination: (TopLevelDestination) -> Unit,
+) {
+    MovieNavigationBar(
+        modifier = modifier,
+        content = {
+            topLevelDestination.forEach { destination ->
+                val selected = destination.route == currentDestination.route
+                MovieNavigationBarItem(
+                    selected = selected,
+                    onClick = { onNavigateToDestination(destination) },
+                    iconImageVector = destination.selectedIcon,
+                    selectedIconImageVector = destination.selectedIcon,
+                    labelTextId = destination.iconTextId,
+                )
+            }
+        }
+    )
 }

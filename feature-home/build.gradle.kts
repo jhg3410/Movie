@@ -2,10 +2,13 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    id("dagger.hilt.android.plugin")
 }
 
+
 android {
-    namespace = "com.jik.core.designsystem"
+    namespace = "com.jik.feature.home"
     compileSdk = 33
 
     defaultConfig {
@@ -25,12 +28,6 @@ android {
             )
         }
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -38,36 +35,50 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.3"
+    }
 }
 
 dependencies {
 
     // modules
+    implementation(projects.coreDesignsystem)
     implementation(projects.coreUi)
+    implementation(projects.coreModel)
+    implementation(projects.coreData)
 
     implementation(libs.androidx.ktx)
+    implementation(libs.androidx.runtime.ktx)
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.navigation)
 
     // compose
     implementation(libs.compose.ui)
-    implementation(libs.compose.tooling)
     implementation(libs.compose.preview)
-
-    // material
     implementation(libs.compose.material3)
-    implementation(libs.compose.material.icons)
 
-    // coroutines
-    implementation(libs.coroutines)
+    // lifecycle
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.runtime)
 
-    // coil
-    implementation(libs.compose.coil)
+    // hilt
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation)
+    kapt(libs.hilt.compiler)
 
     // test
     testImplementation(libs.junit)
-    testImplementation(libs.coroutines.test)
 
     // android test
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso)
+    androidTestImplementation(libs.compose.test.junit)
+
+    // debug
+    debugImplementation(libs.compose.tooling)
+    debugImplementation(libs.compose.test.manifest)
 }
