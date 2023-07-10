@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -17,10 +16,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jik.core.designsystem.component.LoadingWheel
-import com.jik.core.designsystem.component.MovieTopAppBar
-import com.jik.core.designsystem.component.PosterCard
-import com.jik.core.designsystem.component.Refresh
+import com.jik.core.designsystem.component.*
 import com.jik.core.ui.pagination.Pageable
 import kotlinx.coroutines.launch
 
@@ -35,19 +31,20 @@ fun PopularScreen(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    Surface(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
-        Column {
-            PopularScreenTopBar(scrollBehavior = scrollBehavior)
-            PopularScreenContent(
-                popularUiStates = popularViewModel.popularUiStates,
-                onLoadMore = popularViewModel::getPopularMovies,
-                onRetry = popularViewModel::getPopularMovies,
-                onPosterCardClick = onPosterCardClick,
-                modifier = modifier,
-            )
-        }
+    Column(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
+        PopularScreenTopBar(scrollBehavior = scrollBehavior)
+        PopularScreenContent(
+            popularUiStates = popularViewModel.popularUiStates,
+            onLoadMore = popularViewModel::getPopularMovies,
+            onRetry = popularViewModel::getPopularMovies,
+            onPosterCardClick = onPosterCardClick,
+            modifier = modifier,
+        )
+
+        Spacer(modifier = Modifier.padding(bottom = NavigationBarCornerSize))
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
