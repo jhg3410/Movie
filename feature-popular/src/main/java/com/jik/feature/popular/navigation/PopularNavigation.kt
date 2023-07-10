@@ -22,7 +22,7 @@ object PopularNavigation {
             route = PopularNavigation.route
         ) {
             PopularScreen(
-                onPosterCardClick = { movieId -> navController.navigateDetail(movieId) },
+                onPosterClick = { movieId -> navController.navigateDetail(movieId) },
             )
         }
     }

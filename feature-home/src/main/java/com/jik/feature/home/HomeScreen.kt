@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel(),
+    onPosterClick: (Long) -> Unit,
 ) {
 
     TransparentStatusBar()
@@ -48,6 +49,7 @@ fun HomeScreen(
             popularMovies = homeViewModel.popularMovies,
             onLoadMore = homeViewModel::getPopularMovies,
             onRetry = homeViewModel::getPopularMovies,
+            onPosterClick = onPosterClick
         )
         HomeScreenTopBar()
     }
@@ -78,12 +80,20 @@ fun HomeScreenContent(
     popularMovies: List<Movie>,
     onLoadMore: suspend () -> Unit,
     onRetry: suspend () -> Unit,
+    onPosterClick: (Long) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier) {
-        HomeScreenTopContent(mainMovie = mainMovie)
-        HomeScreenPopularContent(popularMovies = popularMovies, onLoadMore = onLoadMore)
+        HomeScreenTopContent(
+            mainMovie = mainMovie,
+            onPosterClick = onPosterClick,
+        )
+        HomeScreenPopularContent(
+            popularMovies = popularMovies,
+            onLoadMore = onLoadMore,
+            onPosterClick = onPosterClick
+        )
         Spacer(modifier = Modifier.padding(bottom = NavigationBarCornerSize))
     }
 
@@ -112,6 +122,7 @@ fun HomeScreenContent(
 fun HomeScreenTopContent(
     mainMovie: Movie,
     modifier: Modifier = Modifier,
+    onPosterClick: (Long) -> Unit,
 ) {
 
     val colorStops = arrayOf(
@@ -129,7 +140,10 @@ fun HomeScreenTopContent(
             modifier = Modifier
                 .aspectRatio(1f / 1.2f)
                 .fillMaxSize(),
+            clickable = mainMovie != Movie.EMPTY,
+            onClick = { onPosterClick(mainMovie.id) },
             roundedCornerSize = 0.dp,
+            alignment = Alignment.TopCenter,
             contentScale = ContentScale.Crop
         )
         Box(
@@ -147,9 +161,9 @@ fun HomeScreenPopularContent(
     modifier: Modifier = Modifier,
     popularMovies: List<Movie>,
     onLoadMore: suspend () -> Unit,
+    onPosterClick: (Long) -> Unit,
 ) {
 
-    val popularPosterUrls = popularMovies.map { it.getPosterUrl() }
 
     val lazyListState = rememberLazyListState().apply {
         Pageable(onLoadMore = onLoadMore)
@@ -172,12 +186,13 @@ fun HomeScreenPopularContent(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(horizontal = 16.dp),
         ) {
-            items(items = popularPosterUrls) { posterUrl ->
+            items(items = popularMovies) { movie ->
                 PosterCard(
-                    posterPath = posterUrl,
+                    posterPath = movie.getPosterUrl(),
                     modifier = Modifier
                         .width(120.dp)
                         .aspectRatio(1f / 1.5f),
+                    onClick = { onPosterClick(movie.id) },
                     roundedCornerSize = 16.dp,
                 )
             }
@@ -195,7 +210,7 @@ fun HomeScreenTopBar(
         titleRes = R.string.home,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background.copy(
-                alpha = 0.5f
+                alpha = 0.4f
             )
         )
     )

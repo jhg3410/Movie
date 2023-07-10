@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -22,10 +23,12 @@ import com.jik.core.designsystem.theme.MovieTheme
 fun PosterCard(
     posterPath: String,
     modifier: Modifier = Modifier,
+    clickable: Boolean = true,
     onClick: () -> Unit = {},
     roundedCornerSize: Dp = 16.dp,
     contentDescription: String? = null,
     placeholder: Painter? = null,
+    alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit
 ) {
     ElevatedCard(
@@ -38,8 +41,9 @@ fun PosterCard(
             contentDescription = contentDescription,
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { onClick() },
+                .clickable(enabled = clickable) { onClick() },
             placeholder = placeholder,
+            alignment = alignment,
             contentScale = contentScale
         )
     }

@@ -23,7 +23,7 @@ fun MovieNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
-        installHomeScreen()
+        installHomeScreen(navController)
         installPopularScreen(navController)
         installDetailScreen(
             modifier = Modifier

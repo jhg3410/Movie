@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 fun PopularScreen(
     modifier: Modifier = Modifier,
     popularViewModel: PopularViewModel = hiltViewModel(),
-    onPosterCardClick: (Long) -> Unit,
+    onPosterClick: (Long) -> Unit,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -37,7 +37,7 @@ fun PopularScreen(
             popularUiStates = popularViewModel.popularUiStates,
             onLoadMore = popularViewModel::getPopularMovies,
             onRetry = popularViewModel::getPopularMovies,
-            onPosterCardClick = onPosterCardClick,
+            onPosterClick = onPosterClick,
             modifier = modifier,
         )
 
@@ -60,7 +60,7 @@ fun PopularScreenContent(
     popularUiStates: List<PopularUiState>,
     onLoadMore: suspend () -> Unit,
     onRetry: suspend () -> Unit,
-    onPosterCardClick: (Long) -> Unit,
+    onPosterClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -88,7 +88,7 @@ fun PopularScreenContent(
                             modifier = Modifier
                                 .sizeIn(minWidth = 160.dp, minHeight = 240.dp)
                                 .aspectRatio(2f / 3f),
-                            onClick = { onPosterCardClick(uiState.movie.id) }
+                            onClick = { onPosterClick(uiState.movie.id) }
                         )
                     }
                 }
