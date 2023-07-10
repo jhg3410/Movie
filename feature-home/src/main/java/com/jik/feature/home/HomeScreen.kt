@@ -5,6 +5,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -16,11 +17,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.jik.core.designsystem.component.MovieTopAppBar
 import com.jik.core.designsystem.component.NavigationBarCornerSize
 import com.jik.core.designsystem.component.PosterCard
 import com.jik.core.designsystem.theme.sansita
+import com.jik.core.model.Movie
+import com.jik.core.ui.pagination.Pageable
 
 @Composable
 fun HomeScreen(
@@ -29,6 +33,7 @@ fun HomeScreen(
 ) {
 
     TransparentStatusBar()
+    val mainMovie = homeViewModel.mainMovie.collectAsStateWithLifecycle().value
 
     Box(modifier = modifier) {
         Column(
@@ -36,8 +41,11 @@ fun HomeScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            HomeScreenTopContent(mainPosterUrl = homeViewModel.mainPosterUrl)
-            HomeScreenPopularContent(popularPosterUrls = homeViewModel.popularPosterUrls)
+            HomeScreenTopContent(mainMovie = mainMovie ?: Movie.EMPTY)
+            HomeScreenPopularContent(
+                popularMovies = homeViewModel.popularMovies,
+                onLoadMore = homeViewModel::getPopularMovies,
+            )
 
             Spacer(modifier = Modifier.padding(bottom = NavigationBarCornerSize))
         }
@@ -81,12 +89,12 @@ fun HomeScreenTopBar(
 
 @Composable
 fun HomeScreenTopContent(
-    mainPosterUrl: String,
+    mainMovie: Movie,
     modifier: Modifier = Modifier,
 ) {
 
     val colorStops = arrayOf(
-        0.0f to Color.White.copy(alpha = 0.5f),
+        0.0f to MaterialTheme.colorScheme.background.copy(alpha = 0.5f),
         0.3f to Color.Transparent,
         0.7f to Color.Transparent,
         1.0f to MaterialTheme.colorScheme.background,
@@ -96,7 +104,7 @@ fun HomeScreenTopContent(
         modifier = modifier.padding(bottom = 16.dp)
     ) {
         PosterCard(
-            posterPath = mainPosterUrl,
+            posterPath = mainMovie.getPosterUrl(),
             modifier = Modifier
                 .aspectRatio(1f / 1.2f)
                 .fillMaxSize(),
@@ -116,8 +124,15 @@ fun HomeScreenTopContent(
 @Composable
 fun HomeScreenPopularContent(
     modifier: Modifier = Modifier,
-    popularPosterUrls: List<String>
+    popularMovies: List<Movie>,
+    onLoadMore: suspend () -> Unit,
 ) {
+
+    val popularPosterUrls = popularMovies.map { it.getPosterUrl() }
+
+    val lazyListState = rememberLazyListState().apply {
+        Pageable(onLoadMore = onLoadMore)
+    }
 
     Column(
         modifier = modifier.padding(vertical = 16.dp)
@@ -132,6 +147,7 @@ fun HomeScreenPopularContent(
 
         LazyRow(
             modifier = Modifier.padding(top = 12.dp),
+            state = lazyListState,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(horizontal = 16.dp),
         ) {
