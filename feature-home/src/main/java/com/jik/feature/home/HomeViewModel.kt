@@ -33,6 +33,8 @@ class HomeViewModel @Inject constructor(
                         homeUiState.value = UiState.Error(uiState.throwable)
                     }
                     is UiState.Success -> {
+                        homeUiState.value = UiState.Success(Unit)
+
                         popularMovies.addAll(uiState.data)
                         if (popularPage == FIRST_PAGE) setMainMovie()
                         popularPage++

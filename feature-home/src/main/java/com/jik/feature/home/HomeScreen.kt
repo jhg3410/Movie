@@ -11,6 +11,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -19,12 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.jik.core.designsystem.component.MovieTopAppBar
-import com.jik.core.designsystem.component.NavigationBarCornerSize
-import com.jik.core.designsystem.component.PosterCard
+import com.jik.core.designsystem.component.*
 import com.jik.core.designsystem.theme.sansita
 import com.jik.core.model.Movie
 import com.jik.core.ui.pagination.Pageable
+import com.jik.core.ui.state.UiState
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -33,22 +35,20 @@ fun HomeScreen(
 ) {
 
     TransparentStatusBar()
+
     val mainMovie = homeViewModel.mainMovie.collectAsStateWithLifecycle().value
 
     Box(modifier = modifier) {
-        Column(
+        HomeScreenContent(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            HomeScreenTopContent(mainMovie = mainMovie ?: Movie.EMPTY)
-            HomeScreenPopularContent(
-                popularMovies = homeViewModel.popularMovies,
-                onLoadMore = homeViewModel::getPopularMovies,
-            )
-
-            Spacer(modifier = Modifier.padding(bottom = NavigationBarCornerSize))
-        }
+                .verticalScroll(rememberScrollState()),
+            homeUiState = homeViewModel.homeUiState.value,
+            mainMovie = mainMovie ?: Movie.EMPTY,
+            popularMovies = homeViewModel.popularMovies,
+            onLoadMore = homeViewModel::getPopularMovies,
+            onRetry = homeViewModel::getPopularMovies,
+        )
         HomeScreenTopBar()
     }
 }
@@ -70,20 +70,41 @@ fun TransparentStatusBar() {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenTopBar(
+fun HomeScreenContent(
     modifier: Modifier = Modifier,
+    homeUiState: UiState<Unit>,
+    mainMovie: Movie,
+    popularMovies: List<Movie>,
+    onLoadMore: suspend () -> Unit,
+    onRetry: suspend () -> Unit,
 ) {
-    MovieTopAppBar(
-        modifier = modifier,
-        titleRes = R.string.home,
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background.copy(
-                alpha = 0.5f
+    val coroutineScope = rememberCoroutineScope()
+
+    Column(modifier) {
+        HomeScreenTopContent(mainMovie = mainMovie)
+        HomeScreenPopularContent(popularMovies = popularMovies, onLoadMore = onLoadMore)
+        Spacer(modifier = Modifier.padding(bottom = NavigationBarCornerSize))
+    }
+
+    if (homeUiState is UiState.Loading && mainMovie == Movie.EMPTY) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            LoadingWheel(modifier = Modifier.align(Alignment.Center))
+        }
+    }
+
+    if (homeUiState is UiState.Error) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Refresh(
+                modifier = Modifier.align(Alignment.Center),
+                onClick = {
+                    coroutineScope.launch {
+                        onRetry()
+                    }
+                }
             )
-        )
-    )
+        }
+    }
 }
 
 
@@ -162,4 +183,20 @@ fun HomeScreenPopularContent(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreenTopBar(
+    modifier: Modifier = Modifier,
+) {
+    MovieTopAppBar(
+        modifier = modifier,
+        titleRes = R.string.home,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background.copy(
+                alpha = 0.5f
+            )
+        )
+    )
 }

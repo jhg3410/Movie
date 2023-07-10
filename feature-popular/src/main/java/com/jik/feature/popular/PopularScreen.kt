@@ -96,13 +96,8 @@ fun PopularScreenContent(
                     if (index != popularUiStates.size - 1) return@forEachIndexed
 
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        Box(
-                            modifier = Modifier.height(popularScreenHeight)
-                        ) {
-                            LoadingWheel(
-                                modifier = Modifier.align(Alignment.Center),
-                                circleSize = 40.dp
-                            )
+                        Box(modifier = Modifier.height(popularScreenHeight)) {
+                            LoadingWheel(modifier = Modifier.align(Alignment.Center))
                         }
                     }
                 }
@@ -115,7 +110,6 @@ fun PopularScreenContent(
                         ) {
                             Refresh(
                                 modifier = Modifier.align(Alignment.Center),
-                                size = 40.dp,
                                 onClick = {
                                     coroutineScope.launch {
                                         onRetry()

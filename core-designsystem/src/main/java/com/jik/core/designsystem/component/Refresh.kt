@@ -7,14 +7,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.jik.core.designsystem.icon.MovieIcons
 
 
 @Composable
 fun Refresh(
-    size: Dp,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    size: Dp = 40.dp,
 ) {
     IconButton(modifier = modifier, onClick = onClick) {
         Icon(

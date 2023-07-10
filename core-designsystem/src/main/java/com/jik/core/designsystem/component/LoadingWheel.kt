@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LoadingWheel(
-    circleSize: Dp,
     modifier: Modifier = Modifier,
+    circleSize: Dp = 40.dp,
     strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth,
     contentPadding: PaddingValues = PaddingValues()
 ) {
