@@ -1,6 +1,5 @@
 package com.jik.feature.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -12,8 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -103,34 +100,18 @@ fun HomeScreenTopContent(
     onPosterClick: (Long) -> Unit,
 ) {
 
-    val colorStops = arrayOf(
-        0.0f to MaterialTheme.colorScheme.background.copy(alpha = 0.5f),
-        0.3f to Color.Transparent,
-        0.7f to Color.Transparent,
-        1.0f to MaterialTheme.colorScheme.background,
+    GradientPosterCard(
+        posterPath = mainMovie.getPosterUrl(),
+        modifier = modifier
+            .padding(bottom = 16.dp)
+            .aspectRatio(1f / 1.2f)
+            .fillMaxSize(),
+        clickable = mainMovie != Movie.EMPTY,
+        onClick = { onPosterClick(mainMovie.id) },
+        roundedCornerSize = 0.dp,
+        alignment = Alignment.TopCenter,
+        contentScale = ContentScale.Crop,
     )
-
-    Surface(
-        modifier = modifier.padding(bottom = 16.dp)
-    ) {
-        PosterCard(
-            posterPath = mainMovie.getPosterUrl(),
-            modifier = Modifier
-                .aspectRatio(1f / 1.2f)
-                .fillMaxSize(),
-            clickable = mainMovie != Movie.EMPTY,
-            onClick = { onPosterClick(mainMovie.id) },
-            roundedCornerSize = 0.dp,
-            alignment = Alignment.TopCenter,
-            contentScale = ContentScale.Crop
-        )
-        Box(
-            modifier = Modifier
-                .aspectRatio(1f / 1.2f)
-                .fillMaxSize()
-                .background(Brush.verticalGradient(colorStops = colorStops))
-        )
-    }
 }
 
 

@@ -1,15 +1,21 @@
 package com.jik.core.designsystem.component
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -45,6 +51,51 @@ fun PosterCard(
             placeholder = placeholder,
             alignment = alignment,
             contentScale = contentScale
+        )
+    }
+}
+
+@Composable
+fun GradientPosterCard(
+    posterPath: String,
+    modifier: Modifier = Modifier,
+    clickable: Boolean = true,
+    onClick: () -> Unit = {},
+    roundedCornerSize: Dp = 16.dp,
+    contentDescription: String? = null,
+    placeholder: Painter? = null,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+) {
+    Surface(modifier = modifier) {
+        ElevatedCard(
+            shape = RoundedCornerShape(roundedCornerSize),
+            elevation = CardDefaults.elevatedCardElevation(8.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            AsyncImage(
+                model = posterPath,
+                contentDescription = contentDescription,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(enabled = clickable) { onClick() },
+                placeholder = placeholder,
+                alignment = alignment,
+                contentScale = contentScale
+            )
+        }
+
+        val colorStops = arrayOf(
+            0.0f to MaterialTheme.colorScheme.background.copy(alpha = 0.5f),
+            0.3f to Color.Transparent,
+            0.7f to Color.Transparent,
+            1.0f to MaterialTheme.colorScheme.background,
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Brush.verticalGradient(colorStops = colorStops))
         )
     }
 }
