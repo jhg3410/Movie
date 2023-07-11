@@ -1,12 +1,13 @@
 package com.jik.feature.detail.navigation
 
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.jik.core.ui.util.StatusBarColor
 import com.jik.feature.detail.DetailScreen
 
 object DetailNavigation {
@@ -25,18 +26,19 @@ object DetailNavigation {
         navigate("${route}/$movieId")
     }
 
-    fun NavGraphBuilder.installDetailScreen(modifier: Modifier = Modifier) {
+    fun NavGraphBuilder.installDetailScreen() {
         composable(
             route = routeWithArgs,
             arguments = arguments
         ) {
-            DetailScreen(modifier = modifier)
+            StatusBarColor(color = Color.Transparent)
+            DetailScreen()
         }
     }
 }
 
 internal class MovieArgs(val movieId: Long) {
-    constructor(savedStateHandle: SavedStateHandle): this(
+    constructor(savedStateHandle: SavedStateHandle) : this(
         movieId = checkNotNull(savedStateHandle[DetailNavigation.movieIdArg])
     )
 }

@@ -81,7 +81,8 @@ fun DetailScreenContent(
         PosterCard(
             posterPath = movieInfo.getPosterUrl(),
             modifier = Modifier.aspectRatio(2f / 3f),
-            roundedCornerSize = 0.dp
+            roundedCornerSize = 0.dp,
+            clickable = false
         )
     }
 }

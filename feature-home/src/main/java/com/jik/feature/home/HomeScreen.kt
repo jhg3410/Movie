@@ -1,7 +1,6 @@
 package com.jik.feature.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -10,7 +9,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +18,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.jik.core.designsystem.component.*
 import com.jik.core.designsystem.theme.sansita
 import com.jik.core.model.Movie
@@ -34,8 +31,6 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     onPosterClick: (Long) -> Unit,
 ) {
-
-    TransparentStatusBar()
 
     val mainMovie = homeViewModel.mainMovie.collectAsStateWithLifecycle().value
 
@@ -54,23 +49,6 @@ fun HomeScreen(
         HomeScreenTopBar()
     }
 }
-
-
-@Composable
-fun TransparentStatusBar() {
-
-    val systemUiController = rememberSystemUiController()
-    val defaultColor = MaterialTheme.colorScheme.background
-    val darkIcons = isSystemInDarkTheme().not()
-
-    DisposableEffect(Unit) {
-        systemUiController.setStatusBarColor(color = Color.Transparent, darkIcons = darkIcons)
-        onDispose {
-            systemUiController.setStatusBarColor(color = defaultColor)
-        }
-    }
-}
-
 
 @Composable
 fun HomeScreenContent(
@@ -210,7 +188,7 @@ fun HomeScreenTopBar(
         titleRes = R.string.home,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background.copy(
-                alpha = 0.4f
+                alpha = 0.0f
             )
         )
     )

@@ -50,6 +50,9 @@ dependencies {
     implementation(libs.compose.tooling)
     implementation(libs.compose.preview)
 
+    // accompanist
+    implementation(libs.accompanist.systemuicontroller)
+
     // coroutines
     implementation(libs.coroutines)
 
