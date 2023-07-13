@@ -50,6 +50,7 @@ dependencies {
     implementation(projects.coreUi)
     implementation(projects.coreModel)
     implementation(projects.coreData)
+    implementation(projects.featureDetail)
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.runtime.ktx)
@@ -60,6 +61,9 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.preview)
     implementation(libs.compose.material3)
+
+    // accompanist
+    implementation(libs.accompanist.systemuicontroller)
 
     // lifecycle
     implementation(libs.lifecycle.viewmodel)

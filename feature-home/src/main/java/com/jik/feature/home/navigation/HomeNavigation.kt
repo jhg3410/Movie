@@ -1,13 +1,10 @@
 package com.jik.feature.home.navigation
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.jik.core.designsystem.component.NavigationBarCornerSize
+import com.jik.feature.detail.navigation.DetailNavigation.navigateDetail
 import com.jik.feature.home.HomeScreen
 
 object HomeNavigation {
@@ -18,12 +15,15 @@ object HomeNavigation {
         navigate(route, navOptions)
     }
 
-    fun NavGraphBuilder.installHomeScreen() {
+    fun NavGraphBuilder.installHomeScreen(
+        navController: NavController
+    ) {
         composable(
             route = HomeNavigation.route
         ) {
-            HomeScreen()
-            Spacer(modifier = Modifier.padding(bottom = NavigationBarCornerSize))
+            HomeScreen(
+                onPosterClick = { movieId -> navController.navigateDetail(movieId) }
+            )
         }
     }
 }

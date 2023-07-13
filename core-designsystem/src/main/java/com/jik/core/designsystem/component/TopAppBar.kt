@@ -18,7 +18,7 @@ fun MovieTopAppBar(
         containerColor = MaterialTheme.colorScheme.background,
         scrolledContainerColor = MaterialTheme.colorScheme.background
     ),
-    scrollBehavior: TopAppBarScrollBehavior
+    scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
     TopAppBar(
         title = {

@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -17,10 +16,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jik.core.designsystem.component.LoadingWheel
-import com.jik.core.designsystem.component.MovieTopAppBar
-import com.jik.core.designsystem.component.PosterCard
-import com.jik.core.designsystem.component.Refresh
+import com.jik.core.designsystem.component.*
 import com.jik.core.ui.pagination.Pageable
 import kotlinx.coroutines.launch
 
@@ -28,26 +24,27 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PopularScreen(
-    onPosterCardClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
-    popularViewModel: PopularViewModel = hiltViewModel()
+    popularViewModel: PopularViewModel = hiltViewModel(),
+    onPosterClick: (Long) -> Unit,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    Surface(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
-        Column {
-            PopularScreenTopBar(scrollBehavior = scrollBehavior)
-            PopularScreenContent(
-                popularUiStates = popularViewModel.popularUiStates,
-                onLoadMore = popularViewModel::getPopularMovies,
-                onRetry = popularViewModel::getPopularMovies,
-                onPosterCardClick = onPosterCardClick,
-                modifier = modifier,
-            )
-        }
+    Column(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
+        PopularScreenTopBar(scrollBehavior = scrollBehavior)
+        PopularScreenContent(
+            popularUiStates = popularViewModel.popularUiStates,
+            onLoadMore = popularViewModel::getPopularMovies,
+            onRetry = popularViewModel::getPopularMovies,
+            onPosterClick = onPosterClick,
+            modifier = modifier,
+        )
+
+        Spacer(modifier = Modifier.padding(bottom = NavigationBarCornerSize))
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +60,7 @@ fun PopularScreenContent(
     popularUiStates: List<PopularUiState>,
     onLoadMore: suspend () -> Unit,
     onRetry: suspend () -> Unit,
-    onPosterCardClick: (Long) -> Unit,
+    onPosterClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -91,7 +88,7 @@ fun PopularScreenContent(
                             modifier = Modifier
                                 .sizeIn(minWidth = 160.dp, minHeight = 240.dp)
                                 .aspectRatio(2f / 3f),
-                            onClick = { onPosterCardClick(uiState.movie.id) }
+                            onClick = { onPosterClick(uiState.movie.id) }
                         )
                     }
                 }
@@ -99,13 +96,8 @@ fun PopularScreenContent(
                     if (index != popularUiStates.size - 1) return@forEachIndexed
 
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        Box(
-                            modifier = Modifier.height(popularScreenHeight)
-                        ) {
-                            LoadingWheel(
-                                modifier = Modifier.align(Alignment.Center),
-                                circleSize = 40.dp
-                            )
+                        Box(modifier = Modifier.height(popularScreenHeight)) {
+                            LoadingWheel(modifier = Modifier.align(Alignment.Center))
                         }
                     }
                 }
@@ -118,7 +110,6 @@ fun PopularScreenContent(
                         ) {
                             Refresh(
                                 modifier = Modifier.align(Alignment.Center),
-                                size = 40.dp,
                                 onClick = {
                                     coroutineScope.launch {
                                         onRetry()

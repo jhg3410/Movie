@@ -1,5 +1,6 @@
 package com.jik.feature.detail.navigation
 
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -24,12 +25,12 @@ object DetailNavigation {
         navigate("${route}/$movieId")
     }
 
-    fun NavGraphBuilder.installDetailScreen() {
+    fun NavGraphBuilder.installDetailScreen(modifier: Modifier = Modifier) {
         composable(
             route = routeWithArgs,
             arguments = arguments
         ) {
-            DetailScreen()
+            DetailScreen(modifier = modifier)
         }
     }
 }
