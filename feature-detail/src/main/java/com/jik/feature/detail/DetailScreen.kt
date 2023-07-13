@@ -17,6 +17,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.jik.core.designsystem.component.GradientArea
 import com.jik.core.designsystem.component.GradientPosterCard
 import com.jik.core.designsystem.component.LoadingWheel
 import com.jik.core.designsystem.component.Refresh
@@ -83,7 +84,8 @@ fun DetailScreenContent(
             posterPath = movieInfo.getPosterUrl(),
             modifier = Modifier.aspectRatio(2f / 3f),
             roundedCornerSize = 0.dp,
-            clickable = false
+            clickable = false,
+            gradientArea = GradientArea.TOP
         )
     }
 }
