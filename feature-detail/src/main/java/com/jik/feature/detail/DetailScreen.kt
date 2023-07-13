@@ -25,6 +25,7 @@ import com.jik.core.designsystem.theme.IconColor
 import com.jik.core.model.MovieInfo
 import com.jik.core.ui.state.UiState
 import com.jik.core.ui.util.MovieGenreUtils
+import com.jik.core.ui.util.getStatusBarHeight
 
 
 @Composable
@@ -73,8 +74,8 @@ fun DetailScreenContent(
         sheetContent = {
             MovieInformation(movieInfo = movieInfo)
         },
-        sheetPeekHeight =
-        LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenWidthDp.dp * 1.5f),
+        sheetPeekHeight = getStatusBarHeight() +
+                LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenWidthDp.dp * 1.5f),
         sheetShape = RoundedCornerShape(size = 16.dp),
         modifier = modifier
     ) {
