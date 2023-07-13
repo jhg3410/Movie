@@ -1,8 +1,5 @@
 package com.jik.movie.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -25,11 +22,6 @@ fun MovieNavHost(
     ) {
         installHomeScreen(navController)
         installPopularScreen(navController)
-        installDetailScreen(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
-        )
+        installDetailScreen()
     }
 }
