@@ -1,5 +1,5 @@
 ## Movie
-다양한 영화들을 정보를 볼 수 있어요.
+다양한 영화들의 정보를 볼 수 있어요.
 
 ## Article
 [Movie 프로젝트 시작점](https://jik3410.tistory.com/1)  
