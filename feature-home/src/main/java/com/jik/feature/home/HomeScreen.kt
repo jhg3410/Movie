@@ -13,10 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jik.core.designsystem.component.*
-import com.jik.core.designsystem.theme.sansita
+import com.jik.core.designsystem.theme.MovieFontFamily
 import com.jik.core.model.Movie
 import com.jik.core.ui.pagination.Pageable
 import com.jik.core.ui.state.UiState
@@ -136,7 +137,7 @@ fun HomeScreenPopularContent(
             modifier = Modifier.padding(horizontal = 16.dp),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.primary,
-            fontFamily = sansita
+            fontFamily = MovieFontFamily.Sansita
         )
 
         LazyRow(
@@ -166,11 +167,13 @@ fun HomeScreenTopBar(
 ) {
     MovieTopAppBar(
         modifier = modifier,
-        titleRes = R.string.home,
+        titleRes = com.jik.core.ui.R.string.logo,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background.copy(
                 alpha = 0.0f
             )
-        )
+        ),
+        titleFontFamily = MovieFontFamily.LilitaOne,
+        titleFontSize = 40.sp
     )
 }

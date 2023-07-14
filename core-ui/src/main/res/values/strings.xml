@@ -2,4 +2,6 @@
 <resources>
 
     <string name="app_name">Movie</string>
+
+    <string name="logo">M</string>
 </resources>

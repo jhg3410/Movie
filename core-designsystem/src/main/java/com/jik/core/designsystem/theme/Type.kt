@@ -37,6 +37,11 @@ val Typography = Typography(
 )
 
 
-val sansita = FontFamily(
-    Font(R.font.sansita_blackitalic),
-)
+object MovieFontFamily {
+    val Sansita = FontFamily(
+        Font(R.font.sansita_blackitalic),
+    )
+    val LilitaOne = FontFamily(
+        Font(R.font.lilita_one),
+    )
+}
