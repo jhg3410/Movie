@@ -41,8 +41,7 @@ fun MovieNavigationBar(
     Surface(
         modifier = modifier,
         shape = shape,
-        color = MaterialTheme.colorScheme.background,
-        tonalElevation = 0.1.dp,
+        color = MaterialTheme.colorScheme.surface,
         shadowElevation = 4.dp
     ) {
         Row(
