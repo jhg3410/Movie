@@ -78,6 +78,7 @@ fun DetailScreenContent(
         sheetPeekHeight = getStatusBarHeight() +
                 LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenWidthDp.dp * 1.5f),
         sheetShape = RoundedCornerShape(size = 16.dp),
+        sheetContainerColor = MaterialTheme.colorScheme.background,
         modifier = modifier
     ) {
         GradientPosterCard(
