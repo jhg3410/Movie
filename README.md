@@ -3,7 +3,10 @@
 
 ## Article
 [Movie 프로젝트 시작점](https://jik3410.tistory.com/1)  
-[Movie 프로젝트 디자인](https://jik3410.tistory.com/2)
+[Movie 프로젝트 디자인](https://jik3410.tistory.com/2)  
+[Movie 프로젝트 구조](https://jik3410.tistory.com/3)  
+[Movie 프로젝트 네트워크 통신(Loading, Error 처리 포함)](https://jik3410.tistory.com/4)  
+
 
 ## Screenshots
 **Light Theme**
