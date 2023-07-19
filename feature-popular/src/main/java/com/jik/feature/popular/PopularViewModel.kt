@@ -7,7 +7,6 @@ import com.jik.core.model.Movie
 import com.jik.core.ui.state.UiState
 import com.jik.core.ui.state.getUiStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,13 +14,13 @@ class PopularViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : ViewModel() {
 
-    private val page = MutableStateFlow(FIRST_PAGE)
+    private var page = FIRST_PAGE
 
     val popularUiStates = mutableStateListOf<PopularUiState>()
 
 
     suspend fun getPopularMovies() {
-        getUiStateFlow { movieRepository.getPopularMovies(page.value) }
+        getUiStateFlow { movieRepository.getPopularMovies(page) }
             .collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
@@ -32,7 +31,7 @@ class PopularViewModel @Inject constructor(
                     }
                     is UiState.Success -> {
                         popularUiStates.addAll(uiState.data.map { PopularUiState.Data(it) })
-                        page.value++
+                        page++
                     }
                 }
             }
