@@ -2,7 +2,6 @@ package com.jik.core.designsystem.component
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -24,6 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.jik.core.designsystem.theme.MovieTheme
+import com.jik.core.ui.util.modifier.clickableSingle
 
 @Composable
 fun PosterCard(
@@ -47,7 +47,7 @@ fun PosterCard(
             contentDescription = contentDescription,
             modifier = Modifier
                 .fillMaxSize()
-                .clickable(enabled = clickable) { onClick() },
+                .clickableSingle(enabled = clickable) { onClick() },
             placeholder = placeholder,
             alignment = alignment,
             contentScale = contentScale
@@ -79,7 +79,7 @@ fun GradientPosterCard(
                 contentDescription = contentDescription,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clickable(enabled = clickable) { onClick() },
+                    .clickableSingle(enabled = clickable) { onClick() },
                 placeholder = placeholder,
                 alignment = alignment,
                 contentScale = contentScale
