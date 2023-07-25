@@ -1,9 +1,6 @@
 package com.jik.core.ui.state
 
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 
 sealed interface UiState<out T> {
@@ -14,17 +11,18 @@ sealed interface UiState<out T> {
 
 
 fun <T> Result<T>.toUiState(): UiState<T> {
-    onSuccess {
-        return UiState.Success(it)
-    }.onFailure {
-        return UiState.Error(it)
-    }
-    return UiState.Loading
+    return fold(
+        onSuccess = {
+            UiState.Success(it)
+        },
+        onFailure = {
+            UiState.Error(it)
+        }
+    )
 }
 
 fun <T> getUiStateFlow(
-    dispatcher: CoroutineDispatcher = Dispatchers.IO,
     block: suspend () -> Result<T>,
 ) = flow {
     emit(block().toUiState())
-}.onStart { emit(UiState.Loading) }.flowOn(dispatcher)
+}.onStart { emit(UiState.Loading) }
