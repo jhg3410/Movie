@@ -17,7 +17,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jik.core.designsystem.component.*
+import com.jik.core.model.Movie
 import com.jik.core.ui.pagination.Pageable
+import com.jik.core.ui.state.UiState
 import kotlinx.coroutines.launch
 
 
@@ -33,6 +35,7 @@ fun PopularScreen(
 
     Column(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         PopularScreenTopBar(scrollBehavior = scrollBehavior)
+
         PopularScreenContent(
             popularUiStates = popularViewModel.popularUiStates,
             onLoadMore = popularViewModel::getPopularMovies,
@@ -57,7 +60,7 @@ fun PopularScreenTopBar(scrollBehavior: TopAppBarScrollBehavior) {
 
 @Composable
 fun PopularScreenContent(
-    popularUiStates: List<PopularUiState>,
+    popularUiStates: List<UiState<Movie>>,
     onLoadMore: suspend () -> Unit,
     onRetry: suspend () -> Unit,
     onPosterClick: (Long) -> Unit,
@@ -81,18 +84,18 @@ fun PopularScreenContent(
     ) {
         popularUiStates.forEachIndexed { index, uiState ->
             when (uiState) {
-                is PopularUiState.Data -> {
+                is UiState.Success -> {
                     item {
                         PosterCard(
-                            posterPath = uiState.movie.getPosterUrl(),
+                            posterPath = uiState.data.getPosterUrl(),
                             modifier = Modifier
                                 .sizeIn(minWidth = 160.dp, minHeight = 240.dp)
                                 .aspectRatio(2f / 3f),
-                            onClick = { onPosterClick(uiState.movie.id) }
+                            onClick = { onPosterClick(uiState.data.id) }
                         )
                     }
                 }
-                is PopularUiState.Loading -> {
+                is UiState.Loading -> {
                     if (index != popularUiStates.size - 1) return@forEachIndexed
 
                     item(span = { GridItemSpan(maxLineSpan) }) {
@@ -101,7 +104,7 @@ fun PopularScreenContent(
                         }
                     }
                 }
-                is PopularUiState.Error -> {
+                is UiState.Error -> {
                     if (index != popularUiStates.size - 1) return@forEachIndexed
 
                     item(span = { GridItemSpan(maxLineSpan) }) {

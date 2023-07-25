@@ -16,7 +16,7 @@ class PopularViewModel @Inject constructor(
 
     private var page = FIRST_PAGE
 
-    val popularUiStates = mutableStateListOf<PopularUiState>()
+    val popularUiStates = mutableStateListOf<UiState<Movie>>()
 
 
     suspend fun getPopularMovies() {
@@ -24,13 +24,13 @@ class PopularViewModel @Inject constructor(
             .collect { uiState ->
                 when (uiState) {
                     is UiState.Loading -> {
-                        popularUiStates.add(PopularUiState.Loading)
+                        popularUiStates.add(uiState)
                     }
                     is UiState.Error -> {
-                        popularUiStates.add(PopularUiState.Error(uiState.throwable))
+                        popularUiStates.add(uiState)
                     }
                     is UiState.Success -> {
-                        popularUiStates.addAll(uiState.data.map { PopularUiState.Data(it) })
+                        popularUiStates.addAll(uiState.data.map { UiState.Success(it) })
                         page++
                     }
                 }
@@ -40,14 +40,4 @@ class PopularViewModel @Inject constructor(
     companion object {
         private const val FIRST_PAGE = 1
     }
-}
-
-
-sealed interface PopularUiState {
-
-    object Loading : PopularUiState
-
-    data class Data(val movie: Movie) : PopularUiState
-
-    data class Error(val throwable: Throwable) : PopularUiState
 }
