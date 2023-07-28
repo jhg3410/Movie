@@ -43,9 +43,7 @@ fun MovieTopAppBar(
 @ThemePreviews
 @Composable
 private fun TopAppBarPreview() {
-    MovieTheme(
-        dynamicColor = false
-    ) {
+    MovieTheme {
         MovieTopAppBar(
             titleRes = android.R.string.untitled,
             scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()

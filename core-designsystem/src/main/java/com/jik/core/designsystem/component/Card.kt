@@ -128,9 +128,7 @@ enum class GradientArea {
 @Preview
 @Composable
 fun PosterCardPreview() {
-    MovieTheme(
-        dynamicColor = false
-    ) {
+    MovieTheme {
         val context = LocalContext.current
         PosterCard(
             posterPath = "https://image.tmdb.org/t/p/w500/qNBAXBIQlnOThrVvA6mA2B5ggV6.jpg",

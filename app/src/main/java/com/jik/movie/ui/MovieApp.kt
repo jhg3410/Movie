@@ -15,9 +15,7 @@ import com.jik.movie.navigation.TopLevelDestination
 
 @Composable
 fun MovieApp() {
-    MovieTheme(
-        dynamicColor = false
-    ) {
+    MovieTheme {
         val appState = rememberMovieAppState()
         val destination = appState.currentTopLevelDestination
 
@@ -63,8 +61,8 @@ fun MovieBottomBar(
                 MovieNavigationBarItem(
                     selected = selected,
                     onClick = { onNavigateToDestination(destination) },
-                    iconImageVector = destination.selectedIcon,
-                    selectedIconImageVector = destination.selectedIcon,
+                    iconImageVector = destination.icon,
+                    selectedIconImageVector = destination.icon,
                     labelTextId = destination.iconTextId,
                 )
             }
