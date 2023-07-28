@@ -18,7 +18,6 @@ class PopularViewModel @Inject constructor(
 
     val popularUiStates = mutableStateListOf<UiState<Movie>>()
 
-
     suspend fun getPopularMovies() {
         getUiStateFlow { movieRepository.getPopularMovies(page) }
             .collect { uiState ->

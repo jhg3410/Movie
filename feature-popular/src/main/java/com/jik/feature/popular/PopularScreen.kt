@@ -108,9 +108,7 @@ fun PopularScreenContent(
                     if (index != popularUiStates.size - 1) return@forEachIndexed
 
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        Box(
-                            modifier = Modifier.height(popularScreenHeight)
-                        ) {
+                        Box(modifier = Modifier.height(popularScreenHeight)) {
                             Refresh(
                                 modifier = Modifier.align(Alignment.Center),
                                 onClick = {

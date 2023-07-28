@@ -21,8 +21,8 @@ import com.jik.core.designsystem.component.GradientArea
 import com.jik.core.designsystem.component.GradientPosterCard
 import com.jik.core.designsystem.component.LoadingWheel
 import com.jik.core.designsystem.component.Refresh
+import com.jik.core.designsystem.icon.IconColor
 import com.jik.core.designsystem.icon.MovieIcons
-import com.jik.core.designsystem.theme.IconColor
 import com.jik.core.model.MovieInfo
 import com.jik.core.ui.state.UiState
 import com.jik.core.ui.util.MovieGenreUtils

@@ -2,9 +2,6 @@ package com.jik.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
-object IconColor {
-    val Star = Color(0xFFFFC72F)
-}
 
 internal val md_theme_light_primary = Color(0xFFE21111)
 internal val md_theme_light_onPrimary = Color(0xFFFFFFFF)

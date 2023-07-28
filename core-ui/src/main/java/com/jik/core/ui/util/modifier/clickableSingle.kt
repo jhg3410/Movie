@@ -16,9 +16,11 @@ fun Modifier.clickableSingle(
     var lastClickTime by remember { mutableStateOf(0L) }
 
     this.clickable(enabled = enabled) {
-        if (System.currentTimeMillis() - lastClickTime > 1000L) {
+        if (System.currentTimeMillis() - lastClickTime > LAST_CLICK_TERM) {
             lastClickTime = System.currentTimeMillis()
             onClick()
         }
     }
 }
+
+private const val LAST_CLICK_TERM = 1000L
