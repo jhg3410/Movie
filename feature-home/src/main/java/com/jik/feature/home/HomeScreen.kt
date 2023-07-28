@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jik.core.designsystem.component.*
@@ -166,14 +165,14 @@ fun HomeScreenTopBar(
     modifier: Modifier = Modifier,
 ) {
     MovieTopAppBar(
-        modifier = modifier,
         titleRes = com.jik.core.ui.R.string.logo,
+        modifier = modifier,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background.copy(
                 alpha = 0.0f
             )
         ),
+        titleStyle = MaterialTheme.typography.displayMedium,
         titleFontFamily = MovieFontFamily.LilitaOne,
-        titleFontSize = 40.sp
     )
 }
