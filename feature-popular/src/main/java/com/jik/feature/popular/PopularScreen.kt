@@ -34,9 +34,9 @@ fun PopularScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Column(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
-        PopularScreenTopBar(scrollBehavior = scrollBehavior)
+        TopBar(scrollBehavior = scrollBehavior)
 
-        PopularScreenContent(
+        Content(
             popularUiStates = popularViewModel.popularUiStates,
             onLoadMore = popularViewModel::getPopularMovies,
             onRetry = popularViewModel::getPopularMovies,
@@ -51,7 +51,7 @@ fun PopularScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PopularScreenTopBar(scrollBehavior: TopAppBarScrollBehavior) {
+private fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
     MovieTopAppBar(
         titleRes = R.string.popular,
         scrollBehavior = scrollBehavior
@@ -59,7 +59,7 @@ fun PopularScreenTopBar(scrollBehavior: TopAppBarScrollBehavior) {
 }
 
 @Composable
-fun PopularScreenContent(
+private fun Content(
     popularUiStates: List<UiState<Movie>>,
     onLoadMore: suspend () -> Unit,
     onRetry: suspend () -> Unit,

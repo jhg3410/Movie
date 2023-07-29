@@ -32,7 +32,7 @@ fun HomeScreen(
     val mainMovie = homeViewModel.mainMovie.collectAsStateWithLifecycle().value
 
     Box(modifier = modifier) {
-        HomeScreenContent(
+        Content(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
@@ -43,12 +43,12 @@ fun HomeScreen(
             onRetry = homeViewModel::getPopularMovies,
             onPosterClick = onPosterClick
         )
-        HomeScreenTopBar()
+        TopBar()
     }
 }
 
 @Composable
-fun HomeScreenContent(
+private fun Content(
     modifier: Modifier = Modifier,
     homeUiState: UiState<Unit>,
     mainMovie: Movie,
@@ -60,11 +60,11 @@ fun HomeScreenContent(
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier) {
-        HomeScreenTopContent(
+        TopContent(
             mainMovie = mainMovie,
             onPosterClick = onPosterClick,
         )
-        HomeScreenPopularContent(
+        PopularContent(
             popularMovies = popularMovies,
             onLoadMore = onLoadMore,
             onPosterClick = onPosterClick
@@ -94,7 +94,7 @@ fun HomeScreenContent(
 
 
 @Composable
-fun HomeScreenTopContent(
+private fun TopContent(
     mainMovie: Movie,
     modifier: Modifier = Modifier,
     onPosterClick: (Long) -> Unit,
@@ -116,7 +116,7 @@ fun HomeScreenTopContent(
 
 
 @Composable
-fun HomeScreenPopularContent(
+fun PopularContent(
     modifier: Modifier = Modifier,
     popularMovies: List<Movie>,
     onLoadMore: suspend () -> Unit,
@@ -161,7 +161,7 @@ fun HomeScreenPopularContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenTopBar(
+private fun TopBar(
     modifier: Modifier = Modifier,
 ) {
     MovieTopAppBar(

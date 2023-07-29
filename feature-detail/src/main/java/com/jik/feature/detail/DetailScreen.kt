@@ -47,7 +47,7 @@ fun DetailScreen(
             }
         }
         is UiState.Success -> {
-            DetailScreenContent(
+            Content(
                 movieInfo = detailUiState.data,
                 modifier = modifier
             )
@@ -66,7 +66,7 @@ fun DetailScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreenContent(
+private fun Content(
     movieInfo: MovieInfo,
     modifier: Modifier = Modifier
 ) {
@@ -167,8 +167,7 @@ private fun Genres(movieInfo: MovieInfo) {
             ) {
                 Text(
                     text = genre.name,
-                    modifier = Modifier
-                        .align(Alignment.Center),
+                    modifier = Modifier.align(Alignment.Center),
                     color = Color.White,
                     style = MaterialTheme.typography.labelMedium,
                 )
