@@ -4,7 +4,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.jik.feature.detail.navigation.DetailNavigation.navigateDetail
 import com.jik.feature.popular.PopularScreen
 
 
@@ -16,14 +15,12 @@ object PopularNavigation {
     }
 
     fun NavGraphBuilder.installPopularScreen(
-        navController: NavController,
+        onPosterClick: (Long) -> Unit
     ) {
         composable(
             route = PopularNavigation.route
         ) {
-            PopularScreen(
-                onPosterClick = { movieId -> navController.navigateDetail(movieId) },
-            )
+            PopularScreen(onPosterClick = onPosterClick)
         }
     }
 }

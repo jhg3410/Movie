@@ -6,7 +6,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.jik.core.ui.util.StatusBarColor
-import com.jik.feature.detail.navigation.DetailNavigation.navigateDetail
 import com.jik.feature.home.HomeScreen
 
 object HomeNavigation {
@@ -18,15 +17,13 @@ object HomeNavigation {
     }
 
     fun NavGraphBuilder.installHomeScreen(
-        navController: NavController
+        onPosterClick: (Long) -> Unit
     ) {
         composable(
             route = HomeNavigation.route
         ) {
             StatusBarColor(color = Color.Transparent)
-            HomeScreen(
-                onPosterClick = { movieId -> navController.navigateDetail(movieId) }
-            )
+            HomeScreen(onPosterClick = onPosterClick)
         }
     }
 }
