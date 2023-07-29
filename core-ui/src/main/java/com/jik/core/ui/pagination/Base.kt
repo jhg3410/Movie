@@ -1,14 +1,11 @@
 package com.jik.core.ui.pagination
 
-import androidx.compose.foundation.lazy.LazyListLayoutInfo
-import androidx.compose.foundation.lazy.grid.LazyGridLayoutInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 
-
-internal object Base {
+internal object BasePageable {
 
     @Composable
     fun Operate(calculateShouldLoadMore: () -> Boolean, onLoadMore: suspend () -> Unit) {
@@ -26,18 +23,7 @@ internal object Base {
     }
 
     // means that if the last visible item is 'threshold' or less from the end of the list, return true
-    fun <T> calculateShouldLoadMore(layoutInfo: T, threshold: Int): Boolean {
-        val itemCount = when (layoutInfo) {
-            is LazyGridLayoutInfo -> layoutInfo.totalItemsCount
-            is LazyListLayoutInfo -> layoutInfo.totalItemsCount
-            else -> throw IllegalArgumentException("Unsupported layoutInfo type")
-        }
-        val lastVisibleItem = when (layoutInfo) {
-            is LazyGridLayoutInfo -> layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-            is LazyListLayoutInfo -> layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-            else -> throw IllegalArgumentException("Unsupported layoutInfo type")
-        }
-
+    fun calculateShouldLoadMore(itemCount: Int, lastVisibleItem: Int, threshold: Int): Boolean {
         return lastVisibleItem >= itemCount - threshold
     }
 }

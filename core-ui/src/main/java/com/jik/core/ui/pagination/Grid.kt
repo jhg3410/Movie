@@ -2,9 +2,6 @@ package com.jik.core.ui.pagination
 
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
-import com.jik.core.ui.pagination.Base.Operate
-import com.jik.core.ui.pagination.Base.calculateShouldLoadMore
-
 
 @Composable
 fun LazyGridState.Pageable(
@@ -12,13 +9,15 @@ fun LazyGridState.Pageable(
     threshold: Int = 4
 ) {
 
-    Operate(
-        onLoadMore = onLoadMore,
-        calculateShouldLoadMore = {
-            calculateShouldLoadMore(
-                layoutInfo = this.layoutInfo,
-                threshold = threshold
-            )
-        }
+    val calculateShouldLoadMore =
+        BasePageable.calculateShouldLoadMore(
+            itemCount = layoutInfo.totalItemsCount,
+            lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0,
+            threshold = threshold
+        )
+
+    BasePageable.Operate(
+        calculateShouldLoadMore = { calculateShouldLoadMore },
+        onLoadMore = onLoadMore
     )
 }
