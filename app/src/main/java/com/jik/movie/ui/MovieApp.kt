@@ -1,5 +1,8 @@
 package com.jik.movie.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -10,6 +13,7 @@ import com.jik.core.designsystem.component.MovieNavigationBar
 import com.jik.core.designsystem.component.MovieNavigationBarItem
 import com.jik.core.designsystem.component.NavigationBarCornerSize
 import com.jik.core.designsystem.theme.MovieTheme
+import com.jik.core.ui.util.modifier.conditional
 import com.jik.movie.navigation.MovieNavHost
 import com.jik.movie.navigation.TopLevelDestination
 
@@ -21,13 +25,12 @@ fun MovieApp() {
 
         Scaffold(
             bottomBar = {
-                if (destination != null) {
-                    MovieBottomBar(
-                        topLevelDestination = appState.topLevelDestinations,
-                        currentDestination = destination,
-                        onNavigateToDestination = appState::navigateToDestination,
-                    )
-                }
+                MovieBottomBar(
+                    visible = destination != null,
+                    topLevelDestination = appState.topLevelDestinations,
+                    currentDestination = destination,
+                    onNavigateToDestination = appState::navigateToDestination,
+                )
             },
             contentWindowInsets = WindowInsets(0.dp)
         ) {
@@ -36,11 +39,13 @@ fun MovieApp() {
 
             MovieNavHost(
                 navController = appState.navController,
-                modifier = Modifier.padding(
-                    top = topPadding,
-                    bottom = if (destination != null && bottomPadding > 0.dp) bottomPadding - NavigationBarCornerSize
-                    else bottomPadding
-                )
+                modifier = Modifier.conditional(destination != null) {
+                    padding(
+                        top = topPadding,
+                        bottom = if (destination != null && bottomPadding > 0.dp) bottomPadding - NavigationBarCornerSize
+                        else bottomPadding
+                    )
+                }
             )
         }
     }
@@ -48,24 +53,31 @@ fun MovieApp() {
 
 @Composable
 fun MovieBottomBar(
+    visible: Boolean,
     topLevelDestination: List<TopLevelDestination>,
-    currentDestination: TopLevelDestination,
+    currentDestination: TopLevelDestination?,
     modifier: Modifier = Modifier,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
 ) {
-    MovieNavigationBar(
-        modifier = modifier,
-        content = {
-            topLevelDestination.forEach { destination ->
-                val selected = destination.route == currentDestination.route
-                MovieNavigationBarItem(
-                    selected = selected,
-                    onClick = { onNavigateToDestination(destination) },
-                    iconImageVector = destination.icon,
-                    selectedIconImageVector = destination.icon,
-                    labelTextId = destination.iconTextId,
-                )
+    AnimatedVisibility(
+        visible = visible,
+        enter = slideInVertically { it },
+        exit = slideOutVertically { it }
+    ) {
+        MovieNavigationBar(
+            modifier = modifier,
+            content = {
+                topLevelDestination.forEach { destination ->
+                    val selected = destination.route == currentDestination?.route
+                    MovieNavigationBarItem(
+                        selected = selected,
+                        onClick = { onNavigateToDestination(destination) },
+                        iconImageVector = destination.icon,
+                        selectedIconImageVector = destination.icon,
+                        labelTextId = destination.iconTextId,
+                    )
+                }
             }
-        }
-    )
+        )
+    }
 }
