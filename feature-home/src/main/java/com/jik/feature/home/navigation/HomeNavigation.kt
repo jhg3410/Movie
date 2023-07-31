@@ -1,5 +1,6 @@
 package com.jik.feature.home.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -16,6 +17,7 @@ object HomeNavigation {
         navigate(route, navOptions)
     }
 
+    @OptIn(ExperimentalAnimationApi::class)
     fun NavGraphBuilder.installHomeScreen(
         onPosterClick: (Long) -> Unit
     ) {

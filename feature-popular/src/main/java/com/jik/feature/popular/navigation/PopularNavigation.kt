@@ -1,5 +1,6 @@
 package com.jik.feature.popular.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -14,6 +15,7 @@ object PopularNavigation {
         navigate(route, navOptions)
     }
 
+    @OptIn(ExperimentalAnimationApi::class)
     fun NavGraphBuilder.installPopularScreen(
         onPosterClick: (Long) -> Unit
     ) {

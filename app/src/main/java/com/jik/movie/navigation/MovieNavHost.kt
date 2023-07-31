@@ -1,5 +1,7 @@
 package com.jik.movie.navigation
 
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -27,6 +29,9 @@ fun MovieNavHost(
         installPopularScreen(
             onPosterClick = { movieId -> navController.navigateDetail(movieId) }
         )
-        installDetailScreen()
+        installDetailScreen(
+            enterTransition = slideInHorizontally { it },
+            exitTransition = slideOutHorizontally { it }
+        )
     }
 }
