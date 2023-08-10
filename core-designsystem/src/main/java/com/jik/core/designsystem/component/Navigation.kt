@@ -101,6 +101,18 @@ fun RowScope.MovieNavigationBarItem(
     }
 }
 
+@Composable
+private fun MovieNavigationBarItemIcon(
+    selected: Boolean,
+    iconImageVector: ImageVector,
+    selectedIconImageVector: ImageVector,
+) {
+    Icon(
+        imageVector = if (selected) selectedIconImageVector else iconImageVector,
+        tint = if (selected) selectedIconColor() else unselectedIconColor(),
+        contentDescription = null
+    )
+}
 
 @Composable
 private fun MovieNavigationBarItemLabelAndIcon(
@@ -126,19 +138,6 @@ private fun MovieNavigationBarItemLabelAndIcon(
             fontSize = 12.sp
         )
     }
-}
-
-@Composable
-private fun MovieNavigationBarItemIcon(
-    selected: Boolean,
-    iconImageVector: ImageVector,
-    selectedIconImageVector: ImageVector,
-) {
-    Icon(
-        imageVector = if (selected) selectedIconImageVector else iconImageVector,
-        tint = if (selected) selectedIconColor() else unselectedIconColor(),
-        contentDescription = null
-    )
 }
 
 private object MovieNavigationBarItemDefaults {

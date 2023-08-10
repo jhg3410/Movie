@@ -1,5 +1,6 @@
 package com.jik.feature.detail.navigation
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,10 +29,16 @@ object DetailNavigation {
         navigate("${route}/$movieId")
     }
 
-    fun NavGraphBuilder.installDetailScreen() {
+    @OptIn(ExperimentalAnimationApi::class)
+    fun NavGraphBuilder.installDetailScreen(
+        enterTransition: EnterTransition,
+        exitTransition: ExitTransition
+    ) {
         composable(
             route = routeWithArgs,
-            arguments = arguments
+            arguments = arguments,
+            enterTransition = { enterTransition },
+            exitTransition = { exitTransition }
         ) {
             StatusBarColor(color = Color.Transparent)
             DetailScreen(

@@ -1,10 +1,10 @@
 package com.jik.feature.popular.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.jik.feature.detail.navigation.DetailNavigation.navigateDetail
 import com.jik.feature.popular.PopularScreen
 
 
@@ -15,15 +15,14 @@ object PopularNavigation {
         navigate(route, navOptions)
     }
 
+    @OptIn(ExperimentalAnimationApi::class)
     fun NavGraphBuilder.installPopularScreen(
-        navController: NavController,
+        onPosterClick: (Long) -> Unit
     ) {
         composable(
             route = PopularNavigation.route
         ) {
-            PopularScreen(
-                onPosterClick = { movieId -> navController.navigateDetail(movieId) },
-            )
+            PopularScreen(onPosterClick = onPosterClick)
         }
     }
 }

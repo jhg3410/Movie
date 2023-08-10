@@ -1,10 +1,13 @@
 package com.jik.movie.navigation
 
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.jik.feature.detail.navigation.DetailNavigation.installDetailScreen
+import com.jik.feature.detail.navigation.DetailNavigation.navigateDetail
 import com.jik.feature.home.navigation.HomeNavigation
 import com.jik.feature.home.navigation.HomeNavigation.installHomeScreen
 import com.jik.feature.popular.navigation.PopularNavigation.installPopularScreen
@@ -20,8 +23,15 @@ fun MovieNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
-        installHomeScreen(navController)
-        installPopularScreen(navController)
-        installDetailScreen()
+        installHomeScreen(
+            onPosterClick = { movieId -> navController.navigateDetail(movieId) }
+        )
+        installPopularScreen(
+            onPosterClick = { movieId -> navController.navigateDetail(movieId) }
+        )
+        installDetailScreen(
+            enterTransition = slideInVertically { it },
+            exitTransition = slideOutVertically { it }
+        )
     }
 }

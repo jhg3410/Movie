@@ -8,6 +8,7 @@ import javax.inject.Inject
 class MovieRemoteDataSourceImpl @Inject constructor(
     private val movieService: MovieService
 ) : MovieRemoteDataSource {
+
     override suspend fun getPopularMovies(page: Int): Result<List<Movie>> {
         return movieService.getPopularMovieList(page).mapCatching {
             it.results

@@ -73,7 +73,7 @@ private val isSdkHigher31 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 fun MovieTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = isSdkHigher31,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -99,7 +99,7 @@ fun MovieTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = MovieTypography,
         content = content
     )
 }
