@@ -10,10 +10,14 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 fun Activity.showSplashScreenWithDelay(delay: Duration = 1.2.seconds) {
+    var splashOut = true
+
+    CoroutineScope(Dispatchers.Main).launch {
+        delay(delay)
+        splashOut = false
+    }
+
     installSplashScreen().setKeepOnScreenCondition {
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(duration = delay)
-        }
-        false
+        splashOut
     }
 }
