@@ -14,6 +14,25 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMovieInfo(id: Long): Result<MovieInfo> {
-        return movieRemoteDataSource.getMovieInfo(id = id)
+        val movieInfo = movieRemoteDataSource.getMovieInfo(id = id)
+        val movieCredits = movieRemoteDataSource.getMovieCredits(id = id)
+
+        val result = movieInfo.fold(
+            onSuccess = { movieInfoData ->
+                movieCredits.fold(
+                    onSuccess = { movieCreditsData ->
+                        Result.success(movieInfoData.copy(cast = movieCreditsData))
+                    },
+                    onFailure = { movieCreditsException ->
+                        Result.failure(movieCreditsException)
+                    }
+                )
+            },
+            onFailure = { movieInfoException ->
+                Result.failure(movieInfoException)
+            }
+        )
+
+        return result
     }
 }
