@@ -5,28 +5,35 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jik.core.designsystem.component.GradientArea
-import com.jik.core.designsystem.component.GradientPosterCard
+import coil.compose.AsyncImage
 import com.jik.core.designsystem.component.LoadingWheel
+import com.jik.core.designsystem.component.PosterCard
 import com.jik.core.designsystem.component.Refresh
 import com.jik.core.designsystem.icon.IconColor
 import com.jik.core.designsystem.icon.MovieIcons
 import com.jik.core.model.MovieInfo
 import com.jik.core.ui.state.UiState
 import com.jik.core.ui.util.MovieGenreUtils
-import com.jik.core.ui.util.getStatusBarHeight
 
 
 @Composable
@@ -64,63 +71,66 @@ fun DetailScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Content(
     movieInfo: MovieInfo,
     modifier: Modifier = Modifier
 ) {
 
-    BottomSheetScaffold(
-        sheetContent = {
-            MovieInformation(movieInfo = movieInfo)
-        },
-        sheetPeekHeight = getStatusBarHeight() +
-                LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenWidthDp.dp * 1.5f),
-        sheetShape = RoundedCornerShape(size = 16.dp),
-        sheetContainerColor = MaterialTheme.colorScheme.background,
-        modifier = modifier
-    ) {
-        GradientPosterCard(
-            posterPath = movieInfo.getPosterUrl(),
-            modifier = Modifier.aspectRatio(2f / 3f),
+    Column(modifier = modifier) {
+        PosterCard(
+            posterPath = movieInfo.getBackdropUrl(),
+            modifier = Modifier.aspectRatio(500f / 281f),
             roundedCornerSize = 0.dp,
             clickable = false,
-            gradientArea = GradientArea.TOP
         )
+        Spacer(modifier = Modifier.height(24.dp))
+        MovieInformation(movieInfo = movieInfo)
     }
 }
 
 @Composable
 private fun MovieInformation(movieInfo: MovieInfo) {
 
+    val horizontalPaddingModifier = Modifier.padding(horizontal = 16.dp)
+
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 24.dp)
     ) {
-        Text(
-            text = movieInfo.title,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(vertical = 8.dp)
+        Title(
+            title = movieInfo.title,
+            modifier = horizontalPaddingModifier
         )
-
-        ReleaseDateAndRating(movieInfo = movieInfo)
-
-        Genres(movieInfo = movieInfo)
-
-        Text(
-            text = movieInfo.overview,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(vertical = 12.dp)
+        Spacer(modifier = Modifier.height(8.dp))
+        ReleaseDateAndRating(
+            movieInfo = movieInfo,
+            modifier = horizontalPaddingModifier
         )
+        Genres(genres = movieInfo.genres)
+        Spacer(modifier = Modifier.height(20.dp))
+        Overview(
+            overview = movieInfo.overview,
+            modifier = horizontalPaddingModifier
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Cast(cast = movieInfo.cast)
     }
 }
 
 @Composable
-private fun ReleaseDateAndRating(movieInfo: MovieInfo) {
+private fun Title(title: String, modifier: Modifier = Modifier) {
+    Text(
+        modifier = modifier,
+        text = title,
+        style = MaterialTheme.typography.titleLarge,
+    )
+}
+
+@Composable
+private fun ReleaseDateAndRating(movieInfo: MovieInfo, modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier.height(IntrinsicSize.Min),
+        modifier = modifier.height(IntrinsicSize.Min),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
@@ -151,12 +161,13 @@ private fun ReleaseDateAndRating(movieInfo: MovieInfo) {
 }
 
 @Composable
-private fun Genres(movieInfo: MovieInfo) {
+private fun Genres(genres: List<MovieInfo.Genre>) {
     LazyRow(
         modifier = Modifier.padding(top = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
-        items(items = movieInfo.genres) { genre ->
+        items(items = genres) { genre ->
             Box(
                 modifier = Modifier
                     .background(
@@ -173,5 +184,76 @@ private fun Genres(movieInfo: MovieInfo) {
                 )
             }
         }
+    }
+}
+
+
+@Composable
+private fun Overview(overview: String, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text(
+            text = "OVERVIEW",
+            color = Color(0xFF8A8A8A),
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = overview,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+    }
+}
+
+@Composable
+private fun Cast(cast: List<MovieInfo.CastItem>, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = "CAST",
+            color = Color(0xFF8A8A8A),
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
+            items(items = cast) { castItem ->
+                CastItem(castItem = castItem)
+            }
+        }
+    }
+}
+
+@Composable
+private fun CastItem(castItem: MovieInfo.CastItem, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.width(80.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AsyncImage(
+            model = castItem.getProfileUrl(),
+            contentDescription = "Cast Image",
+            modifier = Modifier
+                .size(80.dp)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop,
+            error = painterResource(id = com.jik.core.ui.R.drawable.default_profile)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = castItem.name,
+            style = MaterialTheme.typography.labelMedium,
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Text(
+            text = castItem.character,
+            style = MaterialTheme.typography.labelSmall,
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }

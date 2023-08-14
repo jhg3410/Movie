@@ -29,8 +29,9 @@ data class MovieInfo(
     @JsonClass(generateAdapter = true)
     data class CastItem(
         val name: String,
+        val character: String,
         @Json(name = "profile_path") val profilePath: String?,
-        val character: String
+        @Json(name = "known_for_department") val knownForDepartment: String,
     ) {
         fun getProfileUrl() = "https://image.tmdb.org/t/p/w500$profilePath"
     }

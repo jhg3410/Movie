@@ -21,7 +21,9 @@ class MovieRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getMovieCredits(id: Long): Result<List<MovieInfo.CastItem>> {
         return movieService.getMovieCredits(id).mapCatching {
-            it.cast
+            it.cast.filter { castItem ->
+                castItem.knownForDepartment == "Acting"
+            }
         }
     }
 }
