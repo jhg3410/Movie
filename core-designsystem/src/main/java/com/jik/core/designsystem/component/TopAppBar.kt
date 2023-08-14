@@ -9,13 +9,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.jik.core.designsystem.icon.MovieIcons.ArrowBackRounded
 import com.jik.core.designsystem.theme.MovieTheme
 import com.jik.core.ui.preview.ThemePreviews
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieTopAppBar(
-    @StringRes titleRes: Int,
+    @StringRes titleRes: Int?,
     modifier: Modifier = Modifier,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.background,
@@ -25,20 +26,35 @@ fun MovieTopAppBar(
     titleFontFamily: FontFamily? = null,
     titleStyle: TextStyle = MaterialTheme.typography.titleLarge,
     titleWeight: FontWeight = FontWeight.Bold,
+    canNavigateBack: Boolean = false,
+    navigateBack: () -> Unit = {}
 ) {
     TopAppBar(
         title = {
-            Text(
-                text = stringResource(id = titleRes),
-                color = MaterialTheme.colorScheme.primary,
-                fontFamily = titleFontFamily,
-                fontWeight = titleWeight,
-                style = titleStyle
-            )
+            if (titleRes != null) {
+                Text(
+                    text = stringResource(id = titleRes),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontFamily = titleFontFamily,
+                    fontWeight = titleWeight,
+                    style = titleStyle
+                )
+            }
         },
         colors = colors,
         scrollBehavior = scrollBehavior,
-        modifier = modifier
+        modifier = modifier,
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateBack) {
+                    Icon(
+                        imageVector = ArrowBackRounded,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+            }
+        }
     )
 }
 
