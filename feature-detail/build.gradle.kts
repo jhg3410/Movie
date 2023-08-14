@@ -49,6 +49,7 @@ dependencies {
     implementation(projects.coreUi)
     implementation(projects.coreModel)
     implementation(projects.coreData)
+    implementation(projects.libVideoplayer)
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.runtime.ktx)
