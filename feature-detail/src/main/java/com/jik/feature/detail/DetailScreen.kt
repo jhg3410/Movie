@@ -32,7 +32,7 @@ import com.jik.core.designsystem.icon.MovieIcons
 import com.jik.core.model.MovieInfo
 import com.jik.core.ui.state.UiState
 import com.jik.core.ui.util.MovieGenreUtils
-import com.jik.lib.videoplayer.ui.VideoPlayerThumbnail
+import com.jik.lib.videoplayer.ui.VideoPlayer
 
 
 @Composable
@@ -98,11 +98,12 @@ private fun Content(
 ) {
 
     Column(modifier = modifier) {
-        VideoPlayerThumbnail(
+        VideoPlayer(
+            modifier = Modifier.aspectRatio(500f / 281f),
             Thumbnail = {
                 PosterCard(
                     posterPath = movieInfo.getBackdropUrl(),
-                    modifier = Modifier.aspectRatio(500f / 281f),
+                    modifier = Modifier.fillMaxSize(),
                     roundedCornerSize = 0.dp,
                     clickable = false,
                 )
