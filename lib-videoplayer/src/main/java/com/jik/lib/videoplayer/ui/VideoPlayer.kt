@@ -21,14 +21,17 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.jik.lib.videoplayer.VideoPlayerIcons
 import com.jik.lib.videoplayer.VideoUtil
+import com.jik.lib.videoplayer.VideoUtil.toStreamUrlOfYouTube
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun VideoPlayer(
     modifier: Modifier = Modifier,
     Thumbnail: @Composable () -> Unit,
-    videoUrl: String = VideoUtil.VIDEO_URL_MOCK
+    videoUrl: String
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     var player: ExoPlayer? by remember { mutableStateOf(null) }
@@ -38,12 +41,14 @@ fun VideoPlayer(
     }
 
     fun initializePlayer() {
-        player = ExoPlayer.Builder(context).build()
-            .also { exoPlayer ->
-                exoPlayer.setMediaItem(MediaItem.fromUri(videoUrl))
-                exoPlayer.addListener(renderListener)
-                exoPlayer.prepare()
-            }
+        coroutineScope.launch {
+            player = ExoPlayer.Builder(context).build()
+                .also { exoPlayer ->
+                    exoPlayer.setMediaItem(MediaItem.fromUri(videoUrl.toStreamUrlOfYouTube(context)))
+                    exoPlayer.addListener(renderListener)
+                    exoPlayer.prepare()
+                }
+        }
     }
 
     fun releasePlayer() {

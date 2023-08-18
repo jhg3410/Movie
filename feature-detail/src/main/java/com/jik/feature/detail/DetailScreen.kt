@@ -107,7 +107,8 @@ private fun Content(
                     roundedCornerSize = 0.dp,
                     clickable = false,
                 )
-            }
+            },
+            videoUrl = "vkoAEuR-SJQ"
         )
         Spacer(modifier = Modifier.height(24.dp))
         MovieInformation(movieInfo = movieInfo)

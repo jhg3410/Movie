@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.chaquopy)
 }
 
 android {
@@ -14,6 +15,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+        }
     }
 
     buildTypes {
@@ -37,6 +42,14 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
+    }
+}
+
+chaquopy {
+    defaultConfig {
+        pip {
+            install("pytube")
+        }
     }
 }
 

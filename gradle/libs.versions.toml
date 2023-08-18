@@ -23,7 +23,7 @@ logging-interceptor = "4.11.0"
 ksp = "1.8.10-1.0.9"
 splashscreen = "1.0.0"
 media3 = "1.1.0"
-
+chaquopy = "15.0.0"
 
 androidGradlePlugin = "7.4.2"
 
@@ -99,3 +99,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 hilt-plugin = { id = "dagger.hilt.android.plugin", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+chaquopy = { id = "com.chaquo.python", version.ref = "chaquopy" }
