@@ -10,4 +10,6 @@ interface MovieRemoteDataSource {
     suspend fun getMovieInfo(id: Long): Result<MovieInfo>
 
     suspend fun getMovieCredits(id: Long): Result<List<MovieInfo.CastItem>>
+
+    suspend fun getMovieVideo(id: Long): Result<MovieInfo.VideoInfo>
 }
