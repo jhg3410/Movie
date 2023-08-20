@@ -1,27 +1,19 @@
 package com.jik.lib.videoplayer.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
-import com.jik.lib.videoplayer.VideoPlayerIcons
 import com.jik.lib.videoplayer.VideoUtil
 import com.jik.lib.videoplayer.VideoUtil.toStreamUrlOfYouTube
+import com.jik.lib.videoplayer.component.thumnail.ThumbnailLoadingWheel
+import com.jik.lib.videoplayer.component.thumnail.ThumbnailPlayIcon
 import kotlinx.coroutines.launch
 
 
@@ -36,6 +28,7 @@ fun VideoPlayer(
 
     var player: ExoPlayer? by remember { mutableStateOf(null) }
     var videoPlayerScreenVisible by remember { mutableStateOf(false) }
+    var loading by remember { mutableStateOf(false) }
     val renderListener = VideoUtil.renderListener {
         player!!.play()
     }
@@ -85,35 +78,18 @@ fun VideoPlayer(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        if (videoPlayerScreenVisible && player != null) {
-            VideoPlayerScreen(player = player!!)
-        } else {
+        if (videoPlayerScreenVisible.not() || player == null) {
             Thumbnail()
-            VideoPlayerThumbnailPlayIcon {
-                videoPlayerScreenVisible = true
+            if (loading.not()) {
+                ThumbnailPlayIcon {
+                    loading = true
+                    videoPlayerScreenVisible = true
+                }
+            } else {
+                ThumbnailLoadingWheel()
             }
+        } else {
+            VideoPlayerScreen(player = player!!)
         }
-    }
-}
-
-@Composable
-fun VideoPlayerThumbnailPlayIcon(
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .size(40.dp)
-            .clip(CircleShape)
-            .background(color = MaterialTheme.colorScheme.primary)
-            .clickable {
-                onClick()
-            },
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(
-            imageVector = VideoPlayerIcons.Play,
-            contentDescription = null,
-            tint = Color.White
-        )
     }
 }
