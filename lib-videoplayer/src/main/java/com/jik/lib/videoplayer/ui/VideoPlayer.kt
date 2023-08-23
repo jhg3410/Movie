@@ -13,8 +13,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.jik.lib.videoplayer.VideoPlayerState
 import com.jik.lib.videoplayer.VideoPlayerUtil
 import com.jik.lib.videoplayer.VideoPlayerUtil.toStreamUrlOfYouTube
-import com.jik.lib.videoplayer.component.error.NetworkError
-import com.jik.lib.videoplayer.component.error.NoVideoFound
 import com.jik.lib.videoplayer.component.thumnail.ThumbnailLoadingWheel
 import com.jik.lib.videoplayer.component.thumnail.ThumbnailPlayIcon
 import kotlinx.coroutines.launch
@@ -28,14 +26,14 @@ fun VideoPlayer(
 ) {
     val context = LocalContext.current
 
-    var videoPlayerState by remember { mutableStateOf(VideoPlayerState.INITIAL) }
+    var videoPlayerState: VideoPlayerState by remember { mutableStateOf(VideoPlayerState.Initial) }
     val coroutineScope = rememberCoroutineScope()
     var player: ExoPlayer? by remember { mutableStateOf(null) }
     val renderListener = VideoPlayerUtil.renderListener { player!!.play() }
 
     fun initializePlayer() {
         if (videoUrl == null) {
-            videoPlayerState = VideoPlayerState.NO_VIDEO
+            videoPlayerState = VideoPlayerState.NoVideo
             return
         }
         coroutineScope.launch {
@@ -46,7 +44,7 @@ fun VideoPlayer(
                     prepare()
                 }
             } catch (e: Exception) {
-                videoPlayerState = VideoPlayerState.GET_ERROR
+                videoPlayerState = VideoPlayerState.GetError(e.message ?: "Unknown Error")
             }
         }
     }
@@ -86,32 +84,33 @@ fun VideoPlayer(
         contentAlignment = Alignment.Center
     ) {
         when (videoPlayerState) {
-            VideoPlayerState.INITIAL -> {
+            is VideoPlayerState.Initial -> {
                 Thumbnail()
                 ThumbnailPlayIcon {
-                    videoPlayerState = VideoPlayerState.LOADING
+                    videoPlayerState = VideoPlayerState.Loading
                 }
             }
-            VideoPlayerState.LOADING -> {
+            is VideoPlayerState.Loading -> {
                 Thumbnail()
                 ThumbnailLoadingWheel()
                 if (player != null) {
-                    videoPlayerState = VideoPlayerState.CAN_PLAY
+                    videoPlayerState = VideoPlayerState.CanPlay
                 }
             }
-            VideoPlayerState.CAN_PLAY -> {
+            is VideoPlayerState.CanPlay -> {
                 VideoPlayerScreen(player = player ?: return)
             }
-            VideoPlayerState.GET_ERROR -> {
-                NetworkError(
+            is VideoPlayerState.GetError -> {
+                ErrorScreen(
+                    errorMessage = (videoPlayerState as VideoPlayerState.GetError).errorMessage,
                     onRefreshClick = {
                         initializePlayer()
-                        videoPlayerState = VideoPlayerState.LOADING
+                        videoPlayerState = VideoPlayerState.Loading
                     }
                 )
             }
-            VideoPlayerState.NO_VIDEO -> {
-                NoVideoFound()
+            is VideoPlayerState.NoVideo -> {
+                ErrorScreen(errorMessage = "No Video Found")
             }
         }
     }

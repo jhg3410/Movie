@@ -1,10 +1,10 @@
 package com.jik.lib.videoplayer
 
-enum class VideoPlayerState {
+sealed interface VideoPlayerState {
 
-    INITIAL,
-    LOADING,
-    GET_ERROR,
-    NO_VIDEO,
-    CAN_PLAY,
+    object Initial : VideoPlayerState
+    object Loading : VideoPlayerState
+    class GetError(val errorMessage: String) : VideoPlayerState
+    object NoVideo : VideoPlayerState
+    object CanPlay : VideoPlayerState
 }

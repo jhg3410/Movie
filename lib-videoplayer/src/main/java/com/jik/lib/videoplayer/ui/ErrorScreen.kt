@@ -1,4 +1,4 @@
-package com.jik.lib.videoplayer.component.error
+package com.jik.lib.videoplayer.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,9 +15,10 @@ import androidx.compose.ui.graphics.Color
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Refresh
 
 @Composable
-fun NetworkError(
+fun ErrorScreen(
     modifier: Modifier = Modifier,
-    onRefreshClick: () -> Unit
+    errorMessage: String,
+    onRefreshClick: (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier
@@ -27,20 +28,22 @@ fun NetworkError(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "Please check network connection.",
+            text = errorMessage,
             style = MaterialTheme.typography.bodySmall,
             color = Color.White,
         )
-        IconButton(
-            onClick = {
-                onRefreshClick()
-            },
-        ) {
-            Icon(
-                imageVector = Refresh,
-                contentDescription = "Refresh",
-                tint = Color.White,
-            )
+        if (onRefreshClick != null) {
+            IconButton(
+                onClick = {
+                    onRefreshClick()
+                },
+            ) {
+                Icon(
+                    imageVector = Refresh,
+                    contentDescription = "Refresh",
+                    tint = Color.White,
+                )
+            }
         }
     }
 }
