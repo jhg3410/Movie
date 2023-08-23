@@ -10,8 +10,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
-import com.jik.lib.videoplayer.VideoUtil
-import com.jik.lib.videoplayer.VideoUtil.toStreamUrlOfYouTube
+import com.jik.lib.videoplayer.VideoPlayerState
+import com.jik.lib.videoplayer.VideoPlayerUtil
+import com.jik.lib.videoplayer.VideoPlayerUtil.toStreamUrlOfYouTube
+import com.jik.lib.videoplayer.component.error.NetworkError
+import com.jik.lib.videoplayer.component.error.NoVideoFound
 import com.jik.lib.videoplayer.component.thumnail.ThumbnailLoadingWheel
 import com.jik.lib.videoplayer.component.thumnail.ThumbnailPlayIcon
 import kotlinx.coroutines.launch
@@ -21,26 +24,30 @@ import kotlinx.coroutines.launch
 fun VideoPlayer(
     modifier: Modifier = Modifier,
     Thumbnail: @Composable () -> Unit,
-    videoUrl: String
+    videoUrl: String?
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    var videoPlayerState by remember { mutableStateOf(VideoPlayerState.INITIAL) }
+    val coroutineScope = rememberCoroutineScope()
     var player: ExoPlayer? by remember { mutableStateOf(null) }
-    var videoPlayerScreenVisible by remember { mutableStateOf(false) }
-    var loading by remember { mutableStateOf(false) }
-    val renderListener = VideoUtil.renderListener {
-        player!!.play()
-    }
+    val renderListener = VideoPlayerUtil.renderListener { player!!.play() }
 
     fun initializePlayer() {
+        if (videoUrl == null) {
+            videoPlayerState = VideoPlayerState.NO_VIDEO
+            return
+        }
         coroutineScope.launch {
-            player = ExoPlayer.Builder(context).build()
-                .also { exoPlayer ->
-                    exoPlayer.setMediaItem(MediaItem.fromUri(videoUrl.toStreamUrlOfYouTube(context)))
-                    exoPlayer.addListener(renderListener)
-                    exoPlayer.prepare()
+            try {
+                player = ExoPlayer.Builder(context).build().apply {
+                    setMediaItem(MediaItem.fromUri(videoUrl.toStreamUrlOfYouTube(context)))
+                    addListener(renderListener)
+                    prepare()
                 }
+            } catch (e: Exception) {
+                videoPlayerState = VideoPlayerState.GET_ERROR
+            }
         }
     }
 
@@ -78,18 +85,34 @@ fun VideoPlayer(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        if (videoPlayerScreenVisible.not() || player == null) {
-            Thumbnail()
-            if (loading.not()) {
+        when (videoPlayerState) {
+            VideoPlayerState.INITIAL -> {
+                Thumbnail()
                 ThumbnailPlayIcon {
-                    loading = true
-                    videoPlayerScreenVisible = true
+                    videoPlayerState = VideoPlayerState.LOADING
                 }
-            } else {
-                ThumbnailLoadingWheel()
             }
-        } else {
-            VideoPlayerScreen(player = player!!)
+            VideoPlayerState.LOADING -> {
+                Thumbnail()
+                ThumbnailLoadingWheel()
+                if (player != null) {
+                    videoPlayerState = VideoPlayerState.CAN_PLAY
+                }
+            }
+            VideoPlayerState.CAN_PLAY -> {
+                VideoPlayerScreen(player = player ?: return)
+            }
+            VideoPlayerState.GET_ERROR -> {
+                NetworkError(
+                    onRefreshClick = {
+                        initializePlayer()
+                        videoPlayerState = VideoPlayerState.LOADING
+                    }
+                )
+            }
+            VideoPlayerState.NO_VIDEO -> {
+                NoVideoFound()
+            }
         }
     }
 }

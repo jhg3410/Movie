@@ -7,7 +7,7 @@ import com.chaquo.python.android.AndroidPlatform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-object VideoUtil {
+object VideoPlayerUtil {
 
     fun renderListener(playVideo: () -> Unit) = object : Player.Listener {
         override fun onRenderedFirstFrame() {

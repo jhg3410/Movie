@@ -108,7 +108,7 @@ private fun Content(
                     clickable = false,
                 )
             },
-            videoUrl = movieInfo.video?.videoId ?: "", // todo no video found
+            videoUrl = movieInfo.video?.videoId
         )
         Spacer(modifier = Modifier.height(24.dp))
         MovieInformation(movieInfo = movieInfo)
