@@ -32,6 +32,7 @@ import com.jik.core.designsystem.icon.MovieIcons
 import com.jik.core.model.MovieInfo
 import com.jik.core.ui.state.UiState
 import com.jik.core.ui.util.MovieGenreUtils
+import com.jik.lib.videoplayer.ui.VideoPlayer
 
 
 @Composable
@@ -97,11 +98,17 @@ private fun Content(
 ) {
 
     Column(modifier = modifier) {
-        PosterCard(
-            posterPath = movieInfo.getBackdropUrl(),
+        VideoPlayer(
             modifier = Modifier.aspectRatio(500f / 281f),
-            roundedCornerSize = 0.dp,
-            clickable = false,
+            Thumbnail = {
+                PosterCard(
+                    posterPath = movieInfo.getBackdropUrl(),
+                    modifier = Modifier.fillMaxSize(),
+                    roundedCornerSize = 0.dp,
+                    clickable = false,
+                )
+            },
+            videoUrl = movieInfo.video?.videoId
         )
         Spacer(modifier = Modifier.height(24.dp))
         MovieInformation(movieInfo = movieInfo)
@@ -257,7 +264,7 @@ private fun CastItem(castItem: MovieInfo.CastItem, modifier: Modifier = Modifier
                 .size(80.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.Crop,
-            error = painterResource(id = com.jik.core.ui.R.drawable.default_profile)
+            error = painterResource(id = com.jik.core.designsystem.R.drawable.default_profile)
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(

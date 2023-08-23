@@ -9,15 +9,15 @@ data class MovieInfo(
     val title: String,
     val genres: List<Genre>,
     val overview: String,
-    @Json(ignore = true) val cast: List<CastItem> = emptyList(),
     @Json(name = "release_date") val releaseDate: String,
     @Json(name = "poster_path") val posterPath: String,
     @Json(name = "backdrop_path") val backdropPath: String,
     @Json(name = "vote_average") val rating: Double,
+    @Json(ignore = true) val cast: List<CastItem> = emptyList(),
+    @Json(ignore = true) val video: VideoInfo? = null
 ) {
 
     fun getReleaseDateString(): String = "release: $releaseDate"
-    fun getPosterUrl() = "https://image.tmdb.org/t/p/w500$posterPath"
     fun getBackdropUrl() = "https://image.tmdb.org/t/p/w500$backdropPath"
 
 
@@ -35,4 +35,12 @@ data class MovieInfo(
     ) {
         fun getProfileUrl() = "https://image.tmdb.org/t/p/w500$profilePath"
     }
+
+    @JsonClass(generateAdapter = true)
+    data class VideoInfo(
+        @Json(name = "key") val videoId: String,
+        val site: String,
+        val type: String,
+        val official: Boolean
+    )
 }

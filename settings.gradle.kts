@@ -5,6 +5,7 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven { url = uri("https://chaquo.com/maven-test") }
     }
 }
 dependencyResolutionManagement {
@@ -24,3 +25,4 @@ include(":core-data")
 include(":feature-popular")
 include(":feature-detail")
 include(":feature-home")
+include(":lib-videoplayer")
