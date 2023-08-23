@@ -9,7 +9,7 @@ fun LazyListState.Pageable(
     threshold: Int = 4
 ) {
 
-    val calculateShouldLoadMore =
+    fun calculateShouldLoadMore() =
         BasePageable.calculateShouldLoadMore(
             itemCount = layoutInfo.totalItemsCount,
             lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0,
@@ -17,7 +17,7 @@ fun LazyListState.Pageable(
         )
 
     BasePageable.Operate(
-        calculateShouldLoadMore = { calculateShouldLoadMore },
+        calculateShouldLoadMore = { calculateShouldLoadMore() },
         onLoadMore = onLoadMore
     )
 }

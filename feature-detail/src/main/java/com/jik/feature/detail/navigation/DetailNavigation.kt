@@ -32,7 +32,8 @@ object DetailNavigation {
     @OptIn(ExperimentalAnimationApi::class)
     fun NavGraphBuilder.installDetailScreen(
         enterTransition: EnterTransition,
-        exitTransition: ExitTransition
+        exitTransition: ExitTransition,
+        navigateUp: () -> Unit
     ) {
         composable(
             route = routeWithArgs,
@@ -42,7 +43,8 @@ object DetailNavigation {
         ) {
             StatusBarColor(color = Color.Transparent)
             DetailScreen(
-                modifier = Modifier.navigationBarsPadding()
+                modifier = Modifier.navigationBarsPadding(),
+                navigateUp = navigateUp
             )
         }
     }

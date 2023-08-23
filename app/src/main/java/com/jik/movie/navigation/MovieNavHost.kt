@@ -31,7 +31,8 @@ fun MovieNavHost(
         )
         installDetailScreen(
             enterTransition = slideInVertically { it },
-            exitTransition = slideOutVertically { it }
+            exitTransition = slideOutVertically { it },
+            navigateUp = { navController.navigateUp() }
         )
     }
 }
