@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Refresh
 
 @Composable
-fun ErrorScreen(
+internal fun ErrorScreen(
     modifier: Modifier = Modifier,
     errorMessage: String,
     onRefreshClick: (() -> Unit)? = null,
