@@ -37,7 +37,7 @@ fun VideoPlayerScreen(
             factory = {
                 PlayerView(context).apply {
                     this.player = player
-                    useController = true
+                    useController = false
                     layoutParams = FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT

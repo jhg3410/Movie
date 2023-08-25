@@ -99,6 +99,7 @@ fun VideoPlayer(
             }
             is VideoPlayerState.CanPlay -> {
                 VideoPlayerScreen(player = player ?: return)
+                VideoPlayerController(visible = true)
             }
             is VideoPlayerState.GetError -> {
                 ErrorScreen(
