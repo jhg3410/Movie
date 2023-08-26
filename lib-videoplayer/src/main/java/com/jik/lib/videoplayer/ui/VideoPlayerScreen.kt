@@ -19,7 +19,7 @@ import androidx.media3.ui.PlayerView
 fun VideoPlayerScreen(
     player: ExoPlayer,
     modifier: Modifier = Modifier,
-    onScreenClick: () -> Unit = {}
+    onScreenClick: () -> Unit
 ) {
 
     val context = LocalContext.current

@@ -1,6 +1,7 @@
 package com.jik.lib.videoplayer.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +31,8 @@ fun VideoPlayer(
     val coroutineScope = rememberCoroutineScope()
     var player: ExoPlayer? by remember { mutableStateOf(null) }
     val renderListener = VideoPlayerUtil.renderListener { player!!.play() }
+
+    var controllerVisible by remember { mutableStateOf(true) }
 
     fun initializePlayer() {
         if (videoUrl == null) {
@@ -98,8 +101,14 @@ fun VideoPlayer(
                 }
             }
             is VideoPlayerState.CanPlay -> {
-                VideoPlayerScreen(player = player ?: return)
-                VideoPlayerController(visible = true)
+                VideoPlayerScreen(
+                    player = player ?: return,
+                    onScreenClick = { controllerVisible = !controllerVisible }
+                )
+                VideoPlayerController(
+                    modifier = Modifier.fillMaxSize(),
+                    visible = controllerVisible
+                )
             }
             is VideoPlayerState.GetError -> {
                 ErrorScreen(

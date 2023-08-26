@@ -1,6 +1,8 @@
 package com.jik.lib.videoplayer.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -21,11 +23,14 @@ fun VideoPlayerController(
     visible: Boolean,
     controllerState: VideoPlayerControllerState = VideoPlayerControllerState.PLAYING,
 ) {
-    AnimatedVisibility(visible = visible) {
+    AnimatedVisibility(
+        modifier = modifier,
+        visible = visible,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
         Box(
-            modifier = modifier
-                .fillMaxSize()
-                .background(color = Color.Black.copy(alpha = 0.5f))
+            modifier = Modifier.background(color = Color.Black.copy(alpha = 0.5f))
         ) {
             CenterController(
                 modifier = Modifier
@@ -34,7 +39,9 @@ fun VideoPlayerController(
                 controllerState = controllerState
             )
             BottomController(
-                modifier = Modifier.align(Alignment.BottomStart)
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .fillMaxWidth()
             )
         }
     }
