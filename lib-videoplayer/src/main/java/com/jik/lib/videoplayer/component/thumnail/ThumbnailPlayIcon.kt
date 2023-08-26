@@ -12,8 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import com.jik.lib.videoplayer.VideoPlayerIcons
+import com.jik.lib.videoplayer.component.VideoPlayerIcons.Play
+import com.jik.lib.videoplayer.component.iconSize
 
 @Composable
 fun ThumbnailPlayIcon(
@@ -21,7 +21,7 @@ fun ThumbnailPlayIcon(
 ) {
     Box(
         modifier = Modifier
-            .size(40.dp)
+            .size(iconSize)
             .clip(CircleShape)
             .background(color = MaterialTheme.colorScheme.primary)
             .clickable {
@@ -30,7 +30,7 @@ fun ThumbnailPlayIcon(
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            imageVector = VideoPlayerIcons.Play,
+            imageVector = Play,
             contentDescription = null,
             tint = Color.White
         )
