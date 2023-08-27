@@ -11,17 +11,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.media3.exoplayer.ExoPlayer
 import com.jik.lib.videoplayer.VideoPlayerControllerState
-import com.jik.lib.videoplayer.VideoPlayerIcons.Forward5
-import com.jik.lib.videoplayer.VideoPlayerIcons.Pause
-import com.jik.lib.videoplayer.VideoPlayerIcons.Replay5
-import com.jik.lib.videoplayer.iconSize
+import com.jik.lib.videoplayer.component.VideoPlayerIcons.Forward5
+import com.jik.lib.videoplayer.component.VideoPlayerIcons.Replay5
+import com.jik.lib.videoplayer.component.controller.ControllerLoadingWheel
+import com.jik.lib.videoplayer.component.controller.ControllerPauseIcon
+import com.jik.lib.videoplayer.component.controller.ControllerPlayIcon
+import com.jik.lib.videoplayer.component.controller.ControllerReplayIcon
+import com.jik.lib.videoplayer.component.iconSize
 
 @Composable
 fun VideoPlayerController(
+    player: ExoPlayer,
     modifier: Modifier = Modifier,
     visible: Boolean,
-    controllerState: VideoPlayerControllerState = VideoPlayerControllerState.PLAYING,
+    controllerState: VideoPlayerControllerState
 ) {
     AnimatedVisibility(
         modifier = modifier,
@@ -29,10 +34,22 @@ fun VideoPlayerController(
         enter = fadeIn(),
         exit = fadeOut()
     ) {
+        if (controllerState is VideoPlayerControllerState.ERROR) {
+            ErrorScreen(
+                errorMessage = controllerState.errorMessage,
+                onRefreshClick = {
+                    player.prepare()
+                    player.play()
+                }
+            )
+
+            return@AnimatedVisibility
+        }
         Box(
             modifier = Modifier.background(color = Color.Black.copy(alpha = 0.5f))
         ) {
             CenterController(
+                player = player,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .fillMaxWidth(),
@@ -49,15 +66,18 @@ fun VideoPlayerController(
 
 @Composable
 fun CenterController(
+    player: ExoPlayer,
     modifier: Modifier = Modifier,
-    controllerState: VideoPlayerControllerState
+    controllerState: VideoPlayerControllerState,
+    onReplayClick: () -> Unit = {},
+    onForwardClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         IconButton(
-            onClick = { /*TODO*/ }
+            onClick = onReplayClick
         ) {
             Icon(
                 modifier = Modifier.size(iconSize),
@@ -67,20 +87,30 @@ fun CenterController(
             )
         }
 
-        // temporary
-        IconButton(
-            onClick = { /*TODO*/ }
-        ) {
-            Icon(
-                modifier = Modifier.size(iconSize),
-                imageVector = Pause,
-                contentDescription = "Pause",
-                tint = Color.White,
-            )
+        when (controllerState) {
+            is VideoPlayerControllerState.LOADING -> {
+                ControllerLoadingWheel()
+            }
+            is VideoPlayerControllerState.PLAYING -> {
+                ControllerPauseIcon {
+                    player.pause()
+                }
+            }
+            is VideoPlayerControllerState.PAUSED -> {
+                ControllerPlayIcon {
+                    player.play()
+                }
+            }
+            is VideoPlayerControllerState.ENDED -> {
+                ControllerReplayIcon {
+                    player.seekTo(0)
+                }
+            }
+            is VideoPlayerControllerState.ERROR -> Unit
         }
 
         IconButton(
-            onClick = { /*TODO*/ }
+            onClick = onForwardClick
         ) {
             Icon(
                 modifier = Modifier.size(iconSize),

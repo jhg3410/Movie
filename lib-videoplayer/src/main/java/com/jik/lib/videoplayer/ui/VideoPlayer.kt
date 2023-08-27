@@ -124,6 +124,7 @@ fun VideoPlayer(
                     onScreenClick = { controllerVisible = !controllerVisible }
                 )
                 VideoPlayerController(
+                    player = player ?: return,
                     modifier = Modifier.fillMaxSize(),
                     visible = controllerVisible,
                     controllerState = controllerState.apply {
