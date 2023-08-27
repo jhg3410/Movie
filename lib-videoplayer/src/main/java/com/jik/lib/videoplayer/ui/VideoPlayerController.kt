@@ -69,15 +69,15 @@ fun CenterController(
     player: ExoPlayer,
     modifier: Modifier = Modifier,
     controllerState: VideoPlayerControllerState,
-    onReplayClick: () -> Unit = {},
-    onForwardClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         IconButton(
-            onClick = onReplayClick
+            onClick = {
+                player.seekTo(player.currentPosition - 5_000)
+            }
         ) {
             Icon(
                 modifier = Modifier.size(iconSize),
@@ -110,7 +110,9 @@ fun CenterController(
         }
 
         IconButton(
-            onClick = onForwardClick
+            onClick = {
+                player.seekTo(player.currentPosition + 5_000)
+            }
         ) {
             Icon(
                 modifier = Modifier.size(iconSize),

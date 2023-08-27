@@ -34,7 +34,11 @@ fun VideoPlayer(
 
     var videoPlayerState: VideoPlayerState by remember { mutableStateOf(VideoPlayerState.Initial) }
     var player: ExoPlayer? by remember { mutableStateOf(null) }
-    val renderFirstFrameListener = renderFirstFrameListener { player!!.play() }
+    val renderFirstFrameListener = renderFirstFrameListener {
+        if (player?.currentPosition == 0L) {
+            player!!.play()
+        }
+    }
 
     var controllerVisible by remember { mutableStateOf(true) }
     var isPlaying by remember { mutableStateOf(false) }
