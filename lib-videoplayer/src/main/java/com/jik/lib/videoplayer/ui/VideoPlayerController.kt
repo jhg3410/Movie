@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.ExoPlayer
 import com.jik.lib.videoplayer.VideoPlayerControllerState
+import com.jik.lib.videoplayer.VideoPlayerUtil.toFormattedMinutesAndSecondsFromMilliseconds
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Forward5
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Replay5
 import com.jik.lib.videoplayer.component.controller.ControllerLoadingWheel
@@ -26,7 +27,8 @@ fun VideoPlayerController(
     player: ExoPlayer,
     modifier: Modifier = Modifier,
     visible: Boolean,
-    controllerState: VideoPlayerControllerState
+    controllerState: VideoPlayerControllerState,
+    currentPosition: Long,
 ) {
     AnimatedVisibility(
         modifier = modifier,
@@ -58,7 +60,8 @@ fun VideoPlayerController(
             BottomController(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                currentPosition = currentPosition,
             )
         }
     }
@@ -127,12 +130,13 @@ fun CenterController(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomController(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    currentPosition: Long
 ) {
     Column(modifier = modifier.padding(bottom = 4.dp)) {
         Text(
             modifier = Modifier.padding(start = 16.dp),
-            text = "00:21/02:23",
+            text = "${currentPosition.toFormattedMinutesAndSecondsFromMilliseconds()}/02:23",
             style = MaterialTheme.typography.labelMedium,
             color = Color.White
         )

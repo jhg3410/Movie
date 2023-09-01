@@ -5,8 +5,9 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
-object VideoPlayerUtil {
+internal object VideoPlayerUtil {
 
     suspend fun String.toStreamUrlOfYouTube(context: Context): String {
         val videoUrl = "https://www.youtube.com/watch?v=$this"
@@ -22,5 +23,11 @@ object VideoPlayerUtil {
 
             result.toString()
         }
+    }
+
+    fun Long.toFormattedMinutesAndSecondsFromMilliseconds(): String {
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(this)
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(this) % 60
+        return "%02d:%02d".format(minutes, seconds)
     }
 }

@@ -20,7 +20,9 @@ import com.jik.lib.videoplayer.component.thumnail.ThumbnailLoadingWheel
 import com.jik.lib.videoplayer.component.thumnail.ThumbnailPlayIcon
 import com.jik.lib.videoplayer.getControllerState
 import com.jik.lib.videoplayer.setErrorMessage
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 
 @Composable
@@ -36,13 +38,14 @@ fun VideoPlayer(
     var player: ExoPlayer? by remember { mutableStateOf(null) }
     val renderFirstFrameListener = renderFirstFrameListener {
         if (player?.currentPosition == 0L) {
-            player!!.play()
+            player?.play()
         }
     }
 
     var controllerVisible by remember { mutableStateOf(true) }
     var isPlaying by remember { mutableStateOf(false) }
     var playbackState by remember { mutableStateOf(0) }
+    var currentPosition by remember { mutableStateOf(0L) }
     val controllerState = getControllerState(
         isPlaying = isPlaying,
         playbackState = playbackState
@@ -51,6 +54,7 @@ fun VideoPlayer(
     val stateChangedListener = stateChangedListener { changedPlayer ->
         isPlaying = changedPlayer.isPlaying
         playbackState = changedPlayer.playbackState
+        currentPosition = changedPlayer.currentPosition
     }
 
 
@@ -62,7 +66,10 @@ fun VideoPlayer(
         coroutineScope.launch {
             try {
                 player = ExoPlayer.Builder(context).build().apply {
-                    setMediaItem(MediaItem.fromUri(videoUrl.toStreamUrlOfYouTube(context)))
+                    setMediaItem(
+                        MediaItem.fromUri(videoUrl.toStreamUrlOfYouTube(context)),
+                        currentPosition
+                    )
                     addListener(renderFirstFrameListener)
                     addListener(stateChangedListener)
                     prepare()
@@ -104,6 +111,15 @@ fun VideoPlayer(
         }
     }
 
+    if (isPlaying) {
+        LaunchedEffect(key1 = Unit) {
+            while (player != null) {
+                currentPosition = player?.currentPosition ?: 0L
+                delay(1.seconds / 30)
+            }
+        }
+    }
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -135,7 +151,8 @@ fun VideoPlayer(
                         if (this is VideoPlayerControllerState.ERROR) {
                             setErrorMessage(player ?: return)
                         }
-                    }
+                    },
+                    currentPosition = currentPosition
                 )
             }
             is VideoPlayerState.GetError -> {
