@@ -58,6 +58,7 @@ fun VideoPlayerController(
                 controllerState = controllerState
             )
             BottomController(
+                player = player,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .fillMaxWidth(),
@@ -130,13 +131,15 @@ fun CenterController(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomController(
+    player: ExoPlayer,
     modifier: Modifier = Modifier,
     currentPosition: Long
 ) {
     Column(modifier = modifier.padding(bottom = 4.dp)) {
         Text(
             modifier = Modifier.padding(start = 16.dp),
-            text = "${currentPosition.toFormattedMinutesAndSecondsFromMilliseconds()}/02:23",
+            text = currentPosition.toFormattedMinutesAndSecondsFromMilliseconds() + "/" +
+                    player.contentDuration.toFormattedMinutesAndSecondsFromMilliseconds(),
             style = MaterialTheme.typography.labelMedium,
             color = Color.White
         )
