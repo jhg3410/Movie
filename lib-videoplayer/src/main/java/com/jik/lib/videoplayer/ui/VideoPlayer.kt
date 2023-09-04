@@ -2,7 +2,15 @@ package com.jik.lib.videoplayer.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -12,7 +20,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.jik.lib.videoplayer.VideoPlayerControllerState
-import com.jik.lib.videoplayer.VideoPlayerListener.renderFirstFrameListener
 import com.jik.lib.videoplayer.VideoPlayerListener.stateChangedListener
 import com.jik.lib.videoplayer.VideoPlayerState
 import com.jik.lib.videoplayer.VideoPlayerUtil.toStreamUrlOfYouTube
@@ -28,7 +35,7 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun VideoPlayer(
     modifier: Modifier = Modifier,
-    Thumbnail: @Composable () -> Unit,
+    thumbnail: @Composable () -> Unit,
     videoUrl: String?
 ) {
     val context = LocalContext.current
@@ -36,12 +43,8 @@ fun VideoPlayer(
 
     var videoPlayerState: VideoPlayerState by remember { mutableStateOf(VideoPlayerState.Initial) }
     var player: ExoPlayer? by remember { mutableStateOf(null) }
-    val renderFirstFrameListener = renderFirstFrameListener {
-        if (player?.currentPosition == 0L) {
-            player?.play()
-        }
-    }
 
+    var playWhenReady by remember { mutableStateOf(true) }
     var controllerVisible by remember { mutableStateOf(true) }
     var isPlaying by remember { mutableStateOf(false) }
     var playbackState by remember { mutableStateOf(0) }
@@ -52,6 +55,7 @@ fun VideoPlayer(
     )
 
     val stateChangedListener = stateChangedListener { changedPlayer ->
+        playWhenReady = changedPlayer.playWhenReady
         isPlaying = changedPlayer.isPlaying
         playbackState = changedPlayer.playbackState
         currentPosition = changedPlayer.currentPosition
@@ -70,7 +74,7 @@ fun VideoPlayer(
                         MediaItem.fromUri(videoUrl.toStreamUrlOfYouTube(context)),
                         currentPosition
                     )
-                    addListener(renderFirstFrameListener)
+                    this.playWhenReady = playWhenReady
                     addListener(stateChangedListener)
                     prepare()
                 }
@@ -82,7 +86,6 @@ fun VideoPlayer(
 
     fun releasePlayer() {
         player?.let {
-            it.removeListener(renderFirstFrameListener)
             it.removeListener(stateChangedListener)
             it.release()
         }
@@ -97,9 +100,11 @@ fun VideoPlayer(
                 Lifecycle.Event.ON_START -> {
                     initializePlayer()
                 }
+
                 Lifecycle.Event.ON_STOP -> {
                     releasePlayer()
                 }
+
                 else -> Unit
             }
         }
@@ -126,18 +131,20 @@ fun VideoPlayer(
     ) {
         when (videoPlayerState) {
             is VideoPlayerState.Initial -> {
-                Thumbnail()
+                thumbnail()
                 ThumbnailPlayIcon {
                     videoPlayerState = VideoPlayerState.Loading
                 }
             }
+
             is VideoPlayerState.Loading -> {
-                Thumbnail()
+                thumbnail()
                 ThumbnailLoadingWheel()
                 if (player != null) {
                     videoPlayerState = VideoPlayerState.CanPlay
                 }
             }
+
             is VideoPlayerState.CanPlay -> {
                 VideoPlayerScreen(
                     player = player ?: return,
@@ -155,6 +162,7 @@ fun VideoPlayer(
                     currentPosition = currentPosition
                 )
             }
+
             is VideoPlayerState.GetError -> {
                 ErrorScreen(
                     errorMessage = (videoPlayerState as VideoPlayerState.GetError).errorMessage,
@@ -164,6 +172,7 @@ fun VideoPlayer(
                     }
                 )
             }
+
             is VideoPlayerState.NoVideo -> {
                 ErrorScreen(errorMessage = "No Video Found")
             }

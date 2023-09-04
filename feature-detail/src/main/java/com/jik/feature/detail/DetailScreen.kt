@@ -100,7 +100,7 @@ private fun Content(
     Column(modifier = modifier) {
         VideoPlayer(
             modifier = Modifier.aspectRatio(500f / 281f),
-            Thumbnail = {
+            thumbnail = {
                 PosterCard(
                     posterPath = movieInfo.getBackdropUrl(),
                     modifier = Modifier.fillMaxSize(),
