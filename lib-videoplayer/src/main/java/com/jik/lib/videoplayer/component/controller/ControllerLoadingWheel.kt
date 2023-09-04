@@ -1,5 +1,7 @@
 package com.jik.lib.videoplayer.component.controller
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -11,8 +13,10 @@ import com.jik.lib.videoplayer.component.iconSize
 fun ControllerLoadingWheel(
     modifier: Modifier = Modifier
 ) {
-    CircularProgressIndicator(
-        color = Color.White,
-        modifier = modifier.size(iconSize)
-    )
+    Box(modifier = modifier.size(iconSize)) {
+        CircularProgressIndicator(
+            color = Color.White,
+            modifier = modifier.fillMaxSize()
+        )
+    }
 }

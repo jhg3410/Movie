@@ -1,5 +1,6 @@
 package com.jik.lib.videoplayer.component.controller
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -14,11 +15,11 @@ fun ControllerPlayIcon(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    IconButton(onClick = onClick) {
+    IconButton(onClick = onClick, modifier = modifier.size(iconSize)) {
         Icon(
-            modifier = modifier.size(iconSize),
+            modifier = modifier.fillMaxSize(),
             imageVector = Play,
-            contentDescription = "Play",
+            contentDescription = "Pause",
             tint = Color.White,
         )
     }

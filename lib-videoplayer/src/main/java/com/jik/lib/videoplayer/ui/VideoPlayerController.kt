@@ -76,7 +76,8 @@ fun CenterController(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceAround
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
             onClick = {
