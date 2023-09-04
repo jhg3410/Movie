@@ -95,21 +95,25 @@ fun CenterController(
             is VideoPlayerControllerState.LOADING -> {
                 ControllerLoadingWheel()
             }
+
             is VideoPlayerControllerState.PLAYING -> {
                 ControllerPauseIcon {
                     player.pause()
                 }
             }
+
             is VideoPlayerControllerState.PAUSED -> {
                 ControllerPlayIcon {
                     player.play()
                 }
             }
+
             is VideoPlayerControllerState.ENDED -> {
                 ControllerReplayIcon {
                     player.seekTo(0)
                 }
             }
+
             is VideoPlayerControllerState.ERROR -> Unit
         }
 
@@ -148,6 +152,17 @@ fun BottomController(
 
         CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
             Box(modifier = Modifier.fillMaxWidth()) {
+                Slider(
+                    value = player.bufferedPercentage.toFloat(),
+                    enabled = false,
+                    onValueChange = {},
+                    valueRange = 0f..100f,
+                    colors = SliderDefaults.colors(
+                        disabledThumbColor = Color.Transparent,
+                        disabledActiveTrackColor = Color.Gray
+                    )
+                )
+
                 Slider(
                     value = currentPosition.toFloat(),
                     onValueChange = {
