@@ -146,14 +146,14 @@ fun BottomController(
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        var currentProgress by remember { mutableStateOf(0.2f) }
-
         CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 Slider(
-                    value = currentProgress,
-                    onValueChange = { currentProgress = it },
-                    valueRange = 0f..1f,
+                    value = currentPosition.toFloat(),
+                    onValueChange = {
+                        player.seekTo(it.toLong())
+                    },
+                    valueRange = 0f..player.contentDuration.coerceAtLeast(0).toFloat(),
                     colors = SliderDefaults.colors(
                         thumbColor = MaterialTheme.colorScheme.primary,
                         activeTrackColor = MaterialTheme.colorScheme.primary,
