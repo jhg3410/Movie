@@ -67,6 +67,9 @@ fun VideoPlayer(
             videoPlayerState = VideoPlayerState.NoVideo
             return
         }
+        if (videoPlayerState is VideoPlayerState.CanPlay) {
+            videoPlayerState = VideoPlayerState.Loading
+        }
         coroutineScope.launch {
             try {
                 player = ExoPlayer.Builder(context).build().apply {
