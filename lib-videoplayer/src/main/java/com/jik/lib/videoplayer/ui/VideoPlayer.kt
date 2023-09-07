@@ -74,7 +74,8 @@ fun VideoPlayer(
                         MediaItem.fromUri(videoUrl.toStreamUrlOfYouTube(context)),
                         currentPosition
                     )
-                    this.playWhenReady = playWhenReady
+                    this.playWhenReady =
+                        playWhenReady && videoPlayerState !is VideoPlayerState.Initial
                     addListener(stateChangedListener)
                     prepare()
                 }
@@ -134,6 +135,7 @@ fun VideoPlayer(
                 thumbnail()
                 ThumbnailPlayIcon {
                     videoPlayerState = VideoPlayerState.Loading
+                    player?.play()
                 }
             }
 
