@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jik.core.designsystem.component.LoadingWheel
@@ -42,7 +43,9 @@ fun DetailScreen(
     navigateUp: () -> Unit
 ) {
 
-    val detailUiState = viewModel.detailUiState.collectAsStateWithLifecycle().value
+    val detailUiState = viewModel.detailUiState.collectAsStateWithLifecycle(
+        minActiveState = Lifecycle.State.CREATED
+    ).value
 
     when (detailUiState) {
         is UiState.Loading -> {
