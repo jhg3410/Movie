@@ -23,6 +23,7 @@ import com.jik.lib.videoplayer.VideoPlayerControllerState
 import com.jik.lib.videoplayer.VideoPlayerControllerUtil.VISIBLE_DURATION
 import com.jik.lib.videoplayer.VideoPlayerListener.stateChangedListener
 import com.jik.lib.videoplayer.VideoPlayerState
+import com.jik.lib.videoplayer.VideoPlayerUtil.toMovieErrorMessage
 import com.jik.lib.videoplayer.VideoPlayerUtil.toStreamUrlOfYouTube
 import com.jik.lib.videoplayer.component.thumnail.ThumbnailLoadingWheel
 import com.jik.lib.videoplayer.component.thumnail.ThumbnailPlayIcon
@@ -96,7 +97,7 @@ fun VideoPlayer(
                     prepare()
                 }
             } catch (e: Exception) {
-                videoPlayerState = VideoPlayerState.GetError(e.message ?: "Unknown Error")
+                videoPlayerState = VideoPlayerState.GetError(e.toMovieErrorMessage())
             }
         }
     }
