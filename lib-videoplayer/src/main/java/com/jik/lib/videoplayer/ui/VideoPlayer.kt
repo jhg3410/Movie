@@ -42,6 +42,7 @@ fun VideoPlayer(
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    var streamUrl: String? = remember { null }
 
     var player: ExoPlayer? by remember { mutableStateOf(null) }
     var videoPlayerState: VideoPlayerState by remember { mutableStateOf(VideoPlayerState.Initial) }
@@ -89,7 +90,9 @@ fun VideoPlayer(
             try {
                 player = ExoPlayer.Builder(context).build().apply {
                     setMediaItem(
-                        MediaItem.fromUri(videoUrl.toStreamUrlOfYouTube(context)),
+                        MediaItem.fromUri(streamUrl ?: videoUrl.toStreamUrlOfYouTube(context).also {
+                            streamUrl = it
+                        }),
                         currentPosition
                     )
                     playWhenReady = false
