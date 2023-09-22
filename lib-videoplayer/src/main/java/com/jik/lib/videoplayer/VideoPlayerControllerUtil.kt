@@ -1,8 +1,11 @@
 package com.jik.lib.videoplayer
 
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.seconds
 
 internal object VideoPlayerControllerUtil {
+
+    val VISIBLE_DURATION = 2.seconds
 
     fun Long.toFormattedMinutesAndSecondsFromMilliseconds(): String {
         val timeInMilliseconds = this.coerceAtLeast(0)

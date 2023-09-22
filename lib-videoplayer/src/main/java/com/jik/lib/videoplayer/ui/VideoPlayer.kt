@@ -20,6 +20,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.jik.lib.videoplayer.VideoPlayerControllerState
+import com.jik.lib.videoplayer.VideoPlayerControllerUtil.VISIBLE_DURATION
 import com.jik.lib.videoplayer.VideoPlayerListener.stateChangedListener
 import com.jik.lib.videoplayer.VideoPlayerState
 import com.jik.lib.videoplayer.VideoPlayerUtil.toStreamUrlOfYouTube
@@ -46,24 +47,35 @@ fun VideoPlayer(
 
     var controllerVisible by remember { mutableStateOf(true) }
     var isPlaying by remember { mutableStateOf(false) }
-    var playbackState by remember { mutableStateOf(0) }
     var currentPosition by remember { mutableStateOf(0L) }
     var controllerState: VideoPlayerControllerState by remember {
-        mutableStateOf(
-            VideoPlayerControllerState.INITIAL
-        )
+        mutableStateOf(VideoPlayerControllerState.INITIAL)
     }
 
     val stateChangedListener = stateChangedListener { changedPlayer ->
         isPlaying = changedPlayer.isPlaying
-        playbackState = changedPlayer.playbackState
         currentPosition = changedPlayer.currentPosition
         controllerState = getControllerState(
             isPlaying = isPlaying,
-            playbackState = playbackState
+            playbackState = changedPlayer.playbackState
         )
     }
 
+    LaunchedEffect(key1 = controllerState, key2 = controllerVisible) {
+        if (controllerState == VideoPlayerControllerState.PLAYING && controllerVisible) {
+            delay(VISIBLE_DURATION)
+            controllerVisible = false
+        }
+    }
+
+    if (isPlaying) {
+        LaunchedEffect(key1 = Unit) {
+            while (player != null) {
+                currentPosition = player?.currentPosition ?: 0L
+                delay(1.seconds / 30)
+            }
+        }
+    }
 
     fun initializePlayer() {
         if (videoUrl == null) {
@@ -118,15 +130,6 @@ fun VideoPlayer(
 
         onDispose {
             lifeCycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-
-    if (isPlaying) {
-        LaunchedEffect(key1 = Unit) {
-            while (player != null) {
-                currentPosition = player?.currentPosition ?: 0L
-                delay(1.seconds / 30)
-            }
         }
     }
 
