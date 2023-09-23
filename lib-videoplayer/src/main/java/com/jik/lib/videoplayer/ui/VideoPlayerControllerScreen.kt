@@ -20,6 +20,7 @@ import com.jik.lib.videoplayer.component.controller.ControllerReplayIcon
 import com.jik.lib.videoplayer.component.iconSize
 import com.jik.lib.videoplayer.error.ErrorScreen
 import com.jik.lib.videoplayer.state.VideoPlayerControllerState
+import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.MOVING_OFFSET
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.toFormattedMinutesAndSecondsFromMilliseconds
 
 @Composable
@@ -63,8 +64,8 @@ fun VideoPlayerController(
                 onPlay = onPlay,
                 onPause = onPause,
                 onReplay = onReplay,
-                onForward = { onForward(getCurrentPosition() + 5_000L) },
-                onBackward = { onBackward(getCurrentPosition() - 5_000L) }
+                onForward = { onForward(getCurrentPosition() + MOVING_OFFSET) },
+                onBackward = { onBackward(getCurrentPosition() - MOVING_OFFSET) }
             )
             BottomController(
                 modifier = Modifier
