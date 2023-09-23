@@ -15,7 +15,7 @@ internal object VideoPlayerIcons {
     val Refresh = Icons.Rounded.Refresh
 
     val Forward5 = Icons.Filled.Forward5
-    val Replay5 = Icons.Filled.Replay5
+    val Backward5 = Icons.Filled.Replay5
 }
 
 internal val iconSize = 40.dp

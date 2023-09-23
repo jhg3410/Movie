@@ -41,24 +41,29 @@ fun VideoPlayer(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    var videoPlayerState: VideoPlayerState by remember { mutableStateOf(VideoPlayerState.Initial) }
     var player: ExoPlayer? by remember { mutableStateOf(null) }
+    var videoPlayerState: VideoPlayerState by remember { mutableStateOf(VideoPlayerState.Initial) }
 
     var playWhenReady by remember { mutableStateOf(true) }
     var controllerVisible by remember { mutableStateOf(true) }
     var isPlaying by remember { mutableStateOf(false) }
     var playbackState by remember { mutableStateOf(0) }
     var currentPosition by remember { mutableStateOf(0L) }
-    val controllerState = getControllerState(
-        isPlaying = isPlaying,
-        playbackState = playbackState
-    )
+    var controllerState: VideoPlayerControllerState by remember {
+        mutableStateOf(
+            VideoPlayerControllerState.INITIAL
+        )
+    }
 
     val stateChangedListener = stateChangedListener { changedPlayer ->
         playWhenReady = changedPlayer.playWhenReady
         isPlaying = changedPlayer.isPlaying
         playbackState = changedPlayer.playbackState
         currentPosition = changedPlayer.currentPosition
+        controllerState = getControllerState(
+            isPlaying = isPlaying,
+            playbackState = playbackState
+        )
     }
 
 
@@ -151,20 +156,35 @@ fun VideoPlayer(
             }
 
             is VideoPlayerState.CanPlay -> {
+                val moviePlayer = player ?: return
+
                 VideoPlayerScreen(
-                    player = player ?: return,
+                    player = moviePlayer,
                     onScreenClick = { controllerVisible = !controllerVisible }
                 )
+
                 VideoPlayerController(
-                    player = player ?: return,
                     modifier = Modifier.fillMaxSize(),
                     visible = controllerVisible,
                     controllerState = controllerState.apply {
                         if (this is VideoPlayerControllerState.ERROR) {
-                            setErrorMessage(player ?: return)
+                            setErrorMessage(moviePlayer)
                         }
                     },
-                    currentPosition = currentPosition
+                    onRefresh = {
+                        moviePlayer.prepare()
+                        moviePlayer.play()
+                    },
+                    onPlay = moviePlayer::play,
+                    onPause = moviePlayer::pause,
+                    onReplay = moviePlayer::seekTo,
+                    onForward = moviePlayer::seekTo,
+                    onBackward = moviePlayer::seekTo,
+                    getCurrentPosition = moviePlayer::getCurrentPosition,
+                    currentPosition = currentPosition,
+                    duration = moviePlayer.contentDuration,
+                    bufferedPercentage = moviePlayer.bufferedPercentage,
+                    onSlide = moviePlayer::seekTo
                 )
             }
 

@@ -4,6 +4,7 @@ import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 
 sealed interface VideoPlayerControllerState {
+    object INITIAL : VideoPlayerControllerState
 
     object LOADING : VideoPlayerControllerState
 

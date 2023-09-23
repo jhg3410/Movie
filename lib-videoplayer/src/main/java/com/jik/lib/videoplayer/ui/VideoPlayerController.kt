@@ -11,11 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.media3.exoplayer.ExoPlayer
 import com.jik.lib.videoplayer.VideoPlayerControllerState
-import com.jik.lib.videoplayer.VideoPlayerUtil.toFormattedMinutesAndSecondsFromMilliseconds
+import com.jik.lib.videoplayer.VideoPlayerControllerUtil.toFormattedMinutesAndSecondsFromMilliseconds
+import com.jik.lib.videoplayer.component.VideoPlayerIcons.Backward5
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Forward5
-import com.jik.lib.videoplayer.component.VideoPlayerIcons.Replay5
 import com.jik.lib.videoplayer.component.controller.ControllerLoadingWheel
 import com.jik.lib.videoplayer.component.controller.ControllerPauseIcon
 import com.jik.lib.videoplayer.component.controller.ControllerPlayIcon
@@ -24,11 +23,20 @@ import com.jik.lib.videoplayer.component.iconSize
 
 @Composable
 fun VideoPlayerController(
-    player: ExoPlayer,
     modifier: Modifier = Modifier,
     visible: Boolean,
     controllerState: VideoPlayerControllerState,
+    onRefresh: () -> Unit,
+    onPlay: () -> Unit,
+    onPause: () -> Unit,
+    onReplay: (Long) -> Unit,
+    onForward: (Long) -> Unit,
+    onBackward: (Long) -> Unit,
+    getCurrentPosition: () -> Long,
     currentPosition: Long,
+    duration: Long,
+    bufferedPercentage: Int,
+    onSlide: (Long) -> Unit
 ) {
     AnimatedVisibility(
         modifier = modifier,
@@ -39,30 +47,32 @@ fun VideoPlayerController(
         if (controllerState is VideoPlayerControllerState.ERROR) {
             ErrorScreen(
                 errorMessage = controllerState.errorMessage,
-                onRefreshClick = {
-                    player.prepare()
-                    player.play()
-                }
+                onRefreshClick = onRefresh
             )
-
             return@AnimatedVisibility
         }
         Box(
             modifier = Modifier.background(color = Color.Black.copy(alpha = 0.5f))
         ) {
             CenterController(
-                player = player,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .fillMaxWidth(),
-                controllerState = controllerState
+                controllerState = controllerState,
+                onPlay = onPlay,
+                onPause = onPause,
+                onReplay = onReplay,
+                onForward = { onForward(getCurrentPosition() + 5_000L) },
+                onBackward = { onBackward(getCurrentPosition() - 5_000L) }
             )
             BottomController(
-                player = player,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .fillMaxWidth(),
                 currentPosition = currentPosition,
+                duration = duration,
+                bufferedPercentage = bufferedPercentage,
+                onSlide = onSlide
             )
         }
     }
@@ -70,9 +80,13 @@ fun VideoPlayerController(
 
 @Composable
 fun CenterController(
-    player: ExoPlayer,
     modifier: Modifier = Modifier,
     controllerState: VideoPlayerControllerState,
+    onPlay: () -> Unit,
+    onPause: () -> Unit,
+    onReplay: (Long) -> Unit,
+    onForward: () -> Unit,
+    onBackward: () -> Unit
 ) {
     Row(
         modifier = modifier,
@@ -80,14 +94,12 @@ fun CenterController(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = {
-                player.seekTo(player.currentPosition - 5_000)
-            }
+            onClick = { onBackward() }
         ) {
             Icon(
                 modifier = Modifier.size(iconSize),
-                imageVector = Replay5,
-                contentDescription = "Replay",
+                imageVector = Backward5,
+                contentDescription = "backward",
                 tint = Color.White,
             )
         }
@@ -99,34 +111,32 @@ fun CenterController(
 
             is VideoPlayerControllerState.PLAYING -> {
                 ControllerPauseIcon {
-                    player.pause()
+                    onPause()
                 }
             }
 
             is VideoPlayerControllerState.PAUSED -> {
                 ControllerPlayIcon {
-                    player.play()
+                    onPlay()
                 }
             }
 
             is VideoPlayerControllerState.ENDED -> {
                 ControllerReplayIcon {
-                    player.seekTo(0)
+                    onReplay(0L)
                 }
             }
 
-            is VideoPlayerControllerState.ERROR -> Unit
+            else -> Unit
         }
 
         IconButton(
-            onClick = {
-                player.seekTo(player.currentPosition + 5_000)
-            }
+            onClick = { onForward() }
         ) {
             Icon(
                 modifier = Modifier.size(iconSize),
                 imageVector = Forward5,
-                contentDescription = "Replay",
+                contentDescription = "Forward",
                 tint = Color.White,
             )
         }
@@ -136,15 +146,17 @@ fun CenterController(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomController(
-    player: ExoPlayer,
     modifier: Modifier = Modifier,
-    currentPosition: Long
+    duration: Long,
+    currentPosition: Long,
+    bufferedPercentage: Int,
+    onSlide: (Long) -> Unit
 ) {
     Column(modifier = modifier.padding(bottom = 4.dp)) {
         Text(
             modifier = Modifier.padding(start = 16.dp),
             text = currentPosition.toFormattedMinutesAndSecondsFromMilliseconds() + "/" +
-                    player.contentDuration.toFormattedMinutesAndSecondsFromMilliseconds(),
+                    duration.toFormattedMinutesAndSecondsFromMilliseconds(),
             style = MaterialTheme.typography.labelMedium,
             color = Color.White
         )
@@ -154,7 +166,7 @@ fun BottomController(
         CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 Slider(
-                    value = player.bufferedPercentage.toFloat(),
+                    value = bufferedPercentage.toFloat(),
                     enabled = false,
                     onValueChange = {},
                     valueRange = 0f..100f,
@@ -166,10 +178,8 @@ fun BottomController(
 
                 Slider(
                     value = currentPosition.toFloat(),
-                    onValueChange = {
-                        player.seekTo(it.toLong())
-                    },
-                    valueRange = 0f..player.contentDuration.coerceAtLeast(0).toFloat(),
+                    onValueChange = { onSlide(it.toLong()) },
+                    valueRange = 0f..duration.coerceAtLeast(0).toFloat(),
                     colors = SliderDefaults.colors(
                         thumbColor = MaterialTheme.colorScheme.primary,
                         activeTrackColor = MaterialTheme.colorScheme.primary,
