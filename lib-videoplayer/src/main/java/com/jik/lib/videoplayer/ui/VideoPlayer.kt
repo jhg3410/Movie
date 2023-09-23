@@ -44,7 +44,6 @@ fun VideoPlayer(
     var player: ExoPlayer? by remember { mutableStateOf(null) }
     var videoPlayerState: VideoPlayerState by remember { mutableStateOf(VideoPlayerState.Initial) }
 
-    var playWhenReady by remember { mutableStateOf(true) }
     var controllerVisible by remember { mutableStateOf(true) }
     var isPlaying by remember { mutableStateOf(false) }
     var playbackState by remember { mutableStateOf(0) }
@@ -56,7 +55,6 @@ fun VideoPlayer(
     }
 
     val stateChangedListener = stateChangedListener { changedPlayer ->
-        playWhenReady = changedPlayer.playWhenReady
         isPlaying = changedPlayer.isPlaying
         playbackState = changedPlayer.playbackState
         currentPosition = changedPlayer.currentPosition
@@ -72,9 +70,8 @@ fun VideoPlayer(
             videoPlayerState = VideoPlayerState.NoVideo
             return
         }
-        if (videoPlayerState is VideoPlayerState.CanPlay) {
-            videoPlayerState = VideoPlayerState.Loading
-        }
+        videoPlayerState = VideoPlayerState.Initial
+
         coroutineScope.launch {
             try {
                 player = ExoPlayer.Builder(context).build().apply {
@@ -82,8 +79,7 @@ fun VideoPlayer(
                         MediaItem.fromUri(videoUrl.toStreamUrlOfYouTube(context)),
                         currentPosition
                     )
-                    this.playWhenReady =
-                        playWhenReady && videoPlayerState !is VideoPlayerState.Initial
+                    playWhenReady = false
                     addListener(stateChangedListener)
                     prepare()
                 }
@@ -143,15 +139,15 @@ fun VideoPlayer(
                 thumbnail()
                 ThumbnailPlayIcon {
                     videoPlayerState = VideoPlayerState.Loading
-                    player?.play()
                 }
             }
 
             is VideoPlayerState.Loading -> {
                 thumbnail()
                 ThumbnailLoadingWheel()
-                if (player != null) {
+                player?.let {
                     videoPlayerState = VideoPlayerState.CanPlay
+                    it.play()
                 }
             }
 
