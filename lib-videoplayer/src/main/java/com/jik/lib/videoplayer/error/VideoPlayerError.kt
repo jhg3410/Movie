@@ -2,7 +2,7 @@ package com.jik.lib.videoplayer.error
 
 internal object VideoPlayerError {
 
-    enum class ErrorType(val message: String) {
+    private enum class ErrorType(val message: String) {
         AGE_RESTRICTED_ERROR(message = "OMG!! this video requires login to watch"),
         URL_OPEN_ERROR(message = "please check network connection!!"),
         UNKNOWN_ERROR(message = "OMG!! this video is not available")

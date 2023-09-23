@@ -175,7 +175,7 @@ fun VideoPlayer(
                     visible = controllerVisible,
                     controllerState = controllerState.apply {
                         if (this is VideoPlayerControllerState.ERROR) {
-                            this.setErrorMessage(moviePlayer)
+                            this.setErrorMessage(errorCode = moviePlayer.playerError?.errorCode)
                         }
                     },
                     onRefresh = {

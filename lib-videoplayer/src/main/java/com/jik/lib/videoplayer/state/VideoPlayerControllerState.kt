@@ -1,6 +1,7 @@
 package com.jik.lib.videoplayer.state
 
 import androidx.media3.exoplayer.ExoPlayer
+import com.jik.lib.videoplayer.error.VideoPlayerControllerError.ErrorType as ControllerErrorType
 
 sealed interface VideoPlayerControllerState {
     object INITIAL : VideoPlayerControllerState
@@ -13,7 +14,8 @@ sealed interface VideoPlayerControllerState {
 
     object ENDED : VideoPlayerControllerState
 
-    class ERROR(var errorMessage: String) : VideoPlayerControllerState
+    class ERROR(var errorMessage: String = ControllerErrorType.UNKNOWN_ERROR.message) :
+        VideoPlayerControllerState
 }
 
 
@@ -25,7 +27,7 @@ internal fun getControllerState(
         return VideoPlayerControllerState.PLAYING
     }
     if (playbackState == ExoPlayer.STATE_IDLE) {
-        return VideoPlayerControllerState.ERROR("Unknown Error")
+        return VideoPlayerControllerState.ERROR()
     }
     if (playbackState == ExoPlayer.STATE_BUFFERING) {
         return VideoPlayerControllerState.LOADING
@@ -37,5 +39,5 @@ internal fun getControllerState(
         return VideoPlayerControllerState.ENDED
     }
 
-    return VideoPlayerControllerState.ERROR("Unknown Error")
+    return VideoPlayerControllerState.ERROR()
 }
