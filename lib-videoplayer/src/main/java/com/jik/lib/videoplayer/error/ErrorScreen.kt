@@ -18,7 +18,7 @@ import com.jik.lib.videoplayer.component.VideoPlayerIcons.Refresh
 internal fun ErrorScreen(
     modifier: Modifier = Modifier,
     errorMessage: String,
-    onRefreshClick: (() -> Unit)? = null,
+    onRefresh: (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier
@@ -32,10 +32,10 @@ internal fun ErrorScreen(
             style = MaterialTheme.typography.bodySmall,
             color = Color.White,
         )
-        if (onRefreshClick != null) {
+        if (onRefresh != null) {
             IconButton(
                 onClick = {
-                    onRefreshClick()
+                    onRefresh()
                 },
             ) {
                 Icon(

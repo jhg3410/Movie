@@ -198,7 +198,7 @@ fun VideoPlayer(
             is VideoPlayerState.GetError -> {
                 ErrorScreen(
                     errorMessage = (videoPlayerState as VideoPlayerState.GetError).errorMessage,
-                    onRefreshClick = {
+                    onRefresh = {
                         initializePlayer()
                         videoPlayerState = VideoPlayerState.Loading
                     }

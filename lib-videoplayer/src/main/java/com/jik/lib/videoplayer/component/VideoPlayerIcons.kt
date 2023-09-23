@@ -12,6 +12,7 @@ internal object VideoPlayerIcons {
 
     val Play = Icons.Filled.PlayArrow
     val Pause = Icons.Rounded.Pause
+    val Replay = Icons.Rounded.Refresh
     val Refresh = Icons.Rounded.Refresh
 
     val Forward5 = Icons.Filled.Forward5

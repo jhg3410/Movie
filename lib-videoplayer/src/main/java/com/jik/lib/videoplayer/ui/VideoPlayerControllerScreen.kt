@@ -49,7 +49,7 @@ fun VideoPlayerController(
         if (controllerState is VideoPlayerControllerState.ERROR) {
             ErrorScreen(
                 errorMessage = controllerState.errorMessage,
-                onRefreshClick = onRefresh
+                onRefresh = onRefresh
             )
             return@AnimatedVisibility
         }
