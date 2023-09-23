@@ -84,6 +84,7 @@ fun VideoPlayer(
             videoPlayerState = VideoPlayerState.NoVideo
             return
         }
+        controllerVisible = true
         videoPlayerState = VideoPlayerState.Initial
 
         coroutineScope.launch {
