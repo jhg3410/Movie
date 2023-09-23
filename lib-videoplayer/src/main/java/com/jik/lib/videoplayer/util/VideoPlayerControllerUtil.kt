@@ -1,4 +1,4 @@
-package com.jik.lib.videoplayer
+package com.jik.lib.videoplayer.util
 
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.seconds

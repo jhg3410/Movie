@@ -1,4 +1,4 @@
-package com.jik.lib.videoplayer.component.thumnail
+package com.jik.lib.videoplayer.component.player
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,7 +16,7 @@ import com.jik.lib.videoplayer.component.VideoPlayerIcons.Play
 import com.jik.lib.videoplayer.component.iconSize
 
 @Composable
-fun ThumbnailPlayIcon(
+fun PlayerPlayIcon(
     onClick: () -> Unit
 ) {
     Box(

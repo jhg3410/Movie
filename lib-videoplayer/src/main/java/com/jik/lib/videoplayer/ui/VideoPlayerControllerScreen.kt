@@ -11,8 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.jik.lib.videoplayer.VideoPlayerControllerState
-import com.jik.lib.videoplayer.VideoPlayerControllerUtil.toFormattedMinutesAndSecondsFromMilliseconds
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Backward5
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Forward5
 import com.jik.lib.videoplayer.component.controller.ControllerLoadingWheel
@@ -20,6 +18,9 @@ import com.jik.lib.videoplayer.component.controller.ControllerPauseIcon
 import com.jik.lib.videoplayer.component.controller.ControllerPlayIcon
 import com.jik.lib.videoplayer.component.controller.ControllerReplayIcon
 import com.jik.lib.videoplayer.component.iconSize
+import com.jik.lib.videoplayer.error.ErrorScreen
+import com.jik.lib.videoplayer.state.VideoPlayerControllerState
+import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.toFormattedMinutesAndSecondsFromMilliseconds
 
 @Composable
 fun VideoPlayerController(

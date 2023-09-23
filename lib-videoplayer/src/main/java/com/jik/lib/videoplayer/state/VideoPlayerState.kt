@@ -1,4 +1,4 @@
-package com.jik.lib.videoplayer
+package com.jik.lib.videoplayer.state
 
 sealed interface VideoPlayerState {
 

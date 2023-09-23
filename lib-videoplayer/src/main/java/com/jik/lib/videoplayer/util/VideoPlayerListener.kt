@@ -1,4 +1,4 @@
-package com.jik.lib.videoplayer
+package com.jik.lib.videoplayer.util
 
 import androidx.media3.common.Player
 

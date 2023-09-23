@@ -33,7 +33,7 @@ import com.jik.core.designsystem.icon.MovieIcons
 import com.jik.core.model.MovieInfo
 import com.jik.core.ui.state.UiState
 import com.jik.core.ui.util.MovieGenreUtils
-import com.jik.lib.videoplayer.ui.VideoPlayer
+import com.jik.lib.videoplayer.VideoPlayer
 
 
 @Composable

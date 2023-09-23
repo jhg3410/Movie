@@ -1,6 +1,5 @@
-package com.jik.lib.videoplayer
+package com.jik.lib.videoplayer.state
 
-import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 
 sealed interface VideoPlayerControllerState {
@@ -39,10 +38,4 @@ internal fun getControllerState(
     }
 
     return VideoPlayerControllerState.ERROR("Unknown Error")
-}
-
-
-internal fun VideoPlayerControllerState.setErrorMessage(player: Player) {
-    (this as? VideoPlayerControllerState.ERROR)?.errorMessage =
-        player.playerError?.message ?: "Unknown Error"
 }

@@ -1,4 +1,4 @@
-package com.jik.lib.videoplayer.ui
+package com.jik.lib.videoplayer
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,16 +19,19 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
-import com.jik.lib.videoplayer.VideoPlayerControllerState
-import com.jik.lib.videoplayer.VideoPlayerControllerUtil.VISIBLE_DURATION
-import com.jik.lib.videoplayer.VideoPlayerListener.stateChangedListener
-import com.jik.lib.videoplayer.VideoPlayerState
-import com.jik.lib.videoplayer.VideoPlayerUtil.toMovieErrorMessage
-import com.jik.lib.videoplayer.VideoPlayerUtil.toStreamUrlOfYouTube
-import com.jik.lib.videoplayer.component.thumnail.ThumbnailLoadingWheel
-import com.jik.lib.videoplayer.component.thumnail.ThumbnailPlayIcon
-import com.jik.lib.videoplayer.getControllerState
-import com.jik.lib.videoplayer.setErrorMessage
+import com.jik.lib.videoplayer.component.player.PlayerLoadingWheel
+import com.jik.lib.videoplayer.component.player.PlayerPlayIcon
+import com.jik.lib.videoplayer.error.ErrorScreen
+import com.jik.lib.videoplayer.error.VideoPlayerControllerError.setErrorMessage
+import com.jik.lib.videoplayer.error.VideoPlayerError.toMovieErrorMessage
+import com.jik.lib.videoplayer.state.VideoPlayerControllerState
+import com.jik.lib.videoplayer.state.VideoPlayerState
+import com.jik.lib.videoplayer.state.getControllerState
+import com.jik.lib.videoplayer.ui.VideoPlayerController
+import com.jik.lib.videoplayer.ui.VideoPlayerScreen
+import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.VISIBLE_DURATION
+import com.jik.lib.videoplayer.util.VideoPlayerListener.stateChangedListener
+import com.jik.lib.videoplayer.util.VideoPlayerUtil.toStreamUrlOfYouTube
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -145,14 +148,14 @@ fun VideoPlayer(
         when (videoPlayerState) {
             is VideoPlayerState.Initial -> {
                 thumbnail()
-                ThumbnailPlayIcon {
+                PlayerPlayIcon {
                     videoPlayerState = VideoPlayerState.Loading
                 }
             }
 
             is VideoPlayerState.Loading -> {
                 thumbnail()
-                ThumbnailLoadingWheel()
+                PlayerLoadingWheel()
                 player?.let {
                     videoPlayerState = VideoPlayerState.CanPlay
                     it.play()
@@ -172,7 +175,7 @@ fun VideoPlayer(
                     visible = controllerVisible,
                     controllerState = controllerState.apply {
                         if (this is VideoPlayerControllerState.ERROR) {
-                            setErrorMessage(moviePlayer)
+                            this.setErrorMessage(moviePlayer)
                         }
                     },
                     onRefresh = {

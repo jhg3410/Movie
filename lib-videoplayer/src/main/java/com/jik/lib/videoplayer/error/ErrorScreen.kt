@@ -1,4 +1,4 @@
-package com.jik.lib.videoplayer.ui
+package com.jik.lib.videoplayer.error
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
