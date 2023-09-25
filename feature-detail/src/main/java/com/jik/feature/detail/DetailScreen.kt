@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.jik.core.designsystem.component.LoadingWheel
@@ -32,7 +33,7 @@ import com.jik.core.designsystem.icon.MovieIcons
 import com.jik.core.model.MovieInfo
 import com.jik.core.ui.state.UiState
 import com.jik.core.ui.util.MovieGenreUtils
-import com.jik.lib.videoplayer.ui.VideoPlayer
+import com.jik.lib.videoplayer.VideoPlayer
 
 
 @Composable
@@ -42,7 +43,9 @@ fun DetailScreen(
     navigateUp: () -> Unit
 ) {
 
-    val detailUiState = viewModel.detailUiState.collectAsStateWithLifecycle().value
+    val detailUiState = viewModel.detailUiState.collectAsStateWithLifecycle(
+        minActiveState = Lifecycle.State.CREATED
+    ).value
 
     when (detailUiState) {
         is UiState.Loading -> {
@@ -100,7 +103,7 @@ private fun Content(
     Column(modifier = modifier) {
         VideoPlayer(
             modifier = Modifier.aspectRatio(500f / 281f),
-            Thumbnail = {
+            thumbnail = {
                 PosterCard(
                     posterPath = movieInfo.getBackdropUrl(),
                     modifier = Modifier.fillMaxSize(),

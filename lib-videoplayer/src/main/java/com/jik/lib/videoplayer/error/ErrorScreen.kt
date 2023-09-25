@@ -1,4 +1,4 @@
-package com.jik.lib.videoplayer.ui
+package com.jik.lib.videoplayer.error
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,10 +15,10 @@ import androidx.compose.ui.graphics.Color
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Refresh
 
 @Composable
-fun ErrorScreen(
+internal fun ErrorScreen(
     modifier: Modifier = Modifier,
     errorMessage: String,
-    onRefreshClick: (() -> Unit)? = null,
+    onRefresh: (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier
@@ -32,10 +32,10 @@ fun ErrorScreen(
             style = MaterialTheme.typography.bodySmall,
             color = Color.White,
         )
-        if (onRefreshClick != null) {
+        if (onRefresh != null) {
             IconButton(
                 onClick = {
-                    onRefreshClick()
+                    onRefresh()
                 },
             ) {
                 Icon(

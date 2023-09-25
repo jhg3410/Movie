@@ -1,18 +1,18 @@
-package com.jik.lib.videoplayer.component.thumnail
+package com.jik.lib.videoplayer.component.player
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import com.jik.lib.videoplayer.component.iconSize
 
 @Composable
-fun ThumbnailLoadingWheel(
+fun PlayerLoadingWheel(
     modifier: Modifier = Modifier,
 ) {
     CircularProgressIndicator(
         color = MaterialTheme.colorScheme.primary,
-        modifier = modifier.size(40.dp)
+        modifier = modifier.size(iconSize)
     )
 }
