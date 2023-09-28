@@ -49,6 +49,7 @@ chaquopy {
     defaultConfig {
         pip {
             install("pytube")
+            install("mock")
         }
     }
 }
@@ -70,6 +71,4 @@ dependencies {
     // exoplayer
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.ui)
-
-
 }
