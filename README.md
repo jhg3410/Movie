@@ -15,10 +15,10 @@
 
 ## Screenshots
 **Light Theme**
-![Light Theme](https://github.com/jhg3410/Movie/assets/80373033/7880cdb8-44fe-4572-951a-a9139f5fee07)
+![Light Theme](https://github.com/jhg3410/Movie/assets/80373033/82e460bb-a99a-4b9c-89e6-6b9058702c25)
 
 **Dark Theme**
-![Dark Theme](https://github.com/jhg3410/Movie/assets/80373033/e3e77694-1221-4fc9-b220-33f27f838e90)
+![Dark Theme](https://github.com/jhg3410/Movie/assets/80373033/df1b00aa-04d8-46c0-b32e-4f60fb31bb58)
 
 
 ## How to build
