@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.jik.movie"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.jik.movie"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "0.3.0"
 

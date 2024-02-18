@@ -25,7 +25,7 @@ splashscreen = "1.0.0"
 media3 = "1.1.0"
 chaquopy = "15.0.0"
 
-androidGradlePlugin = "7.4.2"
+androidGradlePlugin = "8.1.1"
 
 [libraries]
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }

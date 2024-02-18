@@ -7,11 +7,10 @@ plugins {
 
 android {
     namespace = "com.jik.core.model"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
