@@ -48,7 +48,6 @@ chaquopy {
     defaultConfig {
         pip {
             install("pytube")
-            install("mock")
         }
     }
 }
