@@ -4,18 +4,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jik.core.designsystem.component.*
 import com.jik.core.model.Movie
 import com.jik.core.ui.pagination.Pageable
@@ -32,19 +35,18 @@ fun PopularScreen(
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val uiState by popularViewModel.uiState.collectAsStateWithLifecycle()
 
     Column(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         TopBar(scrollBehavior = scrollBehavior)
-
         Content(
-            popularUiStates = popularViewModel.popularUiStates,
+            modifier = Modifier.weight(1f),
+            popularMovies = popularViewModel.popularMovies,
+            uiState = uiState,
             onLoadMore = popularViewModel::getPopularMovies,
             onRetry = popularViewModel::getPopularMovies,
             onPosterClick = onPosterClick,
-            modifier = modifier,
         )
-
-        Spacer(modifier = Modifier.padding(bottom = NavigationBarCornerSize))
     }
 }
 
@@ -60,16 +62,15 @@ private fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
 
 @Composable
 private fun Content(
-    popularUiStates: List<UiState<Movie>>,
+    modifier: Modifier = Modifier,
+    uiState: UiState<Unit>,
+    popularMovies: List<Movie>,
     onLoadMore: suspend () -> Unit,
     onRetry: suspend () -> Unit,
     onPosterClick: (Long) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
+
     val coroutineScope = rememberCoroutineScope()
-
-    val popularScreenHeight = LocalConfiguration.current.screenHeightDp.dp - MovieTopAppBar.height
-
     val lazyGridState = rememberLazyGridState().apply {
         Pageable(onLoadMore = onLoadMore)
     }
@@ -82,45 +83,44 @@ private fun Content(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        popularUiStates.forEachIndexed { index, uiState ->
-            when (uiState) {
-                is UiState.Success -> {
-                    item {
-                        PosterCard(
-                            posterPath = uiState.data.getPosterUrl(),
-                            modifier = Modifier
-                                .sizeIn(minWidth = 160.dp, minHeight = 240.dp)
-                                .aspectRatio(2f / 3f),
-                            onClick = { onPosterClick(uiState.data.id) }
-                        )
-                    }
-                }
-                is UiState.Loading -> {
-                    if (index != popularUiStates.size - 1) return@forEachIndexed
+        items(popularMovies) { movie ->
+            PosterCard(
+                posterPath = movie.getPosterUrl(),
+                modifier = Modifier.aspectRatio(2 / 3f),
+                onClick = { onPosterClick(movie.id) },
+                contentScale = ContentScale.Crop,
+            )
+        }
 
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Box(modifier = Modifier.height(popularScreenHeight)) {
-                            LoadingWheel(modifier = Modifier.align(Alignment.Center))
-                        }
-                    }
-                }
-                is UiState.Error -> {
-                    if (index != popularUiStates.size - 1) return@forEachIndexed
-
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Box(modifier = Modifier.height(popularScreenHeight)) {
-                            Refresh(
-                                modifier = Modifier.align(Alignment.Center),
-                                onClick = {
-                                    coroutineScope.launch {
-                                        onRetry()
-                                    }
-                                }
-                            )
-                        }
-                    }
+        val stateItem: (content: @Composable (Modifier) -> Unit) -> Unit = { content ->
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Box(contentAlignment = Alignment.Center) {
+                    content(Modifier.padding(top = 16.dp, bottom = 16.dp + NavigationBarCornerSize))
                 }
             }
+        }
+
+        when (uiState) {
+            is UiState.Loading -> {
+                stateItem { modifier ->
+                    LoadingWheel(modifier)
+                }
+            }
+
+            is UiState.Error -> {
+                stateItem { modifier ->
+                    Refresh(
+                        modifier = modifier,
+                        onClick = {
+                            coroutineScope.launch {
+                                onRetry()
+                            }
+                        }
+                    )
+                }
+            }
+
+            is UiState.Success -> Unit
         }
     }
 }
