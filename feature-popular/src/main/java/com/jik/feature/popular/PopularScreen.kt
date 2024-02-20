@@ -11,7 +11,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -23,7 +22,6 @@ import com.jik.core.designsystem.component.*
 import com.jik.core.model.Movie
 import com.jik.core.ui.pagination.Pageable
 import com.jik.core.ui.state.UiState
-import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,12 +63,10 @@ private fun Content(
     modifier: Modifier = Modifier,
     uiState: UiState<Unit>,
     popularMovies: List<Movie>,
-    onLoadMore: suspend () -> Unit,
-    onRetry: suspend () -> Unit,
+    onLoadMore: () -> Unit,
+    onRetry: () -> Unit,
     onPosterClick: (Long) -> Unit,
 ) {
-
-    val coroutineScope = rememberCoroutineScope()
     val lazyGridState = rememberLazyGridState().apply {
         Pageable(onLoadMore = onLoadMore)
     }
@@ -111,11 +107,7 @@ private fun Content(
                 stateItem { modifier ->
                     Refresh(
                         modifier = modifier,
-                        onClick = {
-                            coroutineScope.launch {
-                                onRetry()
-                            }
-                        }
+                        onClick = { onRetry() }
                     )
                 }
             }
