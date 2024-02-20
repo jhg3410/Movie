@@ -4,36 +4,41 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jik.core.data.repository.MovieRepository
+import com.jik.core.model.MovieInfo
 import com.jik.core.ui.state.UiState
-import com.jik.core.ui.state.getUiStateFlow
+import com.jik.core.ui.state.toUiState
 import com.jik.feature.detail.navigation.MovieArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    movieRepository: MovieRepository
+    private val movieRepository: MovieRepository
 ) : ViewModel() {
 
     private val movieId = MovieArgs(savedStateHandle).movieId
+    private val _detailUiState: MutableStateFlow<UiState<MovieInfo>> =
+        MutableStateFlow(UiState.Loading)
+    val detailUiState = _detailUiState.asStateFlow()
 
-    private val retry = MutableStateFlow(false)
+    init {
+        getMovieInfo()
+    }
 
-    val detailUiState = retry.flatMapLatest {
-        getUiStateFlow {
-            movieRepository.getMovieInfo(movieId)
+    private fun getMovieInfo() {
+        _detailUiState.value = UiState.Loading
+        viewModelScope.launch {
+            movieRepository.getMovieInfo(movieId).toUiState().run {
+                _detailUiState.value = this
+            }
         }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = UiState.Loading
-    )
+    }
 
     fun onRetry() {
-        retry.value = !retry.value
+        getMovieInfo()
     }
 }
