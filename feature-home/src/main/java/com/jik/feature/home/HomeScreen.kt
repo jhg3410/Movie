@@ -9,7 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -21,7 +20,6 @@ import com.jik.core.designsystem.theme.MovieFontFamily
 import com.jik.core.model.Movie
 import com.jik.core.ui.pagination.Pageable
 import com.jik.core.ui.state.UiState
-import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -29,7 +27,7 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     onPosterClick: (Long) -> Unit,
 ) {
-
+    val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val mainMovie by homeViewModel.mainMovie.collectAsStateWithLifecycle()
 
     Box(modifier = modifier) {
@@ -37,7 +35,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
-            homeUiState = homeViewModel.homeUiState.value,
+            uiState = uiState,
             mainMovie = mainMovie ?: Movie.EMPTY,
             popularMovies = homeViewModel.popularMovies,
             onLoadMore = homeViewModel::getPopularMovies,
@@ -51,15 +49,13 @@ fun HomeScreen(
 @Composable
 private fun Content(
     modifier: Modifier = Modifier,
-    homeUiState: UiState<Unit>,
+    uiState: UiState<Unit>,
     mainMovie: Movie,
     popularMovies: List<Movie>,
-    onLoadMore: suspend () -> Unit,
-    onRetry: suspend () -> Unit,
+    onLoadMore: () -> Unit,
+    onRetry: () -> Unit,
     onPosterClick: (Long) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     Column(modifier) {
         TopContent(
             mainMovie = mainMovie,
@@ -73,21 +69,17 @@ private fun Content(
         Spacer(modifier = Modifier.padding(bottom = NavigationBarCornerSize))
     }
 
-    if (homeUiState is UiState.Loading && mainMovie == Movie.EMPTY) {
+    if (uiState is UiState.Loading && mainMovie == Movie.EMPTY) {
         Box(modifier = Modifier.fillMaxSize()) {
             LoadingWheel(modifier = Modifier.align(Alignment.Center))
         }
     }
 
-    if (homeUiState is UiState.Error) {
+    if (uiState is UiState.Error) {
         Box(modifier = Modifier.fillMaxSize()) {
             Refresh(
                 modifier = Modifier.align(Alignment.Center),
-                onClick = {
-                    coroutineScope.launch {
-                        onRetry()
-                    }
-                }
+                onClick = { onRetry() }
             )
         }
     }
@@ -100,7 +92,6 @@ private fun TopContent(
     modifier: Modifier = Modifier,
     onPosterClick: (Long) -> Unit,
 ) {
-
     GradientPosterCard(
         posterPath = mainMovie.getPosterUrl(),
         modifier = modifier
@@ -123,8 +114,6 @@ fun PopularContent(
     onLoadMore: suspend () -> Unit,
     onPosterClick: (Long) -> Unit,
 ) {
-
-
     val lazyListState = rememberLazyListState().apply {
         Pageable(onLoadMore = onLoadMore)
     }

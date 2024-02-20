@@ -1,8 +1,5 @@
 package com.jik.core.ui.state
 
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
-
 sealed interface UiState<out T> {
     object Loading : UiState<Nothing>
     data class Success<T>(val data: T) : UiState<T>
@@ -20,9 +17,3 @@ fun <T> Result<T>.toUiState(): UiState<T> {
         }
     )
 }
-
-fun <T> getUiStateFlow(
-    block: suspend () -> Result<T>,
-) = flow {
-    emit(block().toUiState())
-}.onStart { emit(UiState.Loading) }

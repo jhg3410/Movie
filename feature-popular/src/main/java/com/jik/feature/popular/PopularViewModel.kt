@@ -19,9 +19,9 @@ class PopularViewModel @Inject constructor(
 
     private var page = FIRST_PAGE
 
-    val popularMovies = mutableStateListOf<Movie>()
     private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Loading)
     val uiState = _uiState.asStateFlow()
+    val popularMovies = mutableStateListOf<Movie>()
 
     fun getPopularMovies() {
         _uiState.value = UiState.Loading
@@ -40,7 +40,6 @@ class PopularViewModel @Inject constructor(
             }
         }
     }
-
 
     companion object {
         private const val FIRST_PAGE = 1
