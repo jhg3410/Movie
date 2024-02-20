@@ -41,7 +41,7 @@ import kotlin.time.Duration.Companion.seconds
 fun VideoPlayer(
     modifier: Modifier = Modifier,
     thumbnail: @Composable () -> Unit,
-    videoUrl: String?
+    videoId: String?
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -83,7 +83,7 @@ fun VideoPlayer(
     }
 
     fun initializePlayer() {
-        if (videoUrl == null) {
+        if (videoId == null) {
             videoPlayerState = VideoPlayerState.NoVideo
             return
         }
@@ -94,7 +94,7 @@ fun VideoPlayer(
             try {
                 player = ExoPlayer.Builder(context).build().apply {
                     setMediaItem(
-                        MediaItem.fromUri(streamUrl ?: videoUrl.toStreamUrlOfYouTube(context).also {
+                        MediaItem.fromUri(streamUrl ?: videoId.toStreamUrlOfYouTube(context).also {
                             streamUrl = it
                         }),
                         currentPosition

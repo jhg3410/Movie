@@ -111,7 +111,7 @@ private fun Content(
                     clickable = false,
                 )
             },
-            videoUrl = movieInfo.video?.videoId
+            videoId = movieInfo.video?.videoId
         )
         Spacer(modifier = Modifier.height(24.dp))
         MovieInformation(movieInfo = movieInfo)
