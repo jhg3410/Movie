@@ -13,8 +13,8 @@ import com.jik.core.designsystem.icon.MovieIcons
 
 @Composable
 fun Refresh(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit,
     size: Dp = 40.dp,
 ) {
     IconButton(modifier = modifier, onClick = onClick) {

@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.jik.core.designsystem.R
 import com.jik.core.designsystem.component.LoadingWheel
 import com.jik.core.designsystem.component.MovieTopAppBar
 import com.jik.core.designsystem.component.PosterCard
@@ -42,38 +43,36 @@ fun DetailScreen(
     viewModel: DetailViewModel = hiltViewModel(),
     navigateUp: () -> Unit
 ) {
-
     val detailUiState = viewModel.detailUiState.collectAsStateWithLifecycle(
         minActiveState = Lifecycle.State.CREATED
     ).value
 
     when (detailUiState) {
         is UiState.Loading -> {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = modifier) {
                 LoadingWheel(
                     circleSize = 40.dp,
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
         }
+
         is UiState.Success -> {
-            Column(modifier = modifier.fillMaxSize()) {
+            Column(modifier = modifier) {
                 TopBar(
                     modifier = Modifier.fillMaxWidth(),
                     navigateUp = navigateUp
                 )
-                Content(
-                    movieInfo = detailUiState.data,
-                    modifier = modifier
-                )
+                Content(movieInfo = detailUiState.data)
             }
         }
+
         is UiState.Error -> {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = modifier) {
                 Refresh(
-                    size = 40.dp,
+                    modifier = Modifier.align(Alignment.Center),
                     onClick = viewModel::onRetry,
-                    modifier = Modifier.align(Alignment.Center)
+                    size = 40.dp,
                 )
             }
         }
@@ -96,13 +95,13 @@ private fun TopBar(
 
 @Composable
 private fun Content(
+    modifier: Modifier = Modifier,
     movieInfo: MovieInfo,
-    modifier: Modifier = Modifier
 ) {
-
     Column(modifier = modifier) {
         VideoPlayer(
             modifier = Modifier.aspectRatio(500f / 281f),
+            videoId = movieInfo.video?.videoId,
             thumbnail = {
                 PosterCard(
                     posterPath = movieInfo.getBackdropUrl(),
@@ -111,7 +110,6 @@ private fun Content(
                     clickable = false,
                 )
             },
-            videoId = movieInfo.video?.videoId
         )
         Spacer(modifier = Modifier.height(24.dp))
         MovieInformation(movieInfo = movieInfo)
@@ -120,27 +118,23 @@ private fun Content(
 
 @Composable
 private fun MovieInformation(movieInfo: MovieInfo) {
-
     val horizontalPaddingModifier = Modifier.padding(horizontal = 16.dp)
 
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-    ) {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Title(
-            title = movieInfo.title,
-            modifier = horizontalPaddingModifier
+            modifier = horizontalPaddingModifier,
+            title = movieInfo.title
         )
         Spacer(modifier = Modifier.height(8.dp))
         ReleaseDateAndRating(
-            movieInfo = movieInfo,
-            modifier = horizontalPaddingModifier
+            modifier = horizontalPaddingModifier,
+            movieInfo = movieInfo
         )
         Genres(genres = movieInfo.genres)
         Spacer(modifier = Modifier.height(20.dp))
         Overview(
-            overview = movieInfo.overview,
-            modifier = horizontalPaddingModifier
+            modifier = horizontalPaddingModifier,
+            overview = movieInfo.overview
         )
         Spacer(modifier = Modifier.height(12.dp))
         Cast(cast = movieInfo.cast)
@@ -148,7 +142,10 @@ private fun MovieInformation(movieInfo: MovieInfo) {
 }
 
 @Composable
-private fun Title(title: String, modifier: Modifier = Modifier) {
+private fun Title(
+    modifier: Modifier = Modifier,
+    title: String
+) {
     Text(
         modifier = modifier,
         text = title,
@@ -157,7 +154,10 @@ private fun Title(title: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ReleaseDateAndRating(movieInfo: MovieInfo, modifier: Modifier = Modifier) {
+private fun ReleaseDateAndRating(
+    modifier: Modifier = Modifier,
+    movieInfo: MovieInfo
+) {
     Row(
         modifier = modifier.height(IntrinsicSize.Min),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -218,7 +218,10 @@ private fun Genres(genres: List<MovieInfo.Genre>) {
 
 
 @Composable
-private fun Overview(overview: String, modifier: Modifier = Modifier) {
+private fun Overview(
+    modifier: Modifier = Modifier,
+    overview: String
+) {
     Column(modifier = modifier) {
         Text(
             text = "OVERVIEW",
@@ -234,7 +237,10 @@ private fun Overview(overview: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Cast(cast: List<MovieInfo.CastItem>, modifier: Modifier = Modifier) {
+private fun Cast(
+    modifier: Modifier = Modifier,
+    cast: List<MovieInfo.CastItem>
+) {
     Column(modifier = modifier) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -255,7 +261,10 @@ private fun Cast(cast: List<MovieInfo.CastItem>, modifier: Modifier = Modifier) 
 }
 
 @Composable
-private fun CastItem(castItem: MovieInfo.CastItem, modifier: Modifier = Modifier) {
+private fun CastItem(
+    modifier: Modifier = Modifier,
+    castItem: MovieInfo.CastItem
+) {
     Column(
         modifier = modifier.width(80.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -267,7 +276,7 @@ private fun CastItem(castItem: MovieInfo.CastItem, modifier: Modifier = Modifier
                 .size(80.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.Crop,
-            error = painterResource(id = com.jik.core.designsystem.R.drawable.default_profile)
+            error = painterResource(id = R.drawable.default_profile)
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
