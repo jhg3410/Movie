@@ -8,7 +8,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.jik.core.designsystem.icon.MovieIcons.ArrowBackRounded
 import com.jik.core.designsystem.theme.MovieTheme
 import com.jik.core.ui.preview.ThemePreviews
@@ -30,6 +29,7 @@ fun MovieTopAppBar(
     navigateBack: () -> Unit = {}
 ) {
     TopAppBar(
+        modifier = modifier,
         title = {
             if (titleRes != null) {
                 Text(
@@ -41,20 +41,19 @@ fun MovieTopAppBar(
                 )
             }
         },
-        colors = colors,
-        scrollBehavior = scrollBehavior,
-        modifier = modifier,
         navigationIcon = {
             if (canNavigateBack) {
                 IconButton(onClick = navigateBack) {
                     Icon(
                         imageVector = ArrowBackRounded,
-                        contentDescription = null,
+                        contentDescription = "Back",
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
-        }
+        },
+        colors = colors,
+        scrollBehavior = scrollBehavior
     )
 }
 
@@ -68,9 +67,4 @@ private fun TopAppBarPreview() {
             scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         )
     }
-}
-
-// TopAppBarSmallTokens.ContainerHeight
-object MovieTopAppBar {
-    val height = 64.dp
 }

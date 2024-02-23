@@ -66,7 +66,7 @@ fun GradientPosterCard(
     placeholder: Painter? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
-    gradientArea: GradientArea = GradientArea.TOP_BOTTOM
+    gradientArea: GradientArea = GradientArea.VERTICAL
 ) {
     Surface(modifier = modifier) {
         ElevatedCard(
@@ -104,7 +104,7 @@ fun GradientPosterCard(
         )
 
         val colorStops = when (gradientArea) {
-            GradientArea.TOP_BOTTOM -> colorStopsOfTopBottom
+            GradientArea.VERTICAL -> colorStopsOfTopBottom
             GradientArea.TOP -> colorStopsOfTop
             GradientArea.BOTTOM -> colorStopsOfBottom
         }
@@ -112,14 +112,14 @@ fun GradientPosterCard(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Brush.verticalGradient(colorStops = colorStops))
+                .background(brush = Brush.verticalGradient(colorStops = colorStops))
         )
     }
 }
 
 
 enum class GradientArea {
-    TOP_BOTTOM,
+    VERTICAL,
     TOP,
     BOTTOM,
 }

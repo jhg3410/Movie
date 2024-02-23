@@ -8,9 +8,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -60,7 +59,6 @@ fun MovieNavigationBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .windowInsetsPadding(NavigationBarDefaults.windowInsets)
-                .height(52.dp)
                 .selectableGroup(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             content = content
@@ -83,7 +81,7 @@ fun RowScope.MovieNavigationBarItem(
     val scale = animateFloatAsState(targetValue = if (isPressed) 0.8f else 1f, label = "")
 
     Box(
-        modifier
+        modifier = modifier
             .selectable(
                 selected = selected,
                 onClick = onClick,
@@ -93,7 +91,8 @@ fun RowScope.MovieNavigationBarItem(
                 indication = null,
             )
             .weight(1f)
-            .scale(scale.value),
+            .scale(scale.value)
+            .padding(vertical = 4.dp),
         contentAlignment = Alignment.Center
     ) {
         if (labelTextId == null) {
@@ -134,7 +133,6 @@ private fun MovieNavigationBarItemLabelAndIcon(
     labelTextId: Int,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
