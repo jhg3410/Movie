@@ -6,5 +6,5 @@ sealed interface VideoPlayerState {
     object Loading : VideoPlayerState
     object CanPlay : VideoPlayerState
     class GetError(val errorMessage: String) : VideoPlayerState
-    object NoVideo : VideoPlayerState
+    class NoVideo(val message: String = "Sorry, there's no video") : VideoPlayerState
 }

@@ -22,14 +22,14 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.jik.lib.videoplayer.component.player.PlayerLoadingWheel
 import com.jik.lib.videoplayer.component.player.PlayerPlayIcon
 import com.jik.lib.videoplayer.error.ErrorScreen
-import com.jik.lib.videoplayer.error.VideoPlayerControllerError.setErrorMessage
+import com.jik.lib.videoplayer.error.VideoPlayerControllerError.setErrorMessageIfError
 import com.jik.lib.videoplayer.error.VideoPlayerError.toMovieErrorMessage
 import com.jik.lib.videoplayer.state.VideoPlayerControllerState
 import com.jik.lib.videoplayer.state.VideoPlayerState
 import com.jik.lib.videoplayer.state.getControllerState
 import com.jik.lib.videoplayer.ui.VideoPlayerController
 import com.jik.lib.videoplayer.ui.VideoPlayerScreen
-import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.VISIBLE_DURATION
+import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.AUTO_HIDE_DELAY
 import com.jik.lib.videoplayer.util.VideoPlayerListener.stateChangedListener
 import com.jik.lib.videoplayer.util.VideoPlayerUtil.toStreamUrlOfYouTube
 import kotlinx.coroutines.delay
@@ -68,7 +68,7 @@ fun VideoPlayer(
 
     LaunchedEffect(key1 = controllerState, key2 = controllerVisible) {
         if (controllerState == VideoPlayerControllerState.PLAYING && controllerVisible) {
-            delay(VISIBLE_DURATION)
+            delay(AUTO_HIDE_DELAY)
             controllerVisible = false
         }
     }
@@ -84,7 +84,7 @@ fun VideoPlayer(
 
     fun initializePlayer() {
         if (videoId == null) {
-            videoPlayerState = VideoPlayerState.NoVideo
+            videoPlayerState = VideoPlayerState.NoVideo()
             return
         }
         controllerVisible = true
@@ -174,9 +174,7 @@ fun VideoPlayer(
                     modifier = Modifier.fillMaxSize(),
                     visible = controllerVisible,
                     controllerState = controllerState.apply {
-                        if (this is VideoPlayerControllerState.ERROR) {
-                            this.setErrorMessage(errorCode = moviePlayer.playerError?.errorCode)
-                        }
+                        setErrorMessageIfError(errorCode = moviePlayer.playerError?.errorCode)
                     },
                     onRefresh = {
                         moviePlayer.prepare()
@@ -206,7 +204,7 @@ fun VideoPlayer(
             }
 
             is VideoPlayerState.NoVideo -> {
-                ErrorScreen(errorMessage = "No Video Found")
+                ErrorScreen(errorMessage = (videoPlayerState as VideoPlayerState.NoVideo).message)
             }
         }
     }

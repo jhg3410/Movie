@@ -10,7 +10,7 @@ internal object VideoPlayerControllerError {
         UNKNOWN_ERROR(message = "unknown error has occurred!!")
     }
 
-    fun VideoPlayerControllerState.setErrorMessage(errorCode: Int?) {
+    fun VideoPlayerControllerState.setErrorMessageIfError(errorCode: Int?) {
         (this as? VideoPlayerControllerState.ERROR)?.errorMessage =
             if (errorCode == ERROR_CODE_IO_NETWORK_CONNECTION_FAILED) {
                 ErrorType.NETWORK_CONNECTION_ERROR.message

@@ -33,11 +33,7 @@ internal fun ErrorScreen(
             color = Color.White,
         )
         if (onRefresh != null) {
-            IconButton(
-                onClick = {
-                    onRefresh()
-                },
-            ) {
+            IconButton(onClick = { onRefresh() }) {
                 Icon(
                     imageVector = Refresh,
                     contentDescription = "Refresh",

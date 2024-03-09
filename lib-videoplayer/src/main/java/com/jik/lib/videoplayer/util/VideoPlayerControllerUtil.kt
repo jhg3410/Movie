@@ -6,7 +6,7 @@ import kotlin.time.DurationUnit
 
 internal object VideoPlayerControllerUtil {
 
-    val VISIBLE_DURATION = 2.seconds
+    val AUTO_HIDE_DELAY = 2.seconds
     val MOVING_OFFSET = 5.seconds.toLong(DurationUnit.MILLISECONDS)
 
     fun Long.toFormattedMinutesAndSecondsFromMilliseconds(): String {

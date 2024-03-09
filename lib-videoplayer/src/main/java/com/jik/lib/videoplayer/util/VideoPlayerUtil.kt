@@ -8,8 +8,12 @@ import kotlinx.coroutines.withContext
 
 internal object VideoPlayerUtil {
 
+    private const val YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="
+    private const val PYTHON_FILE_NAME = "youtube_stream_url"
+    private const val PYTHON_FUNCTION_NAME = "getVideoStreamUrl"
+
     suspend fun String.toStreamUrlOfYouTube(context: Context): String {
-        val videoUrl = "https://www.youtube.com/watch?v=$this"
+        val videoUrl = "$YOUTUBE_BASE_URL$this"
 
         return withContext(Dispatchers.IO) {
             if (!Python.isStarted()) {
@@ -17,8 +21,8 @@ internal object VideoPlayerUtil {
             }
 
             val py = Python.getInstance()
-            val module = py.getModule("youtube_stream_url")
-            val result = module.callAttr("getVideoStreamUrl", videoUrl)
+            val module = py.getModule(PYTHON_FILE_NAME)
+            val result = module.callAttr(PYTHON_FUNCTION_NAME, videoUrl)
 
             result.toString()
         }
