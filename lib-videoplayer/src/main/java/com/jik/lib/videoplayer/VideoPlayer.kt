@@ -3,20 +3,16 @@ package com.jik.lib.videoplayer
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.jik.lib.videoplayer.component.player.PlayerLoadingWheel
@@ -94,9 +90,9 @@ fun VideoPlayer(
             try {
                 player = ExoPlayer.Builder(context).build().apply {
                     setMediaItem(
-                        MediaItem.fromUri(streamUrl ?: videoId.toStreamUrlOfYouTube(context).also {
-                            streamUrl = it
-                        }),
+                        MediaItem.fromUri(streamUrl ?: videoId.toStreamUrlOfYouTube(context)
+                            .also { streamUrl = it }
+                        ),
                         currentPosition
                     )
                     playWhenReady = false
@@ -104,7 +100,8 @@ fun VideoPlayer(
                     prepare()
                 }
             } catch (e: Exception) {
-                videoPlayerState = VideoPlayerState.GetError(e.toMovieErrorMessage())
+                videoPlayerState =
+                    VideoPlayerState.GetError(errorMessage = e.message.toMovieErrorMessage())
             }
         }
     }
@@ -117,27 +114,11 @@ fun VideoPlayer(
         player = null
     }
 
-    val lifeCycleOwner by rememberUpdatedState(newValue = LocalLifecycleOwner.current)
+    LifecycleStartEffect {
+        initializePlayer()
 
-    DisposableEffect(key1 = lifeCycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_START -> {
-                    initializePlayer()
-                }
-
-                Lifecycle.Event.ON_STOP -> {
-                    releasePlayer()
-                }
-
-                else -> Unit
-            }
-        }
-
-        lifeCycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifeCycleOwner.lifecycle.removeObserver(observer)
+        onStopOrDispose {
+            releasePlayer()
         }
     }
 

@@ -8,15 +8,16 @@ internal object VideoPlayerError {
         UNKNOWN_ERROR(message = "OMG!! this video is not available")
     }
 
-    fun Exception.toMovieErrorMessage(): String {
-        val errorMessage = message ?: ErrorType.UNKNOWN_ERROR.message
+    fun String?.toMovieErrorMessage(): String {
 
         return when {
-            errorMessage.contains("AgeRestrictedError") -> {
+            this == null -> ErrorType.UNKNOWN_ERROR.message
+
+            contains("AgeRestrictedError") -> {
                 ErrorType.AGE_RESTRICTED_ERROR.message
             }
 
-            errorMessage.contains("urlopen error") -> {
+            contains("urlopen error") -> {
                 ErrorType.URL_OPEN_ERROR.message
             }
 
