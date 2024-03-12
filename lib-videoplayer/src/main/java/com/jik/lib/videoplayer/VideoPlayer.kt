@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,11 +45,11 @@ fun VideoPlayer(
     var streamUrl: String? = remember { null }
 
     var player: ExoPlayer? by remember { mutableStateOf(null) }
-    var videoPlayerState: VideoPlayerState by remember { mutableStateOf(VideoPlayerState.Initial) }
-
     var controllerVisible by remember { mutableStateOf(true) }
     var isPlaying by remember { mutableStateOf(false) }
-    var currentPosition by remember { mutableStateOf(0L) }
+    var currentPosition by remember { mutableLongStateOf(0L) }
+
+    var videoPlayerState: VideoPlayerState by remember { mutableStateOf(VideoPlayerState.Initial) }
     var controllerState: VideoPlayerControllerState by remember {
         mutableStateOf(VideoPlayerControllerState.INITIAL)
     }
@@ -157,20 +158,8 @@ fun VideoPlayer(
                     controllerState = controllerState.apply {
                         setErrorMessageIfError(errorCode = moviePlayer.playerError?.errorCode)
                     },
-                    onRefresh = {
-                        moviePlayer.prepare()
-                        moviePlayer.play()
-                    },
-                    onPlay = moviePlayer::play,
-                    onPause = moviePlayer::pause,
-                    onReplay = moviePlayer::seekTo,
-                    onForward = moviePlayer::seekTo,
-                    onBackward = moviePlayer::seekTo,
-                    getCurrentPosition = moviePlayer::getCurrentPosition,
-                    currentPosition = currentPosition,
-                    duration = moviePlayer.contentDuration,
-                    bufferedPercentage = moviePlayer.bufferedPercentage,
-                    onSlide = moviePlayer::seekTo
+                    player = moviePlayer,
+                    currentPosition = currentPosition
                 )
             }
 

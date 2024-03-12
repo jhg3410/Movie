@@ -4,13 +4,32 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.media3.exoplayer.ExoPlayer
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Backward5
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Forward5
 import com.jik.lib.videoplayer.component.controller.ControllerLoadingWheel
@@ -28,18 +47,11 @@ fun VideoPlayerController(
     modifier: Modifier = Modifier,
     visible: Boolean,
     controllerState: VideoPlayerControllerState,
-    onRefresh: () -> Unit,
-    onPlay: () -> Unit,
-    onPause: () -> Unit,
-    onReplay: (Long) -> Unit,
-    onForward: (Long) -> Unit,
-    onBackward: (Long) -> Unit,
-    getCurrentPosition: () -> Long,
-    currentPosition: Long,
-    duration: Long,
-    bufferedPercentage: Int,
-    onSlide: (Long) -> Unit
+    player: ExoPlayer,
+    currentPosition: Long
 ) {
+    val moviePlayer by rememberUpdatedState(newValue = player)
+
     AnimatedVisibility(
         modifier = modifier,
         visible = visible,
@@ -49,7 +61,10 @@ fun VideoPlayerController(
         if (controllerState is VideoPlayerControllerState.ERROR) {
             ErrorScreen(
                 errorMessage = controllerState.errorMessage,
-                onRefresh = onRefresh
+                onRefresh = {
+                    moviePlayer.prepare()
+                    moviePlayer.play()
+                }
             )
             return@AnimatedVisibility
         }
@@ -61,20 +76,20 @@ fun VideoPlayerController(
                     .align(Alignment.Center)
                     .fillMaxWidth(),
                 controllerState = controllerState,
-                onPlay = onPlay,
-                onPause = onPause,
-                onReplay = onReplay,
-                onForward = { onForward(getCurrentPosition() + MOVING_OFFSET) },
-                onBackward = { onBackward(getCurrentPosition() - MOVING_OFFSET) }
+                onPlay = { moviePlayer.play() },
+                onPause = { moviePlayer.pause() },
+                onReplay = { moviePlayer.seekTo(0L) },
+                onForward = { moviePlayer.seekTo(moviePlayer.currentPosition + MOVING_OFFSET) },
+                onBackward = { moviePlayer.seekTo(moviePlayer.currentPosition - MOVING_OFFSET) }
             )
             BottomController(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .fillMaxWidth(),
                 currentPosition = currentPosition,
-                duration = duration,
-                bufferedPercentage = bufferedPercentage,
-                onSlide = onSlide
+                duration = moviePlayer.duration,
+                bufferedPercentage = moviePlayer.bufferedPercentage,
+                onSlide = { moviePlayer.seekTo(it) }
             )
         }
     }
