@@ -6,16 +6,14 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
-
 android {
-    namespace = "com.jik.feature.home"
+    namespace = "com.jik.feature.popular"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -45,10 +43,10 @@ android {
 dependencies {
 
     // modules
-    implementation(projects.coreDesignsystem)
-    implementation(projects.coreUi)
-    implementation(projects.coreModel)
-    implementation(projects.coreData)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.ui)
+    implementation(projects.core.model)
+    implementation(projects.core.data)
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.runtime.ktx)
@@ -59,9 +57,6 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.preview)
     implementation(libs.compose.material3)
-
-    // accompanist
-    implementation(libs.accompanist.systemuicontroller)
 
     // lifecycle
     implementation(libs.lifecycle.viewmodel)

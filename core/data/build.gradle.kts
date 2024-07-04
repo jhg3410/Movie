@@ -36,8 +36,8 @@ android {
 
 dependencies {
     // modules
-    implementation(projects.coreModel)
-    implementation(projects.coreNetwork)
+    implementation(projects.core.model)
+    implementation(projects.core.network)
 
     implementation(libs.androidx.ktx)
 

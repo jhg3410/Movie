@@ -56,13 +56,13 @@ android {
 dependencies {
 
     // modules
-    implementation(projects.coreDesignsystem)
-    implementation(projects.coreUi)
-    implementation(projects.coreModel)
-    implementation(projects.coreData)
-    implementation(projects.featureHome)
-    implementation(projects.featurePopular)
-    implementation(projects.featureDetail)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.ui)
+    implementation(projects.core.model)
+    implementation(projects.core.data)
+    implementation(projects.feature.home)
+    implementation(projects.feature.popular)
+    implementation(projects.feature.detail)
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.runtime.ktx)

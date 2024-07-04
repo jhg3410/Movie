@@ -6,8 +6,9 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
+
 android {
-    namespace = "com.jik.feature.detail"
+    namespace = "com.jik.feature.home"
     compileSdk = 34
 
     defaultConfig {
@@ -44,11 +45,10 @@ android {
 dependencies {
 
     // modules
-    implementation(projects.coreDesignsystem)
-    implementation(projects.coreUi)
-    implementation(projects.coreModel)
-    implementation(projects.coreData)
-    implementation(projects.libVideoplayer)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.ui)
+    implementation(projects.core.model)
+    implementation(projects.core.data)
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.runtime.ktx)
@@ -60,6 +60,9 @@ dependencies {
     implementation(libs.compose.preview)
     implementation(libs.compose.material3)
 
+    // accompanist
+    implementation(libs.accompanist.systemuicontroller)
+
     // lifecycle
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.lifecycle.runtime)
@@ -68,9 +71,6 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
     kapt(libs.hilt.compiler)
-
-    // coil
-    implementation(libs.compose.coil)
 
     // test
     testImplementation(libs.junit)

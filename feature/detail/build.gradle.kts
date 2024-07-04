@@ -7,13 +7,14 @@ plugins {
 }
 
 android {
-    namespace = "com.jik.feature.popular"
+    namespace = "com.jik.feature.detail"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -43,10 +44,11 @@ android {
 dependencies {
 
     // modules
-    implementation(projects.coreDesignsystem)
-    implementation(projects.coreUi)
-    implementation(projects.coreModel)
-    implementation(projects.coreData)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.ui)
+    implementation(projects.core.model)
+    implementation(projects.core.data)
+    implementation(projects.lib.videoplayer)
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.runtime.ktx)
@@ -66,6 +68,9 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
     kapt(libs.hilt.compiler)
+
+    // coil
+    implementation(libs.compose.coil)
 
     // test
     testImplementation(libs.junit)

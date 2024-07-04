@@ -1,18 +1,27 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.jik.core.designsystem"
+    namespace = "com.jik.core.network"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField(
+            type = "String",
+            name = "TMDB_API_KEY",
+            value = gradleLocalProperties(rootDir).getProperty("TMDB_API_KEY")
+        )
     }
 
     buildTypes {
@@ -23,12 +32,6 @@ android {
                 "proguard-rules.pro"
             )
         }
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -42,29 +45,27 @@ android {
 dependencies {
 
     // modules
-    implementation(projects.coreUi)
+    implementation(projects.core.model)
 
     implementation(libs.androidx.ktx)
-    implementation(libs.androidx.navigation)
 
-    // compose
-    implementation(libs.compose.ui)
-    implementation(libs.compose.tooling)
-    implementation(libs.compose.preview)
+    // moshi
+    implementation(libs.moshi)
+    ksp(libs.moshi.codegen)
 
-    // material
-    implementation(libs.compose.material3)
-    implementation(libs.compose.material.icons)
+    // retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi)
 
-    // coroutines
-    implementation(libs.coroutines)
+    // logging
+    implementation(libs.logging.interceptor)
 
-    // coil
-    implementation(libs.compose.coil)
+    // hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     // test
     testImplementation(libs.junit)
-    testImplementation(libs.coroutines.test)
 
     // android test
     androidTestImplementation(libs.ext.junit)
