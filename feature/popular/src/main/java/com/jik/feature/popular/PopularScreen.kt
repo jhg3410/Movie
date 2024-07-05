@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -22,6 +21,7 @@ import com.jik.core.designsystem.component.*
 import com.jik.core.model.Movie
 import com.jik.core.ui.pagination.Pageable
 import com.jik.core.ui.state.UiState
+import com.jik.feature.popular.component.PopularTopBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +36,7 @@ fun PopularScreen(
     val uiState by popularViewModel.uiState.collectAsStateWithLifecycle()
 
     Column(modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
-        TopBar(scrollBehavior = scrollBehavior)
+        PopularTopBar(scrollBehavior = scrollBehavior)
         Content(
             modifier = Modifier.weight(1f),
             popularMovies = popularViewModel.popularMovies,
@@ -46,16 +46,6 @@ fun PopularScreen(
             onPosterClick = onPosterClick,
         )
     }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
-    MovieTopAppBar(
-        titleRes = R.string.popular,
-        scrollBehavior = scrollBehavior
-    )
 }
 
 @Composable
