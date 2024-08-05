@@ -47,7 +47,7 @@ android {
 chaquopy {
     defaultConfig {
         pip {
-            install("pytube")
+            install("pytubefix")
         }
     }
 }
