@@ -115,7 +115,7 @@ fun VideoPlayer(
         player = null
     }
 
-    LifecycleStartEffect {
+    LifecycleStartEffect(key1 = null) {
         initializePlayer()
 
         onStopOrDispose {
