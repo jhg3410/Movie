@@ -58,6 +58,9 @@ dependencies {
     // coil
     implementation(libs.compose.coil)
 
+    // palette
+    implementation(libs.palette)
+
     // test
     testImplementation(libs.junit)
     testImplementation(libs.coroutines.test)
