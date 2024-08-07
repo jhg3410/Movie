@@ -3,6 +3,7 @@ package com.jik.feature.detail.navigation
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
@@ -43,7 +44,9 @@ object DetailNavigation {
         ) {
             StatusBarColor(color = Color.Transparent)
             DetailScreen(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding(),
                 navigateUp = navigateUp
             )
         }
