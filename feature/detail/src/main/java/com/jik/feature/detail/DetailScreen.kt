@@ -1,5 +1,7 @@
 package com.jik.feature.detail
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,8 +10,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -18,6 +26,7 @@ import com.jik.core.designsystem.component.LoadingWheel
 import com.jik.core.designsystem.component.PosterCard
 import com.jik.core.designsystem.component.Refresh
 import com.jik.core.model.MovieInfo
+import com.jik.core.ui.palette.ExtractRepresentativeColor
 import com.jik.core.ui.state.UiState
 import com.jik.feature.detail.component.DetailMovieInfo
 import com.jik.feature.detail.component.TopBar
@@ -33,6 +42,7 @@ fun DetailScreen(
     val detailUiState = viewModel.detailUiState.collectAsStateWithLifecycle(
         minActiveState = Lifecycle.State.CREATED
     ).value
+    val isDarkMode = isSystemInDarkTheme()
 
     when (detailUiState) {
         is UiState.Loading -> {
@@ -45,12 +55,25 @@ fun DetailScreen(
         }
 
         is UiState.Success -> {
-            Column(modifier = modifier) {
+            val movieInfo = detailUiState.data
+            var backgroundColor by remember { mutableStateOf(Color.Transparent) }
+            val colorStops = arrayOf(
+                0.0f to backgroundColor.copy(alpha = if (isDarkMode) 1f else 0.6f),
+                0.6f to Color.Transparent
+            )
+
+            ExtractRepresentativeColor(imageUrl = movieInfo.getBackdropUrl()) {
+                backgroundColor = it
+            }
+
+            Column(
+                modifier = modifier.background(brush = Brush.verticalGradient(colorStops = colorStops))
+            ) {
                 TopBar(
                     modifier = Modifier.fillMaxWidth(),
                     navigateUp = navigateUp
                 )
-                Content(movieInfo = detailUiState.data)
+                Content(movieInfo = movieInfo)
             }
         }
 
