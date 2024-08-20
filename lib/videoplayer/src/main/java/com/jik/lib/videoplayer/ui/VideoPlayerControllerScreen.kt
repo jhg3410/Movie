@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.ExoPlayer
+import com.jik.lib.videoplayer.component.VideoPlayerIcons
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Backward5
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Forward5
 import com.jik.lib.videoplayer.component.controller.ControllerLoadingWheel
@@ -170,18 +171,40 @@ fun BottomController(
     onSlide: (Long) -> Unit
 ) {
     Column(modifier = modifier.padding(bottom = 4.dp)) {
-        Text(
-            modifier = Modifier.padding(start = 16.dp),
-            text = currentPosition.toFormattedMinutesAndSecondsFromMilliseconds() + "/" +
-                    duration.toFormattedMinutesAndSecondsFromMilliseconds(),
-            style = MaterialTheme.typography.labelMedium,
-            color = Color.White
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = currentPosition.toFormattedMinutesAndSecondsFromMilliseconds() + "/" +
+                        duration.toFormattedMinutesAndSecondsFromMilliseconds(),
+                style = MaterialTheme.typography.labelMedium,
+                color = Color.White
+            )
+            IconButton(
+                modifier = Modifier.size(32.dp),
+                onClick = {}
+            ) {
+                Icon(
+                    imageVector = VideoPlayerIcons.FullScreen,
+                    contentDescription = "FullScreen",
+                    tint = Color.White,
+                )
+            }
+        }
 
-        Spacer(modifier = Modifier.height(4.dp))
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
+            ) {
                 Slider(
                     value = bufferedPercentage.toFloat(),
                     enabled = false,
