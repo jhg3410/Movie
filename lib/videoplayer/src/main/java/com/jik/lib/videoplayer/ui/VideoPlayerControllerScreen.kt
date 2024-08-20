@@ -28,8 +28,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.ExoPlayer
+import com.jik.lib.videoplayer.R
 import com.jik.lib.videoplayer.component.VideoPlayerIcons
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Backward5
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Forward5
@@ -72,6 +74,12 @@ fun VideoPlayerController(
         Box(
             modifier = Modifier.background(color = Color.Black.copy(alpha = 0.5f))
         ) {
+            TopController(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .fillMaxWidth(),
+                onClickYoutubeIcon = {}
+            )
             CenterController(
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -91,6 +99,28 @@ fun VideoPlayerController(
                 duration = moviePlayer.duration,
                 bufferedPercentage = moviePlayer.bufferedPercentage,
                 onSlide = { moviePlayer.seekTo(it) }
+            )
+        }
+    }
+}
+
+@Composable
+fun TopController(
+    modifier: Modifier = Modifier,
+    onClickYoutubeIcon: () -> Unit,
+) {
+    Row(
+        modifier = modifier.padding(start = 16.dp, end = 16.dp),
+        horizontalArrangement = Arrangement.End
+    ) {
+        IconButton(
+            onClick = onClickYoutubeIcon
+        ) {
+            Icon(
+                modifier = Modifier.height(24.dp),
+                painter = painterResource(id = R.drawable.youtube_icon),
+                contentDescription = "Go to Youtube",
+                tint = Color.Unspecified,
             )
         }
     }
