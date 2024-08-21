@@ -1,5 +1,9 @@
 package com.jik.lib.videoplayer.util
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
@@ -14,5 +18,23 @@ internal object VideoPlayerControllerUtil {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(timeInMilliseconds)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(timeInMilliseconds) % 60
         return "%02d:%02d".format(minutes, seconds)
+    }
+}
+
+internal fun watchOnYoutube(context: Context, videoId: String) {
+    val appUrl = "vnd.youtube:$videoId"
+    val webUrl = "http://www.youtube.com/watch?v=$videoId"
+
+    val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse(appUrl)).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+    val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(webUrl)).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+
+    try {
+        context.startActivity(appIntent)
+    } catch (e: ActivityNotFoundException) {
+        context.startActivity(webIntent)
     }
 }

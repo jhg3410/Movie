@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +44,7 @@ fun VideoPlayer(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     var streamUrl: String? = remember { null }
+    val nonNullVideoId: String by rememberUpdatedState(newValue = videoId ?: "")
 
     var player: ExoPlayer? by remember { mutableStateOf(null) }
     var controllerVisible by remember { mutableStateOf(true) }
@@ -91,7 +93,7 @@ fun VideoPlayer(
             try {
                 player = ExoPlayer.Builder(context).build().apply {
                     setMediaItem(
-                        MediaItem.fromUri(streamUrl ?: videoId.toStreamUrlOfYouTube(context)
+                        MediaItem.fromUri(streamUrl ?: nonNullVideoId.toStreamUrlOfYouTube(context)
                             .also { streamUrl = it }
                         ),
                         currentPosition
@@ -160,7 +162,8 @@ fun VideoPlayer(
                         setErrorMessageIfError(errorCode = moviePlayer.playerError?.errorCode)
                     },
                     player = moviePlayer,
-                    currentPosition = currentPosition
+                    videoId = nonNullVideoId,
+                    currentPosition = currentPosition,
                 )
             }
 

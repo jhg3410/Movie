@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.ExoPlayer
@@ -47,6 +48,7 @@ import com.jik.lib.videoplayer.error.ErrorScreen
 import com.jik.lib.videoplayer.state.VideoPlayerControllerState
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.MOVING_OFFSET
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.toFormattedMinutesAndSecondsFromMilliseconds
+import com.jik.lib.videoplayer.util.watchOnYoutube
 
 @Composable
 fun VideoPlayerController(
@@ -54,6 +56,7 @@ fun VideoPlayerController(
     visible: Boolean,
     controllerState: VideoPlayerControllerState,
     player: ExoPlayer,
+    videoId: String,
     currentPosition: Long
 ) {
     val moviePlayer by rememberUpdatedState(newValue = player)
@@ -82,7 +85,7 @@ fun VideoPlayerController(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .fillMaxWidth(),
-                onClickYoutubeIcon = {}
+                videoId = videoId
             )
             CenterController(
                 modifier = Modifier
@@ -116,19 +119,21 @@ fun VideoPlayerController(
 @Composable
 fun TopController(
     modifier: Modifier = Modifier,
-    onClickYoutubeIcon: () -> Unit,
+    videoId: String
 ) {
+    val context = LocalContext.current
+
     Row(
-        modifier = modifier.padding(start = 16.dp, end = 16.dp),
+        modifier = modifier.padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.End
     ) {
         IconButton(
-            onClick = onClickYoutubeIcon
+            onClick = { watchOnYoutube(context = context, videoId = videoId) }
         ) {
             Icon(
                 modifier = Modifier.height(24.dp),
                 painter = painterResource(id = R.drawable.youtube_icon),
-                contentDescription = "Go to Youtube",
+                contentDescription = "Watch on Youtube",
                 tint = Color.Unspecified,
             )
         }
