@@ -24,7 +24,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,6 +57,7 @@ fun VideoPlayerController(
     currentPosition: Long
 ) {
     val moviePlayer by rememberUpdatedState(newValue = player)
+    var isMute by remember { mutableStateOf(moviePlayer.volume == 0f) }
 
     AnimatedVisibility(
         modifier = modifier,
@@ -98,7 +102,12 @@ fun VideoPlayerController(
                 currentPosition = currentPosition,
                 duration = moviePlayer.duration,
                 bufferedPercentage = moviePlayer.bufferedPercentage,
-                onSlide = { moviePlayer.seekTo(it) }
+                onSlide = { moviePlayer.seekTo(it) },
+                toggleMute = {
+                    moviePlayer.volume = if (isMute) 1f else 0f
+                    isMute = isMute.not()
+                },
+                isMute = isMute
             )
         }
     }
@@ -198,7 +207,9 @@ fun BottomController(
     duration: Long,
     currentPosition: Long,
     bufferedPercentage: Int,
-    onSlide: (Long) -> Unit
+    onSlide: (Long) -> Unit,
+    toggleMute: () -> Unit,
+    isMute: Boolean
 ) {
     Column(modifier = modifier.padding(bottom = 4.dp)) {
         Row(
@@ -216,11 +227,11 @@ fun BottomController(
             )
             IconButton(
                 modifier = Modifier.size(32.dp),
-                onClick = {}
+                onClick = { toggleMute() }
             ) {
                 Icon(
-                    imageVector = VideoPlayerIcons.FullScreen,
-                    contentDescription = "FullScreen",
+                    imageVector = if (isMute) VideoPlayerIcons.VolumeOFF else VideoPlayerIcons.VolumeUp,
+                    contentDescription = if (isMute) "Volume Off" else "Volume On",
                     tint = Color.White,
                 )
             }

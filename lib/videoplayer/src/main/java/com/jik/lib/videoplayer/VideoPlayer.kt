@@ -140,6 +140,7 @@ fun VideoPlayer(
                 PlayerLoadingWheel()
                 player?.let {
                     videoPlayerState = VideoPlayerState.CanPlay
+                    it.volume = 0f
                     it.play()
                 }
             }
