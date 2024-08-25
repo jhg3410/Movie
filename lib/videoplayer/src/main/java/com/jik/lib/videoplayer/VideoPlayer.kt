@@ -30,7 +30,10 @@ import com.jik.lib.videoplayer.ui.VideoPlayerScreen
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.AUTO_HIDE_DELAY
 import com.jik.lib.videoplayer.util.VideoPlayerListener.stateChangedListener
 import com.jik.lib.videoplayer.util.VideoPlayerUtil.toStreamUrlOfYouTube
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
@@ -50,6 +53,10 @@ fun VideoPlayer(
     var controllerVisible by remember { mutableStateOf(true) }
     var isPlaying by remember { mutableStateOf(false) }
     var currentPosition by remember { mutableLongStateOf(0L) }
+    val controllerEventChannel = remember { Channel<Unit>() }
+    val controllerEventChannelFlow =
+        remember(key1 = controllerEventChannel) { controllerEventChannel.receiveAsFlow() }
+    var onControllerEvent: Long by remember { mutableLongStateOf(0) }
 
     var videoPlayerState: VideoPlayerState by remember { mutableStateOf(VideoPlayerState.Initial) }
     var controllerState: VideoPlayerControllerState by remember {
@@ -65,19 +72,24 @@ fun VideoPlayer(
         )
     }
 
-    LaunchedEffect(key1 = controllerState, key2 = controllerVisible) {
+    LaunchedEffect(key1 = controllerEventChannelFlow) {
+        controllerEventChannelFlow.collectLatest {
+            onControllerEvent += 1
+        }
+    }
+
+    LaunchedEffect(key1 = controllerState, key2 = controllerVisible, key3 = onControllerEvent) {
         if (controllerState == VideoPlayerControllerState.PLAYING && controllerVisible) {
             delay(AUTO_HIDE_DELAY)
             controllerVisible = false
         }
     }
 
-    if (isPlaying) {
-        LaunchedEffect(key1 = Unit) {
-            while (player != null) {
-                currentPosition = player?.currentPosition ?: 0L
-                delay(1.seconds / 30)
-            }
+
+    LaunchedEffect(key1 = isPlaying) {
+        while (isPlaying && player != null) {
+            currentPosition = player?.currentPosition ?: 0L
+            delay(1.seconds / 30)
         }
     }
 
@@ -164,6 +176,7 @@ fun VideoPlayer(
                     player = moviePlayer,
                     videoId = nonNullVideoId,
                     currentPosition = currentPosition,
+                    visibleEventChannel = controllerEventChannel
                 )
             }
 

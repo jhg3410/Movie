@@ -23,9 +23,11 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -48,7 +50,9 @@ import com.jik.lib.videoplayer.error.ErrorScreen
 import com.jik.lib.videoplayer.state.VideoPlayerControllerState
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.MOVING_OFFSET
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.toFormattedMinutesAndSecondsFromMilliseconds
-import com.jik.lib.videoplayer.util.watchOnYoutube
+import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.watchOnYoutube
+import kotlinx.coroutines.channels.Channel
+import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil as controllerUtil
 
 @Composable
 fun VideoPlayerController(
@@ -57,10 +61,19 @@ fun VideoPlayerController(
     controllerState: VideoPlayerControllerState,
     player: ExoPlayer,
     videoId: String,
-    currentPosition: Long
+    currentPosition: Long,
+    visibleEventChannel: Channel<Unit>
 ) {
+
     val moviePlayer by rememberUpdatedState(newValue = player)
+    val coroutineScope = rememberCoroutineScope()
     var isMute by remember { mutableStateOf(moviePlayer.volume == 0f) }
+
+    LaunchedEffect(key1 = visibleEventChannel) {
+        controllerUtil.KeepVisible.visibleEventChannel = visibleEventChannel
+        controllerUtil.KeepVisible.scope = coroutineScope
+    }
+
 
     AnimatedVisibility(
         modifier = modifier,
@@ -106,7 +119,7 @@ fun VideoPlayerController(
                 duration = moviePlayer.duration,
                 bufferedPercentage = moviePlayer.bufferedPercentage,
                 onSlide = { moviePlayer.seekTo(it) },
-                toggleMute = {
+                toggleMute = controllerUtil.KeepVisible {
                     moviePlayer.volume = if (isMute) 1f else 0f
                     isMute = isMute.not()
                 },
@@ -146,7 +159,7 @@ fun CenterController(
     controllerState: VideoPlayerControllerState,
     onPlay: () -> Unit,
     onPause: () -> Unit,
-    onReplay: (Long) -> Unit,
+    onReplay: () -> Unit,
     onForward: () -> Unit,
     onBackward: () -> Unit
 ) {
@@ -185,7 +198,7 @@ fun CenterController(
 
             is VideoPlayerControllerState.ENDED -> {
                 ControllerReplayIcon {
-                    onReplay(0L)
+                    onReplay()
                 }
             }
 
