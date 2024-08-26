@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,6 +35,7 @@ import com.jik.core.designsystem.component.MovieNavigationBarItemDefaults.select
 import com.jik.core.designsystem.component.MovieNavigationBarItemDefaults.selectedTextColor
 import com.jik.core.designsystem.component.MovieNavigationBarItemDefaults.unselectedIconColor
 import com.jik.core.designsystem.component.MovieNavigationBarItemDefaults.unselectedTextColor
+import com.jik.core.designsystem.icon.MovieIcons
 
 
 val NavigationBarCornerSize = 24.dp
@@ -72,7 +72,7 @@ fun RowScope.MovieNavigationBarItem(
     iconImageVector: ImageVector,
     selectedIconImageVector: ImageVector,
     modifier: Modifier = Modifier,
-    labelTextId: Int? = null,
+    labelText: String,
     enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
@@ -95,20 +95,12 @@ fun RowScope.MovieNavigationBarItem(
             .padding(vertical = 4.dp),
         contentAlignment = Alignment.Center
     ) {
-        if (labelTextId == null) {
-            MovieNavigationBarItemIcon(
-                selected = selected,
-                iconImageVector = iconImageVector,
-                selectedIconImageVector = selectedIconImageVector
-            )
-        } else {
-            MovieNavigationBarItemLabelAndIcon(
-                selected = selected,
-                iconImageVector = iconImageVector,
-                selectedIconImageVector = selectedIconImageVector,
-                labelTextId = labelTextId
-            )
-        }
+        MovieNavigationBarItemLabelAndIcon(
+            selected = selected,
+            iconImageVector = iconImageVector,
+            selectedIconImageVector = selectedIconImageVector,
+            labelText = labelText
+        )
     }
 }
 
@@ -127,12 +119,14 @@ private fun MovieNavigationBarItemIcon(
 
 @Composable
 private fun MovieNavigationBarItemLabelAndIcon(
+    modifier: Modifier = Modifier,
     selected: Boolean,
     iconImageVector: ImageVector,
     selectedIconImageVector: ImageVector,
-    labelTextId: Int,
+    labelText: String,
 ) {
     Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -142,12 +136,25 @@ private fun MovieNavigationBarItemLabelAndIcon(
             selectedIconImageVector = selectedIconImageVector
         )
         Text(
-            text = stringResource(id = labelTextId),
+            text = labelText,
             color = if (selected) selectedTextColor() else unselectedTextColor(),
             fontWeight = FontWeight.SemiBold,
             fontSize = 12.sp
         )
     }
+}
+
+@Composable
+fun FakeNavigationBarItemLabelAndIcon(
+    modifier: Modifier = Modifier,
+) {
+    MovieNavigationBarItemLabelAndIcon(
+        modifier = modifier,
+        selected = false,
+        iconImageVector = MovieIcons.HomeRounded,
+        selectedIconImageVector = MovieIcons.HomeRounded,
+        labelText = ""
+    )
 }
 
 private object MovieNavigationBarItemDefaults {
