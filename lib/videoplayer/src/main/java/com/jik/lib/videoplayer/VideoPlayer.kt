@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +30,10 @@ import com.jik.lib.videoplayer.ui.VideoPlayerScreen
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.AUTO_HIDE_DELAY
 import com.jik.lib.videoplayer.util.VideoPlayerListener.stateChangedListener
 import com.jik.lib.videoplayer.util.VideoPlayerUtil.toStreamUrlOfYouTube
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
@@ -43,11 +47,16 @@ fun VideoPlayer(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     var streamUrl: String? = remember { null }
+    val nonNullVideoId: String by rememberUpdatedState(newValue = videoId ?: "")
 
     var player: ExoPlayer? by remember { mutableStateOf(null) }
     var controllerVisible by remember { mutableStateOf(true) }
     var isPlaying by remember { mutableStateOf(false) }
     var currentPosition by remember { mutableLongStateOf(0L) }
+    val controllerEventChannel = remember { Channel<Unit>() }
+    val controllerEventChannelFlow =
+        remember(key1 = controllerEventChannel) { controllerEventChannel.receiveAsFlow() }
+    var onControllerEvent: Long by remember { mutableLongStateOf(0) }
 
     var videoPlayerState: VideoPlayerState by remember { mutableStateOf(VideoPlayerState.Initial) }
     var controllerState: VideoPlayerControllerState by remember {
@@ -63,19 +72,24 @@ fun VideoPlayer(
         )
     }
 
-    LaunchedEffect(key1 = controllerState, key2 = controllerVisible) {
+    LaunchedEffect(key1 = controllerEventChannelFlow) {
+        controllerEventChannelFlow.collectLatest {
+            onControllerEvent += 1
+        }
+    }
+
+    LaunchedEffect(key1 = controllerState, key2 = controllerVisible, key3 = onControllerEvent) {
         if (controllerState == VideoPlayerControllerState.PLAYING && controllerVisible) {
             delay(AUTO_HIDE_DELAY)
             controllerVisible = false
         }
     }
 
-    if (isPlaying) {
-        LaunchedEffect(key1 = Unit) {
-            while (player != null) {
-                currentPosition = player?.currentPosition ?: 0L
-                delay(1.seconds / 30)
-            }
+
+    LaunchedEffect(key1 = isPlaying) {
+        while (isPlaying && player != null) {
+            currentPosition = player?.currentPosition ?: 0L
+            delay(1.seconds / 30)
         }
     }
 
@@ -91,7 +105,7 @@ fun VideoPlayer(
             try {
                 player = ExoPlayer.Builder(context).build().apply {
                     setMediaItem(
-                        MediaItem.fromUri(streamUrl ?: videoId.toStreamUrlOfYouTube(context)
+                        MediaItem.fromUri(streamUrl ?: nonNullVideoId.toStreamUrlOfYouTube(context)
                             .also { streamUrl = it }
                         ),
                         currentPosition
@@ -140,6 +154,7 @@ fun VideoPlayer(
                 PlayerLoadingWheel()
                 player?.let {
                     videoPlayerState = VideoPlayerState.CanPlay
+                    it.volume = 0f
                     it.play()
                 }
             }
@@ -159,7 +174,9 @@ fun VideoPlayer(
                         setErrorMessageIfError(errorCode = moviePlayer.playerError?.errorCode)
                     },
                     player = moviePlayer,
-                    currentPosition = currentPosition
+                    videoId = nonNullVideoId,
+                    currentPosition = currentPosition,
+                    visibleEventChannel = controllerEventChannel
                 )
             }
 

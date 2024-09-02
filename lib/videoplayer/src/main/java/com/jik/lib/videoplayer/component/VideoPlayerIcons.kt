@@ -1,6 +1,8 @@
 package com.jik.lib.videoplayer.component
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.VolumeOff
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.filled.Forward5
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Replay5
@@ -17,6 +19,9 @@ internal object VideoPlayerIcons {
 
     val Forward5 = Icons.Filled.Forward5
     val Backward5 = Icons.Filled.Replay5
+
+    val VolumeUp = Icons.AutoMirrored.Rounded.VolumeUp
+    val VolumeOFF = Icons.AutoMirrored.Rounded.VolumeOff
 }
 
 internal val iconSize = 40.dp

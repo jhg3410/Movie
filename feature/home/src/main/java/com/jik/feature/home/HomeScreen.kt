@@ -2,8 +2,8 @@ package com.jik.feature.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,10 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.jik.core.designsystem.component.FakeNavigationBarItemLabelAndIcon
 import com.jik.core.designsystem.component.LoadingWheel
-import com.jik.core.designsystem.component.NavigationBarCornerSize
 import com.jik.core.designsystem.component.Refresh
 import com.jik.core.model.Movie
 import com.jik.core.ui.state.UiState
@@ -31,7 +33,7 @@ fun HomeScreen(
     val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val mainMovie by homeViewModel.mainMovie.collectAsStateWithLifecycle()
 
-    Box(modifier = modifier) {
+    Box(modifier = modifier.navigationBarsPadding()) {
         Content(
             modifier = Modifier
                 .fillMaxSize()
@@ -67,7 +69,11 @@ private fun Content(
             onLoadMore = onLoadMore,
             onPosterClick = onPosterClick
         )
-        Spacer(modifier = Modifier.padding(bottom = NavigationBarCornerSize))
+        FakeNavigationBarItemLabelAndIcon(
+            modifier = Modifier
+                .alpha(0f)
+                .padding(vertical = 4.dp)
+        )
     }
 
     if (uiState is UiState.Loading && mainMovie == Movie.EMPTY) {

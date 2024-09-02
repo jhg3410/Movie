@@ -23,13 +23,21 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.ExoPlayer
+import com.jik.lib.videoplayer.R
+import com.jik.lib.videoplayer.component.VideoPlayerIcons
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Backward5
 import com.jik.lib.videoplayer.component.VideoPlayerIcons.Forward5
 import com.jik.lib.videoplayer.component.controller.ControllerLoadingWheel
@@ -41,6 +49,8 @@ import com.jik.lib.videoplayer.error.ErrorScreen
 import com.jik.lib.videoplayer.state.VideoPlayerControllerState
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.MOVING_OFFSET
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.toFormattedMinutesAndSecondsFromMilliseconds
+import kotlinx.coroutines.channels.Channel
+import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil as controllerUtil
 
 @Composable
 fun VideoPlayerController(
@@ -48,9 +58,24 @@ fun VideoPlayerController(
     visible: Boolean,
     controllerState: VideoPlayerControllerState,
     player: ExoPlayer,
-    currentPosition: Long
+    videoId: String,
+    currentPosition: Long,
+    visibleEventChannel: Channel<Unit>
 ) {
+
+    val context = LocalContext.current
+
     val moviePlayer by rememberUpdatedState(newValue = player)
+    val coroutineScope = rememberCoroutineScope()
+
+    val moviePlayerVolume by rememberUpdatedState(newValue = moviePlayer.volume)
+    val isMute by remember { derivedStateOf { moviePlayerVolume == 0f } }
+    val currentTime by rememberUpdatedState(newValue = currentPosition / 1000)
+
+    LaunchedEffect(key1 = visibleEventChannel) {
+        controllerUtil.KeepVisible.visibleEventChannel = visibleEventChannel
+        controllerUtil.KeepVisible.scope = coroutineScope
+    }
 
     AnimatedVisibility(
         modifier = modifier,
@@ -71,6 +96,20 @@ fun VideoPlayerController(
         Box(
             modifier = Modifier.background(color = Color.Black.copy(alpha = 0.5f))
         ) {
+            TopController(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .fillMaxWidth(),
+                onClickYoutubeIcon = remember {
+                    {
+                        controllerUtil.watchOnYoutube(
+                            context = context,
+                            videoId = videoId,
+                            currentTime = currentTime
+                        )
+                    }
+                }
+            )
             CenterController(
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -89,7 +128,35 @@ fun VideoPlayerController(
                 currentPosition = currentPosition,
                 duration = moviePlayer.duration,
                 bufferedPercentage = moviePlayer.bufferedPercentage,
-                onSlide = { moviePlayer.seekTo(it) }
+                onSlide = { moviePlayer.seekTo(it) },
+                toggleMute = {
+                    controllerUtil.KeepVisible {
+                        moviePlayer.volume = if (isMute) 1f else 0f
+                    }
+                },
+                isMute = isMute
+            )
+        }
+    }
+}
+
+@Composable
+fun TopController(
+    modifier: Modifier = Modifier,
+    onClickYoutubeIcon: () -> Unit
+) {
+    Row(
+        modifier = modifier.padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.End
+    ) {
+        IconButton(
+            onClick = onClickYoutubeIcon
+        ) {
+            Icon(
+                modifier = Modifier.height(24.dp),
+                painter = painterResource(id = R.drawable.youtube_icon),
+                contentDescription = "Watch on Youtube",
+                tint = Color.Unspecified,
             )
         }
     }
@@ -101,7 +168,7 @@ fun CenterController(
     controllerState: VideoPlayerControllerState,
     onPlay: () -> Unit,
     onPause: () -> Unit,
-    onReplay: (Long) -> Unit,
+    onReplay: () -> Unit,
     onForward: () -> Unit,
     onBackward: () -> Unit
 ) {
@@ -140,7 +207,7 @@ fun CenterController(
 
             is VideoPlayerControllerState.ENDED -> {
                 ControllerReplayIcon {
-                    onReplay(0L)
+                    onReplay()
                 }
             }
 
@@ -167,21 +234,46 @@ fun BottomController(
     duration: Long,
     currentPosition: Long,
     bufferedPercentage: Int,
-    onSlide: (Long) -> Unit
+    onSlide: (Long) -> Unit,
+    toggleMute: () -> Unit,
+    isMute: Boolean
 ) {
-    Column(modifier = modifier.padding(bottom = 4.dp)) {
-        Text(
-            modifier = Modifier.padding(start = 16.dp),
-            text = currentPosition.toFormattedMinutesAndSecondsFromMilliseconds() + "/" +
-                    duration.toFormattedMinutesAndSecondsFromMilliseconds(),
-            style = MaterialTheme.typography.labelMedium,
-            color = Color.White
-        )
 
-        Spacer(modifier = Modifier.height(4.dp))
+    Column(modifier = modifier.padding(bottom = 4.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text(
+                text = currentPosition.toFormattedMinutesAndSecondsFromMilliseconds() + "/" +
+                        duration.toFormattedMinutesAndSecondsFromMilliseconds(),
+                style = MaterialTheme.typography.labelMedium,
+                color = Color.White
+            )
+            IconButton(
+                modifier = Modifier.size(32.dp),
+                onClick = toggleMute
+            ) {
+                Icon(
+                    imageVector = if (isMute) VideoPlayerIcons.VolumeOFF else VideoPlayerIcons.VolumeUp,
+                    contentDescription = if (isMute) "Volume Off" else "Volume On",
+                    tint = Color.White,
+                )
+            }
+        }
+
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
+            ) {
                 Slider(
                     value = bufferedPercentage.toFloat(),
                     enabled = false,

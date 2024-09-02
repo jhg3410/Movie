@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jik.core.designsystem.component.MovieNavigationBar
 import com.jik.core.designsystem.component.MovieNavigationBarItem
@@ -65,7 +66,7 @@ fun MovieBottomBar(
                         onClick = { onNavigateToDestination(destination) },
                         iconImageVector = destination.icon,
                         selectedIconImageVector = destination.icon,
-                        labelTextId = destination.iconTextId,
+                        labelText = stringResource(id = destination.iconTextId),
                     )
                 }
             }
