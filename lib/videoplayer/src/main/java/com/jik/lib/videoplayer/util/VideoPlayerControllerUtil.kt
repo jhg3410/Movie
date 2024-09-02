@@ -23,9 +23,9 @@ internal object VideoPlayerControllerUtil {
         return "%02d:%02d".format(minutes, seconds)
     }
 
-    internal fun watchOnYoutube(context: Context, videoId: String) {
-        val appUrl = "vnd.youtube:$videoId"
-        val webUrl = "http://www.youtube.com/watch?v=$videoId"
+    internal fun watchOnYoutube(context: Context, videoId: String, currentTime: Long) {
+        val appUrl = "vnd.youtube:$videoId?t=$currentTime"
+        val webUrl = "http://www.youtube.com/watch?v=$videoId&t=$currentTime"
 
         val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse(appUrl)).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -46,7 +46,7 @@ internal object VideoPlayerControllerUtil {
         lateinit var visibleEventChannel: Channel<Unit>
         lateinit var scope: CoroutineScope
 
-        operator fun invoke(block: () -> Unit): () -> Unit = {
+        operator fun invoke(block: () -> Unit) {
             scope.launch {
                 visibleEventChannel.send(Unit)
             }

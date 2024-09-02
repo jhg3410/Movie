@@ -24,12 +24,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,7 +49,6 @@ import com.jik.lib.videoplayer.error.ErrorScreen
 import com.jik.lib.videoplayer.state.VideoPlayerControllerState
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.MOVING_OFFSET
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.toFormattedMinutesAndSecondsFromMilliseconds
-import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.watchOnYoutube
 import kotlinx.coroutines.channels.Channel
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil as controllerUtil
 
@@ -65,15 +63,19 @@ fun VideoPlayerController(
     visibleEventChannel: Channel<Unit>
 ) {
 
+    val context = LocalContext.current
+
     val moviePlayer by rememberUpdatedState(newValue = player)
     val coroutineScope = rememberCoroutineScope()
-    var isMute by remember { mutableStateOf(moviePlayer.volume == 0f) }
+
+    val moviePlayerVolume by rememberUpdatedState(newValue = moviePlayer.volume)
+    val isMute by remember { derivedStateOf { moviePlayerVolume == 0f } }
+    val currentTime by rememberUpdatedState(newValue = currentPosition / 1000)
 
     LaunchedEffect(key1 = visibleEventChannel) {
         controllerUtil.KeepVisible.visibleEventChannel = visibleEventChannel
         controllerUtil.KeepVisible.scope = coroutineScope
     }
-
 
     AnimatedVisibility(
         modifier = modifier,
@@ -98,7 +100,15 @@ fun VideoPlayerController(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .fillMaxWidth(),
-                videoId = videoId
+                onClickYoutubeIcon = remember {
+                    {
+                        controllerUtil.watchOnYoutube(
+                            context = context,
+                            videoId = videoId,
+                            currentTime = currentTime
+                        )
+                    }
+                }
             )
             CenterController(
                 modifier = Modifier
@@ -119,9 +129,10 @@ fun VideoPlayerController(
                 duration = moviePlayer.duration,
                 bufferedPercentage = moviePlayer.bufferedPercentage,
                 onSlide = { moviePlayer.seekTo(it) },
-                toggleMute = controllerUtil.KeepVisible {
-                    moviePlayer.volume = if (isMute) 1f else 0f
-                    isMute = isMute.not()
+                toggleMute = {
+                    controllerUtil.KeepVisible {
+                        moviePlayer.volume = if (isMute) 1f else 0f
+                    }
                 },
                 isMute = isMute
             )
@@ -132,16 +143,14 @@ fun VideoPlayerController(
 @Composable
 fun TopController(
     modifier: Modifier = Modifier,
-    videoId: String
+    onClickYoutubeIcon: () -> Unit
 ) {
-    val context = LocalContext.current
-
     Row(
         modifier = modifier.padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.End
     ) {
         IconButton(
-            onClick = { watchOnYoutube(context = context, videoId = videoId) }
+            onClick = onClickYoutubeIcon
         ) {
             Icon(
                 modifier = Modifier.height(24.dp),
@@ -229,6 +238,7 @@ fun BottomController(
     toggleMute: () -> Unit,
     isMute: Boolean
 ) {
+
     Column(modifier = modifier.padding(bottom = 4.dp)) {
         Row(
             modifier = Modifier
@@ -245,7 +255,7 @@ fun BottomController(
             )
             IconButton(
                 modifier = Modifier.size(32.dp),
-                onClick = { toggleMute() }
+                onClick = toggleMute
             ) {
                 Icon(
                     imageVector = if (isMute) VideoPlayerIcons.VolumeOFF else VideoPlayerIcons.VolumeUp,
