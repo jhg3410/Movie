@@ -1,22 +1,22 @@
 package com.jik.movie.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jik.core.designsystem.component.MovieNavigationBar
 import com.jik.core.designsystem.component.MovieNavigationBarItem
-import com.jik.core.designsystem.component.NavigationBarCornerSize
 import com.jik.core.designsystem.theme.MovieTheme
 import com.jik.movie.navigation.MovieNavHost
 import com.jik.movie.navigation.TopLevelDestination
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MovieApp() {
     MovieTheme {
@@ -34,13 +34,9 @@ fun MovieApp() {
             },
             contentWindowInsets = WindowInsets(0.dp)
         ) {
-            val bottomPadding = it.calculateBottomPadding()
-
             MovieNavHost(
                 navController = appState.navController,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = if (bottomPadding > 0.dp) bottomPadding - NavigationBarCornerSize else bottomPadding)
+                modifier = Modifier.fillMaxSize()
             )
         }
     }

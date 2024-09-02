@@ -1,9 +1,18 @@
 package com.jik.core.designsystem.component
 
 import androidx.annotation.StringRes
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -26,6 +35,7 @@ fun MovieTopAppBar(
     titleStyle: TextStyle = MaterialTheme.typography.titleLarge,
     titleWeight: FontWeight = FontWeight.Bold,
     canNavigateBack: Boolean = false,
+    backIconTint: Color = MaterialTheme.colorScheme.onBackground,
     navigateBack: () -> Unit = {}
 ) {
     TopAppBar(
@@ -47,7 +57,7 @@ fun MovieTopAppBar(
                     Icon(
                         imageVector = ArrowBackRounded,
                         contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onBackground
+                        tint = backIconTint
                     )
                 }
             }

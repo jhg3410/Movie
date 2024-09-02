@@ -80,6 +80,7 @@ private fun CastItem(
         Text(
             text = castItem.character,
             style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
