@@ -1,36 +1,28 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
-    id(libs.plugins.hilt.plugin.get().pluginId)
+    id("dagger.hilt.android.plugin")
 }
 
 android {
-    namespace = "com.jik.movie"
+    namespace = "com.jik.feature.popular"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.jik.movie"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "0.3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            setProguardFiles(
-                listOf(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
-                )
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -46,11 +38,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
@@ -60,9 +47,6 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.core.model)
     implementation(projects.core.data)
-    implementation(projects.feature.home)
-    implementation(projects.feature.popular)
-    implementation(projects.feature.detail)
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.runtime.ktx)
@@ -71,16 +55,17 @@ dependencies {
 
     // compose
     implementation(libs.compose.ui)
-    implementation(libs.compose.material3)
-    implementation(libs.compose.tooling)
     implementation(libs.compose.preview)
+    implementation(libs.compose.material3)
+
+    // lifecycle
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.runtime)
 
     // hilt
     implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation)
     kapt(libs.hilt.compiler)
-
-    // splash
-    implementation(libs.splashscreen)
 
     // test
     testImplementation(libs.junit)
