@@ -23,17 +23,15 @@
 
 ## Videos
 
-|                                                 control                                                 |                                               background                                                |
-|:-------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|
-| <img width="250" src="https://github.com/user-attachments/assets/c4ccfd0e-0a46-4467-bb2a-8d7119fa57ba"> | <img width="250" src="https://github.com/user-attachments/assets/2222ffa4-4060-45d0-8b70-fdcd425ba0ca"> |
+|                                                 control                                                 |                                               background                                                |                                                 youtube                                                 |
+|:-------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|
+| <img width="300" src="https://github.com/user-attachments/assets/c4ccfd0e-0a46-4467-bb2a-8d7119fa57ba"> | <img width="300" src="https://github.com/user-attachments/assets/2222ffa4-4060-45d0-8b70-fdcd425ba0ca"> | <img width="300" src="https://github.com/user-attachments/assets/c3c6e251-5376-4acf-83ec-b2953da9da70"> |
 
-|                                                 youtube                                                 |                                                  mute                                                   |
-|:-------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|
-| <img width="250" src="https://github.com/user-attachments/assets/c3c6e251-5376-4acf-83ec-b2953da9da70"> | <img width="250" src="https://github.com/user-attachments/assets/32ee2350-df47-40d9-bd03-81c4e1cfb5cc"> |
+https://github.com/user-attachments/assets/d6195381-0f7b-42cf-adc9-504a4a33ac8a
 
 ## How to build
 
-Add TMDB API KEY in `local.properties`
+Add [TMDB](https://www.themoviedb.org/) API KEY in `local.properties`
 
 ```
 TMDB_API_KEY=YOUR_API_KEY
