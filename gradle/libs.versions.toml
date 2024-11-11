@@ -23,7 +23,7 @@ logging-interceptor = "4.12.0"
 ksp = "1.8.10-1.0.9"
 splashscreen = "1.0.1"
 media3 = "1.4.0"
-chaquopy = "15.0.1"
+chaquopy = "16.0.0"
 palette = "1.0.0"
 
 androidGradlePlugin = "8.1.4"
