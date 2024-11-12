@@ -13,13 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -45,6 +42,8 @@ import com.jik.lib.videoplayer.component.controller.ControllerPauseIcon
 import com.jik.lib.videoplayer.component.controller.ControllerPlayIcon
 import com.jik.lib.videoplayer.component.controller.ControllerReplayIcon
 import com.jik.lib.videoplayer.component.iconSize
+import com.jik.lib.videoplayer.component.slider.MovieSlider
+import com.jik.lib.videoplayer.component.slider.MovieSliderDefaults
 import com.jik.lib.videoplayer.error.ErrorScreen
 import com.jik.lib.videoplayer.state.VideoPlayerControllerState
 import com.jik.lib.videoplayer.util.VideoPlayerControllerUtil.MOVING_OFFSET
@@ -60,7 +59,7 @@ fun VideoPlayerController(
     player: ExoPlayer,
     videoId: String,
     currentPosition: Long,
-    visibleEventChannel: Channel<Unit>
+    visibleEventChannel: Channel<Unit>,
 ) {
 
     val context = LocalContext.current
@@ -143,7 +142,7 @@ fun VideoPlayerController(
 @Composable
 fun TopController(
     modifier: Modifier = Modifier,
-    onClickYoutubeIcon: () -> Unit
+    onClickYoutubeIcon: () -> Unit,
 ) {
     Row(
         modifier = modifier.padding(horizontal = 16.dp),
@@ -170,7 +169,7 @@ fun CenterController(
     onPause: () -> Unit,
     onReplay: () -> Unit,
     onForward: () -> Unit,
-    onBackward: () -> Unit
+    onBackward: () -> Unit,
 ) {
     Row(
         modifier = modifier,
@@ -227,7 +226,6 @@ fun CenterController(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomController(
     modifier: Modifier = Modifier,
@@ -236,7 +234,7 @@ fun BottomController(
     bufferedPercentage: Int,
     onSlide: (Long) -> Unit,
     toggleMute: () -> Unit,
-    isMute: Boolean
+    isMute: Boolean,
 ) {
 
     Column(modifier = modifier.padding(bottom = 4.dp)) {
@@ -268,31 +266,30 @@ fun BottomController(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
+        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp)
             ) {
-                Slider(
+                MovieSlider(
                     value = bufferedPercentage.toFloat(),
-                    enabled = false,
-                    onValueChange = {},
                     valueRange = 0f..100f,
-                    colors = SliderDefaults.colors(
-                        disabledThumbColor = Color.Transparent,
-                        disabledActiveTrackColor = Color.Gray
+                    enabled = false,
+                    colors = MovieSliderDefaults.colors(
+                        thumbColor = Color.Transparent,
+                        activeTrackColor = Color.Gray
                     )
                 )
 
-                Slider(
+                MovieSlider(
                     value = currentPosition.toFloat(),
                     onValueChange = { onSlide(it.toLong()) },
                     valueRange = 0f..duration.coerceAtLeast(0).toFloat(),
-                    colors = SliderDefaults.colors(
+                    colors = MovieSliderDefaults.colors(
                         thumbColor = MaterialTheme.colorScheme.primary,
                         activeTrackColor = MaterialTheme.colorScheme.primary,
-                        inactiveTrackColor = Color.Gray.copy(alpha = 0.5f),
+                        inactiveTrackColor = Color.Gray.copy(alpha = 0.5f)
                     )
                 )
             }
