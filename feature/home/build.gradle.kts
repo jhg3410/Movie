@@ -1,9 +1,9 @@
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
-    id("dagger.hilt.android.plugin")
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.hilt.android)
 }
 
 
@@ -36,9 +36,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
     }
 }
 
