@@ -21,11 +21,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -66,14 +67,16 @@ fun VideoPlayerController(
 
     val moviePlayer by rememberUpdatedState(newValue = player)
     val coroutineScope = rememberCoroutineScope()
-
-    val moviePlayerVolume by rememberUpdatedState(newValue = moviePlayer.volume)
-    val isMute by remember { derivedStateOf { moviePlayerVolume == 0f } }
+    var isMute by remember { mutableStateOf(moviePlayer.volume == 0f) }
     val currentTime by rememberUpdatedState(newValue = currentPosition / 1000)
 
     LaunchedEffect(key1 = visibleEventChannel) {
         controllerUtil.KeepVisible.visibleEventChannel = visibleEventChannel
         controllerUtil.KeepVisible.scope = coroutineScope
+    }
+
+    LaunchedEffect(key1 = isMute) {
+        moviePlayer.volume = if (isMute) 0f else 1f
     }
 
     AnimatedVisibility(
@@ -130,7 +133,7 @@ fun VideoPlayerController(
                 onSlide = { moviePlayer.seekTo(it) },
                 toggleMute = {
                     controllerUtil.KeepVisible {
-                        moviePlayer.volume = if (isMute) 1f else 0f
+                        isMute = isMute.not()
                     }
                 },
                 isMute = isMute
@@ -236,7 +239,6 @@ fun BottomController(
     toggleMute: () -> Unit,
     isMute: Boolean,
 ) {
-
     Column(modifier = modifier.padding(bottom = 4.dp)) {
         Row(
             modifier = Modifier
