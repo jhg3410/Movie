@@ -13,7 +13,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.jik.core.ui.util.StatusBarColor
-import com.jik.feature.detail.DetailScreen
+import com.jik.feature.detail.DetailRoute
 
 object DetailNavigation {
 
@@ -43,7 +43,7 @@ object DetailNavigation {
             exitTransition = { exitTransition }
         ) {
             StatusBarColor(color = Color.Transparent)
-            DetailScreen(
+            DetailRoute(
                 modifier = Modifier
                     .fillMaxSize()
                     .navigationBarsPadding(),

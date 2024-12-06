@@ -3,6 +3,7 @@ package com.jik.core.ui.preview
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 
-@Preview(name = "dark", group = "themes", uiMode = UI_MODE_NIGHT_YES)
-@Preview(name = "light", group = "themes")
-annotation class ThemePreviews
+@Preview(name = "dark", group = "themes", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "light", group = "themes", showBackground = true)
+annotation class
+ThemePreviews

@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -31,26 +33,43 @@ import com.jik.core.designsystem.component.LoadingWheel
 import com.jik.core.designsystem.component.PosterCard
 import com.jik.core.designsystem.component.Refresh
 import com.jik.core.designsystem.icon.MovieIcons.ArrowBackRounded
+import com.jik.core.designsystem.theme.MovieTheme
 import com.jik.core.model.MovieInfo
 import com.jik.core.ui.palette.ExtractRepresentativeColor
+import com.jik.core.ui.preview.MovieInfoPreviewParameterProvider
 import com.jik.core.ui.state.UiState
 import com.jik.core.ui.util.modifier.clickableSingle
 import com.jik.feature.detail.component.DetailMovieInfo
 import com.jik.lib.videoplayer.VideoPlayer
 
-
 @Composable
-fun DetailScreen(
-    modifier: Modifier = Modifier,
+internal fun DetailRoute(
+    modifier: Modifier,
     viewModel: DetailViewModel = hiltViewModel(),
     navigateUp: () -> Unit
 ) {
-    val detailUiState = viewModel.detailUiState.collectAsStateWithLifecycle(
-        minActiveState = Lifecycle.State.CREATED
-    ).value
+
+    val detailUiState by viewModel.detailUiState.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.CREATED)
+
+    DetailScreen(
+        modifier = modifier,
+        uiState = detailUiState,
+        navigateUp = navigateUp,
+        onRetry = viewModel::onRetry
+    )
+}
+
+
+@Composable
+private fun DetailScreen(
+    modifier: Modifier = Modifier,
+    uiState: UiState<MovieInfo>,
+    navigateUp: () -> Unit,
+    onRetry: () -> Unit
+) {
     val isDarkMode = isSystemInDarkTheme()
 
-    when (detailUiState) {
+    when (uiState) {
         is UiState.Loading -> {
             Box(modifier = modifier) {
                 LoadingWheel(
@@ -61,7 +80,7 @@ fun DetailScreen(
         }
 
         is UiState.Success -> {
-            val movieInfo = detailUiState.data
+            val movieInfo = uiState.data
             var backgroundColor by remember { mutableStateOf(Color.Transparent) }
             val colorStops = arrayOf(
                 0.0f to backgroundColor.copy(alpha = if (isDarkMode) 1f else 0.6f),
@@ -101,7 +120,7 @@ fun DetailScreen(
             Box(modifier = modifier) {
                 Refresh(
                     modifier = Modifier.align(Alignment.Center),
-                    onClick = viewModel::onRetry,
+                    onClick = onRetry,
                     size = 40.dp,
                 )
             }
@@ -132,6 +151,20 @@ private fun Content(
         DetailMovieInfo(
             movieInfo = movieInfo,
             playMovie = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DetailScreenPreview(
+    @PreviewParameter(MovieInfoPreviewParameterProvider::class) movieInfo: MovieInfo
+) {
+    MovieTheme {
+        DetailScreen(
+            uiState = UiState.Success(data = movieInfo),
+            navigateUp = {},
+            onRetry = {}
         )
     }
 }
