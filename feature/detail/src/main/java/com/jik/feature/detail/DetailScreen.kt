@@ -7,8 +7,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -25,11 +30,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jik.core.designsystem.component.LoadingWheel
 import com.jik.core.designsystem.component.PosterCard
 import com.jik.core.designsystem.component.Refresh
+import com.jik.core.designsystem.icon.MovieIcons.ArrowBackRounded
 import com.jik.core.model.MovieInfo
 import com.jik.core.ui.palette.ExtractRepresentativeColor
 import com.jik.core.ui.state.UiState
+import com.jik.core.ui.util.modifier.clickableSingle
 import com.jik.feature.detail.component.DetailMovieInfo
-import com.jik.feature.detail.component.TopBar
 import com.jik.lib.videoplayer.VideoPlayer
 
 
@@ -66,14 +72,28 @@ fun DetailScreen(
                 backgroundColor = it
             }
 
-            Column(
-                modifier = modifier.background(brush = Brush.verticalGradient(colorStops = colorStops))
+            Box(
+                modifier = modifier
+                    .background(brush = Brush.verticalGradient(colorStops = colorStops))
+                    .statusBarsPadding()
             ) {
-                TopBar(
-                    modifier = Modifier.fillMaxWidth(),
-                    navigateUp = navigateUp
-                )
                 Content(movieInfo = movieInfo)
+                Box(
+                    modifier = Modifier
+                        .padding(start = 16.dp, top = 16.dp)
+                        .clip(RoundedCornerShape(100.dp))
+                        .background(color = Color.Black.copy(alpha = 0.8f))
+                        .clickableSingle(onClick = navigateUp),
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(all = 6.dp)
+                            .size(24.dp),
+                        imageVector = ArrowBackRounded,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
             }
         }
 
