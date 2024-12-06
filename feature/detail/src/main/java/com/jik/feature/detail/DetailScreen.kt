@@ -128,7 +128,10 @@ private fun Content(
                 )
             },
         )
-        Spacer(modifier = Modifier.height(24.dp))
-        DetailMovieInfo(movieInfo = movieInfo)
+        Spacer(modifier = Modifier.height(20.dp))
+        DetailMovieInfo(
+            movieInfo = movieInfo,
+            playMovie = {}
+        )
     }
 }

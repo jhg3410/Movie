@@ -2,6 +2,7 @@ package com.jik.core.designsystem.icon
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Home
@@ -15,6 +16,7 @@ object MovieIcons {
     val HomeRounded = Icons.Rounded.Home
     val LocalFireDepartmentRounded = Icons.Rounded.LocalFireDepartment
     val ArrowBackRounded = Icons.AutoMirrored.Rounded.ArrowBack
+    val PlayArrow = Icons.Filled.PlayArrow
 }
 
 object IconColor {

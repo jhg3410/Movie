@@ -1,6 +1,7 @@
 package com.jik.feature.detail.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,6 +26,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
@@ -33,10 +36,14 @@ import com.jik.core.model.MovieInfo
 import com.jik.core.ui.util.MovieGenreUtils
 
 @Composable
-internal fun DetailMovieInfo(movieInfo: MovieInfo) {
+internal fun DetailMovieInfo(
+    modifier: Modifier = Modifier,
+    movieInfo: MovieInfo,
+    playMovie: () -> Unit
+) {
     val horizontalPaddingModifier = Modifier.padding(horizontal = 16.dp)
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+    Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Title(
             modifier = horizontalPaddingModifier,
             title = movieInfo.title
@@ -47,6 +54,11 @@ internal fun DetailMovieInfo(movieInfo: MovieInfo) {
             movieInfo = movieInfo
         )
         Genres(genres = movieInfo.genres)
+        Spacer(modifier = Modifier.height(20.dp))
+        PlayButton(
+            modifier = horizontalPaddingModifier,
+            onClick = playMovie
+        )
         Spacer(modifier = Modifier.height(20.dp))
         Overview(
             modifier = horizontalPaddingModifier,
@@ -101,6 +113,36 @@ private fun ReleaseDateAndRating(
             text = movieInfo.rating.toString(),
             color = IconColor.Star,
             style = MaterialTheme.typography.labelMedium
+        )
+    }
+}
+
+
+@Composable
+private fun PlayButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(size = 8.dp))
+            .background(color = MaterialTheme.colorScheme.primary)
+            .clickable(onClick = onClick)
+            .padding(vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            modifier = Modifier.size(24.dp),
+            imageVector = MovieIcons.PlayArrow,
+            tint = Color.White,
+            contentDescription = "Play",
+        )
+        Text(
+            text = "Watch",
+            color = Color.White,
+            style = MaterialTheme.typography.bodyMedium,
         )
     }
 }
